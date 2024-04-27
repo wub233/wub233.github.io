@@ -1,0 +1,195 @@
+<!DOCTYPE html><html lang="ch"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="wub"><meta name="copyright" content="wub"><meta name="generator" content="Hexo 7.1.1"><meta name="theme" content="hexo-theme-yun"><title>区块链学习 | Wub's Blog</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/star-markdown-css@0.4.1/dist/yun/yun-markdown.min.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prism-theme-vars/base.css"><script src="https://fastly.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".markdown-body img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><link rel="icon" type="image/svg+xml" href="/yun.svg"><link rel="mask-icon" href="/yun.svg" color="#0078E7"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fastly.jsdelivr.net/npm/" crossorigin><script id="yun-config">
+    window.Yun = {}
+    window.CONFIG = {"hostname":"wub233.github.io","root":"/","title":"雾柏の站","version":"1.10.11","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms"},"anonymous_image":"https://cdn.yunyoujun.cn/img/avatar/none.jpg","say":{"api":"https://el-bot-api.vercel.app/api/words/young"},"fireworks":{"colors":null},"vendors":{"host":"https://fastly.jsdelivr.net/npm/","darken":"https://fastly.jsdelivr.net/npm/darken@1.5.0"}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/hexo-theme-yun.js" type="module"></script><meta name="description" content="智能合约现实生活中的合约，是由多方商讨制定，制定完成后，由专门的执行角色执行的约定。智能合约，顾名思义，是可以抛却专门的执行角色，一种可以自动化执行的规则。只要满足智能合约中制定的条件，合约就会自动被执行。  智能合约的结构主要分为两大部分： 合约变量 与 合约函数  从0到1 上的介绍  区块链区块链，就是一个又一个区块组成的链条。每一个区块中保存了一定的信息，它们按照各自产生的时间顺序连接成链">
+<meta property="og:type" content="article">
+<meta property="og:title" content="区块链学习">
+<meta property="og:url" content="https://wub233.github.io/2024/04/27/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Wub&#39;s Blog">
+<meta property="og:description" content="智能合约现实生活中的合约，是由多方商讨制定，制定完成后，由专门的执行角色执行的约定。智能合约，顾名思义，是可以抛却专门的执行角色，一种可以自动化执行的规则。只要满足智能合约中制定的条件，合约就会自动被执行。  智能合约的结构主要分为两大部分： 合约变量 与 合约函数  从0到1 上的介绍  区块链区块链，就是一个又一个区块组成的链条。每一个区块中保存了一定的信息，它们按照各自产生的时间顺序连接成链">
+<meta property="og:locale">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/20/OpWerY.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/20/OpWrQv.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/15/OmfnMq.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/15/Omf11c.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/15/Om6Pkr.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/16/OmXTaK.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/16/OmXUea.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/19/OpBztG.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/19/OpBNo6.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/19/OpTHZF.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/19/OpTQ7b.md.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/20/OpT8Li.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/20/OpUQsU.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/20/OpU0aY.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/20/OpUcev.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/20/OpUdGq.png">
+<meta property="og:image" content="https://ooo.0x0.ooo/2024/04/20/OpUYhr.png">
+<meta property="article:published_time" content="2024-04-27T07:39:26.134Z">
+<meta property="article:modified_time" content="2024-04-27T08:12:09.149Z">
+<meta property="article:author" content="wub">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ooo.0x0.ooo/2024/04/20/OpWerY.png"><script>(function() {
+  if (CONFIG.mode !== 'auto') return
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const setting = localStorage.getItem('darken-mode') || 'auto'
+  if (setting === 'dark' || (prefersDark && setting !== 'light'))
+    document.documentElement.classList.toggle('dark', true)
+})()</script></head><body><script src="https://code.iconify.design/2/2.1.1/iconify.min.js"></script><script>// Define global variable
+IconifyProviders = {
+  // Empty prefix: overwrite default API provider configuration
+  '': {
+    // Use custom API first, use Iconify public API as backup
+    resources: [
+        'https://api.iconify.design',
+    ],
+    // Wait for 1 second before switching API hosts
+    rotate: 1000,
+  },
+};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="Table of Contents"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="Overview"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="wub"><img width="96" loading="lazy" src="/images/avatar.gif" alt="wub"><span class="site-author-status"></span></a><div class="site-author-name"><a href="/about/">wub</a></div><span class="site-name">Wub's Blog</span><sub class="site-subtitle">Stay hungry, Stay foolish</sub><div class="site-description">Here 1s 4 Bl0g</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="Home"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="Archives"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">2</span></a></div><div class="site-state-item"><a href="/categories/" title="Categories"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">0</span></a></div><div class="site-state-item"><a href="/tags/" title="Tags"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">0</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:settings-line"></span></span></a></nav><hr style="margin-bottom:0.5rem"><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="我的小伙伴们" style="color:dodgerblue"><span class="icon iconify" data-icon="ri:genderless-line"></span></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6"><span class="toc-number">1.</span> <span class="toc-text">智能合约</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8C%BA%E5%9D%97%E9%93%BE"><span class="toc-number">2.</span> <span class="toc-text">区块链</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A4%E6%98%93%E4%B8%AD%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-number">2.1.</span> <span class="toc-text">交易中的信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E9%87%8Atransaction-fee-%E5%92%8C-gas"><span class="toc-number">2.2.</span> <span class="toc-text">解释transaction fee 和 gas</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%BA%E5%9D%97-%E3%80%8B-%E5%8C%BA%E5%9D%97%E9%93%BE-%E3%80%8B%E5%88%86%E5%B8%83%E5%BC%8F%E5%8C%BA%E5%9D%97%E9%93%BE"><span class="toc-number">2.3.</span> <span class="toc-text">区块 -》 区块链 -》分布式区块链</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#solidity%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80"><span class="toc-number">3.</span> <span class="toc-text">solidity开发基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6"><span class="toc-number">3.1.</span> <span class="toc-text">第一个智能合约</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.1.1.</span> <span class="toc-text">数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%99%90"><span class="toc-number">3.1.2.</span> <span class="toc-text">权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E5%87%BD%E6%95%B0"><span class="toc-number">3.1.3.</span> <span class="toc-text">基础函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#view-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">3.1.4.</span> <span class="toc-text">view 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pure-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">3.1.5.</span> <span class="toc-text">pure 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#calldata-memory-storage-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">3.1.6.</span> <span class="toc-text">calldata, memory,storage 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E5%85%A5%E5%85%B6%E4%BB%96%E5%90%88%E7%BA%A6"><span class="toc-number">3.1.7.</span> <span class="toc-text">引入其他合约</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%A7%E6%89%BF%E4%B8%8E%E9%87%8D%E5%86%99"><span class="toc-number">3.1.8.</span> <span class="toc-text">继承与重写</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FundMe%E5%90%88%E7%BA%A6"><span class="toc-number">3.2.</span> <span class="toc-text">FundMe合约</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#payable%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">3.2.1.</span> <span class="toc-text">payable关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#revert"><span class="toc-number">3.2.2.</span> <span class="toc-text">revert</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E6%9C%80%E5%B0%8F%E9%87%91%E9%A2%9D%E7%9A%84usd"><span class="toc-number">3.2.3.</span> <span class="toc-text">设置最小金额的usd</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Chainlink%EF%BC%88%E9%A2%84%E8%A8%80%E6%9C%BA%EF%BC%89"><span class="toc-number">3.2.3.1.</span> <span class="toc-text">Chainlink（预言机）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E6%8E%A5%E5%8F%A3"><span class="toc-number">3.2.4.</span> <span class="toc-text">引用接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E5%87%BA%E7%9A%84FundMe%E5%90%88%E7%BA%A6"><span class="toc-number">3.2.5.</span> <span class="toc-text">编写出的FundMe合约</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%93%EF%BC%88library%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">库（library）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#unchecked-%E4%B8%8E-safemath"><span class="toc-number">3.3.1.</span> <span class="toc-text">unchecked 与 safemath</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#transfer%EF%BC%8Csend%EF%BC%8Ccall"><span class="toc-number">3.3.2.</span> <span class="toc-text">transfer，send，call</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#transfer"><span class="toc-number">3.3.2.1.</span> <span class="toc-text">transfer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#send"><span class="toc-number">3.3.2.2.</span> <span class="toc-text">send</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#call"><span class="toc-number">3.3.2.3.</span> <span class="toc-text">call</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%90%E5%88%B6withdraw%E5%87%BD%E6%95%B0%E7%9A%84%E6%9D%83%E9%99%90"><span class="toc-number">3.3.3.</span> <span class="toc-text">限制withdraw函数的权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gas%E4%BC%98%E5%8C%96"><span class="toc-number">3.3.4.</span> <span class="toc-text">Gas优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#receive%E5%87%BD%E6%95%B0-%E5%92%8C-fallback-%E5%87%BD%E6%95%B0"><span class="toc-number">3.3.5.</span> <span class="toc-text">receive函数 和 fallback 函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#receive-%E5%87%BD%E6%95%B0"><span class="toc-number">3.3.5.1.</span> <span class="toc-text">receive 函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#fallback%E5%87%BD%E6%95%B0"><span class="toc-number">3.3.5.2.</span> <span class="toc-text">fallback函数</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="https://wub233.github.io/2024/04/27/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%AD%A6%E4%B9%A0/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="wub"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="Wub's Blog"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">区块链学习</h1><div class="post-meta"><div class="post-time"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <time title="Created: 2024-04-27 15:39:26" itemprop="dateCreated datePublished" datetime="2024-04-27T15:39:26+08:00">2024-04-27</time></div><div class="post-classify"></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><h1 id="智能合约"><a href="#智能合约" class="headerlink" title="智能合约"></a><strong>智能合约</strong></h1><p>现实生活中的合约，是由多方商讨制定，制定完成后，由专门的执行角色执行的约定。智能合约，顾名思义，是可以抛却专门的执行角色，一种可以自动化执行的规则。只要满足智能合约中制定的条件，合约就会自动被执行。</p>
+<p><img src="https://ooo.0x0.ooo/2024/04/20/OpWerY.png" alt="OpWerY.png" loading="lazy"></p>
+<p>智能合约的结构主要分为两大部分： 合约变量 与 合约函数</p>
+<p> <strong>从0到1</strong> 上的介绍</p>
+<p><img src="https://ooo.0x0.ooo/2024/04/20/OpWrQv.png" alt="OpWrQv.png" loading="lazy"></p>
+<h1 id="区块链"><a href="#区块链" class="headerlink" title="区块链"></a>区块链</h1><p>区块链，就是一个又一个区块组成的链条。每一个区块中保存了一定的信息，它们<strong>按照各自产生的时间顺序</strong>连接成链条。这个链条被保存在所有的服务器中，<strong>只要整个系统中有一台服务器可以工作，整条区块链就是安全的。这些服务器在区块链系统中被称为节点</strong>，它们为整个区块链系统提供存储空间和算力支持。<strong>如果要修改区块链中的信息，必须征得半数以上节点的同意并修改所有节点中的信息</strong>(伪造区块链需要拥有超过51%的全网算力。)，而这些节点通常掌握在<strong>不同的主体</strong>手中，因此篡改区块链中的信息是一件极其困难的事。相比于传统的网络，区块链具有两大核心特点：<strong>数据难以篡改和去中心化</strong>。基于这两个特点，区块链所记录的信息更加真实可靠，可以帮助解决人们互不信任的问题。</p>
+<h2 id="交易中的信息"><a href="#交易中的信息" class="headerlink" title="交易中的信息"></a>交易中的信息</h2><p>在进行交易时，会产生与交易相关的信息</p>
+<p>下面以 请求测试币 的一次交易为例子</p>
+<p><img src="https://ooo.0x0.ooo/2024/04/15/OmfnMq.png" alt="image-20240411144059660" loading="lazy"></p>
+<p>transaction hash 交易哈希：是在当前区块链上这笔交易的唯一ID</p>
+<p>staus 交易状态 ： 这里显示成功</p>
+<p>Block : 区块高度</p>
+<p>Timestamp 时间戳</p>
+<p>from ：发送交易的用户</p>
+<p>to ： 接受交易的用户</p>
+<p>value ：交易的资产价值是 0.05 以太币</p>
+<p>transaction fee 交易手续费 ：是付给矿工处理这笔交易的费用</p>
+<p>gas ：是交易中每个执行单位的花费 （一般以 ether 和 gwei 做单位）</p>
+<h2 id="解释transaction-fee-和-gas"><a href="#解释transaction-fee-和-gas" class="headerlink" title="解释transaction fee 和 gas"></a>解释transaction fee 和 gas</h2><p>每当你创建一个交易时，会有一个节点（矿工）来运行区块链，他会被得到该区块链的原生代币(transaction fee)，这份收入实际是由gas的使用量来决定的</p>
+<p>gas ，是一种计量单位，想要使用更多的计算资源 ，就需要支付更多的gas</p>
+<p>点开上面说的交易的细节</p>
+<p><img src="https://ooo.0x0.ooo/2024/04/15/Omf11c.png" alt="image-20240411150831651" loading="lazy"></p>
+<p>gas的上限值（gas limit ）为 60000 ，而这笔交易实际的使用量是 21000</p>
+<p>用使用量 21000 去乘 gas费用（gas price）0**.**000000001003875679 ETH</p>
+<p>正好是 transaction fee 的值</p>
+<h2 id="区块-》-区块链-》分布式区块链"><a href="#区块-》-区块链-》分布式区块链" class="headerlink" title="区块 -》 区块链 -》分布式区块链"></a>区块 -》 区块链 -》分布式区块链</h2><p>区块将 产生哈希的原值 分为  block（区块高度）、nonce（要计算的答案）、data（区块中记录的数据）、 </p>
+<p>矿工计算nounce的值 来使得 整个区块计算得到的hash值符合某个限制条件</p>
+<p>区块链 则加入 prev（上一个区块计算得到的hash值），使得整个区块计算得到的hash值符合某个限制条件     ps：block为1的区块的prev值由 0 填充</p>
+<p>分布式区块链 则 将多条区块链 同时记录 同一系列交易 ，若某一区块链中携带的值被篡改，也能以 少数服从多数 的原则 发现 （理论上篡改者不可能同时胜过网络中至少一半的计算能力）</p>
+<h1 id="solidity开发基础"><a href="#solidity开发基础" class="headerlink" title="solidity开发基础"></a>solidity开发基础</h1><h2 id="第一个智能合约"><a href="#第一个智能合约" class="headerlink" title="第一个智能合约"></a>第一个智能合约</h2><p><img src="https://ooo.0x0.ooo/2024/04/15/Om6Pkr.png" loading="lazy"></p>
+<p>SPDX-License-Identifier 用来指定 License</p>
+<p>pragma solidity 用来指定版本</p>
+<p>部署一个合约实际上是发送一个交易</p>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>最基础的数据类型 ：boolean、uint、int、address、btyes</p>
+<h3 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h3><p>public、private、external、internal、</p>
+<p>（public 变量相当于给 变量加了一个  getter 函数）</p>
+<h3 id="基础函数"><a href="#基础函数" class="headerlink" title="基础函数"></a>基础函数</h3><p>函数使用 fuction 关键字</p>
+<p><img src="https://ooo.0x0.ooo/2024/04/16/OmXTaK.png" loading="lazy"></p>
+<p>像这里创建一个 changemynumber 函数</p>
+<p>在合约部署之后，可以通过remix上面直接改</p>
+<p><img src="https://ooo.0x0.ooo/2024/04/16/OmXUea.png" loading="lazy"></p>
+<p>部署合约时 会产生 交易费用（transaction fee），如果合约的功能越复杂（操作越多），部署时产生的费用会越多</p>
+<h3 id="view-关键字"><a href="#view-关键字" class="headerlink" title="view 关键字"></a>view 关键字</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function retrieve() public view returns(uint256)&#123;</span><br><span class="line">	return aNumber;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果是 view 函数，意味着只会读取该合约的状态，而不能修改；</p>
+<p>调用此类函数时不会产生任何费用，除非在消耗gas的函数中调用它</p>
+<h3 id="pure-关键字"><a href="#pure-关键字" class="headerlink" title="pure 关键字"></a>pure 关键字</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function retrieve() public pure returns(uint256)&#123;</span><br><span class="line">	return (1+2+3);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果是 pure 函数，不能读取该合约的状态，也不能修改</p>
+<p>调用此类函数时不会产生任何费用</p>
+<h3 id="calldata-memory-storage-关键字"><a href="#calldata-memory-storage-关键字" class="headerlink" title="calldata, memory,storage 关键字"></a>calldata, memory,storage 关键字</h3><p>calldata 用来修饰 不可以被修改的 临时变量</p>
+<p>memory 用来修饰 可以被修改的 临时变量</p>
+<p>storage  用来修饰 可以被修改的 永久变量</p>
+<h3 id="引入其他合约"><a href="#引入其他合约" class="headerlink" title="引入其他合约"></a>引入其他合约</h3><p><img src="https://ooo.0x0.ooo/2024/04/19/OpBztG.png" alt="OpBztG.png" loading="lazy"></p>
+<p>这里在ContractFactory.sol文件中 使用 import 引入其他合约</p>
+<p>这里创建一个合约的方式和创建一个对象类似</p>
+<h3 id="继承与重写"><a href="#继承与重写" class="headerlink" title="继承与重写"></a>继承与重写</h3><p><img src="https://ooo.0x0.ooo/2024/04/19/OpBNo6.png" alt="OpBNo6.png" loading="lazy"></p>
+<p>使用 is 关键字来指定继承关系</p>
+<p>当子合约要重写父合约的某个函数时，需要将子合约中的该函数加上 override 关键字；</p>
+<p>父合约中的该函数加上 virtual 关键字。</p>
+<h2 id="FundMe合约"><a href="#FundMe合约" class="headerlink" title="FundMe合约"></a>FundMe合约</h2><p>每个我们发送的合约都包含以下字段</p>
+<p><img src="https://ooo.0x0.ooo/2024/04/19/OpTHZF.png" alt="OpTHZF.png" loading="lazy"></p>
+<p>nonce：该账户的交易序号</p>
+<p>。。。。（前面已经讲过)</p>
+<p>v，r，s：交易签名时的技术</p>
+<h3 id="payable关键字"><a href="#payable关键字" class="headerlink" title="payable关键字"></a>payable关键字</h3><p>使函数进行ETH或者其他货币相关的操作</p>
+<p>在函数中用全局关键字 msg.value ,来知道某人转账的金额</p>
+<p>使用 require 来保证每次转账的金额的限制</p>
+<h3 id="revert"><a href="#revert" class="headerlink" title="revert"></a>revert</h3><p>当require 里面的条件没有被满足时，会执行 回滚操作（revert），合约状态会回到执行所有操作之前，并且过程中消耗的gas会被返还</p>
+<h3 id="设置最小金额的usd"><a href="#设置最小金额的usd" class="headerlink" title="设置最小金额的usd"></a>设置最小金额的usd</h3><p>为了找到 usd 与ETH 之间的关系，我们需要利用 Chainlink（预言机）</p>
+<h4 id="Chainlink（预言机）"><a href="#Chainlink（预言机）" class="headerlink" title="Chainlink（预言机）"></a>Chainlink（预言机）</h4><p>预言机是一种与世界交互，给智能合约提供外部数据或计算的工具</p>
+<p>Chainlink 是一个 去中心化 的预言机网络</p>
+<p><strong>使用Chainlink的 喂价（datafeed）功能</strong></p>
+<p>这里使用docs.chain.link里面给的喂价合约 <a target="_blank" rel="noopener" href="https://docs.chain.link/data-feeds/using-data-feeds#solidity">Using Data Feeds on EVM Chains | Chainlink Documentation</a></p>
+<p>可以获得实时比例</p>
+<p><a target="_blank" rel="noopener" href="https://img.tg/image/OpTQ7b"><img src="https://ooo.0x0.ooo/2024/04/19/OpTQ7b.md.png" alt="OpTQ7b.md.png" loading="lazy"></a></p>
+<p>要与项目之外的合约交互，我们需要</p>
+<p>1.ABI（ABI实际上是一个合约中不同功能和交互的列表，接口可以被编译成ABI）</p>
+<p>2.合约地址</p>
+<h3 id="引用接口"><a href="#引用接口" class="headerlink" title="引用接口"></a>引用接口</h3><p>1.直接从docs.chain.link里面的gitbub仓库里面复制源代码到自己的.sol文件中</p>
+<p>2.使用import</p>
+<h3 id="编写出的FundMe合约"><a href="#编写出的FundMe合约" class="headerlink" title="编写出的FundMe合约"></a>编写出的FundMe合约</h3><p><img src="https://ooo.0x0.ooo/2024/04/20/OpT8Li.png" alt="OpT8Li.png" loading="lazy"></p>
+<p>简单来说就是利用chainlink的喂价功能，算出最新ETH和usd的比例，利用这个比例写一个getConservetionRate函数进行转换，从而进行比较</p>
+<h2 id="库（library）"><a href="#库（library）" class="headerlink" title="库（library）"></a>库（library）</h2><p>这里将 FundMe 合约中的函数 提取到一个新的库里面，并将该库依附到uint256的对象上</p>
+<p><img src="https://ooo.0x0.ooo/2024/04/20/OpUQsU.png" alt="OpUQsU.png" loading="lazy"></p>
+<p><img src="https://ooo.0x0.ooo/2024/04/20/OpU0aY.png" alt="OpU0aY.png" loading="lazy"></p>
+<p>库中的函数必须使用 internal 关键字</p>
+<p>库中函数被调用时，使用函数的对象会作为第一个传参，括号里面的参数从第二个传参开始</p>
+<h3 id="unchecked-与-safemath"><a href="#unchecked-与-safemath" class="headerlink" title="unchecked 与 safemath"></a>unchecked 与 safemath</h3><p>在solidity 0.8 以前的版本中，不会进行基础性检查，如uint8 para &#x3D;255时，对para加一会导致其重置为0，是unchecked</p>
+<p>到了0.8版本以后，增加了safemath库，会进行基础性检查，当对 para加一 时会报错</p>
+<p>然而，你可以在0.8以后的版本中使用 unchecked 关键字，就像这样：</p>
+<p><img src="https://ooo.0x0.ooo/2024/04/20/OpUcev.png" alt="OpUcev.png" loading="lazy"></p>
+<p>在花括号中的内容将不会收到基础性检查，这样做的好处是可以节省 gas</p>
+<h3 id="transfer，send，call"><a href="#transfer，send，call" class="headerlink" title="transfer，send，call"></a>transfer，send，call</h3><p>这是三种从合约中提取货币的方式</p>
+<h4 id="transfer"><a href="#transfer" class="headerlink" title="transfer"></a>transfer</h4><p>transfer的gas限制为2300，超过或调用失败会抛出报错</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payable(msg.sender).transfer(address(this.balance));</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="send"><a href="#send" class="headerlink" title="send"></a>send</h4><p>send 的gas限制也为2300，超过或调用失败会返回false的布尔值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bool sendSuccess = payable(msg.sender).send(address(this.balance));</span><br><span class="line">require(sendSuccess,&quot;send failed&quot;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="call"><a href="#call" class="headerlink" title="call"></a>call</h4><p>call的gas没有上限，调用失败会返回false的布尔值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(bool sendSuccess,) = payable(msg.sender).call&#123;value:address(this).balance&#125;(&quot;&quot;);</span><br><span class="line">require(sendSuccess,&quot;send failed&quot;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="限制withdraw函数的权限"><a href="#限制withdraw函数的权限" class="headerlink" title="限制withdraw函数的权限"></a>限制withdraw函数的权限</h3><p>这里使用 构造器constructor 和 修饰器modifier 来限制withdraw函数只能被部署合约的人调用</p>
+<p><img src="https://ooo.0x0.ooo/2024/04/20/OpUdGq.png" alt="OpUdGq.png" loading="lazy"></p>
+<p>在调用 withdraw函数之前,会先执行onlyowner里面的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">require (msg.sender == owner, &quot;you are not the owner!&quot;);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Gas优化"><a href="#Gas优化" class="headerlink" title="Gas优化"></a>Gas优化</h3><p>1.使用constant设置常量</p>
+<p>2.使用 immutable 设置不可变</p>
+<blockquote>
+<p>constant 的常量将会把赋值给它的表达式复制到所有访问它的位置，然后再进行求值的运算。 immutable 的不变量则是将表达式的值复制到访问它的位置，而且值占用固定的32个字节</p>
+</blockquote>
+<p>3.使用 自定义报错(例如将require改成自定义报错)</p>
+<p><img src="https://ooo.0x0.ooo/2024/04/20/OpUYhr.png" alt="OpUYhr.png" loading="lazy"></p>
+<h3 id="receive函数-和-fallback-函数"><a href="#receive函数-和-fallback-函数" class="headerlink" title="receive函数 和 fallback 函数"></a>receive函数 和 fallback 函数</h3><h4 id="receive-函数"><a href="#receive-函数" class="headerlink" title="receive 函数"></a>receive 函数</h4><p>receive函数不需要使用 function 关键字,且没有参数、没有返回值</p>
+<p>当合约接收到以太币但没有与之匹配的函数时，Solidity会尝试调用<code>receive</code>函数。<code>receive</code>函数只能有一个，并且必须是外部可见的（public或external）</p>
+<p>使用格式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">receive() external payable&#123;....&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个合约中最多只有一个receive函数.</p>
+<h4 id="fallback函数"><a href="#fallback函数" class="headerlink" title="fallback函数"></a>fallback函数</h4><p>fallback函数是一个没有函数名的函数</p>
+<p>在合约接收到以太币时调用</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fallback() external payable &#123;... &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果合约没有定义<code>receive</code>函数，但有定义<code>fallback</code>函数，那么在接收到以太币时会调用<code>fallback</code>函数。如果合约同时定义了<code>receive</code>函数和<code>fallback</code>函数，那么当合约接收到以太币时只会调用<code>receive</code>函数，而<code>fallback</code>函数只会处理未知函数调用。</p>
+<hr>
+</div></section><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="Donate" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><span class="icon iconify" data-icon="ri:hand-coin-line"></span></span><div id="reward-comment">I'm so cute. Please give me money.</div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>Post author: </strong>wub</li><li class="post-copyright-link"><strong>Post link: </strong><a href="https://wub233.github.io/2024/04/27/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%AD%A6%E4%B9%A0/" title="区块链学习">https://wub233.github.io/2024/04/27/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%AD%A6%E4%B9%A0/</a></li><li class="post-copyright-license"><strong>Copyright Notice: </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><span class="icon iconify" data-icon="ri:creative-commons-line"></span><span class="icon iconify" data-icon="ri:creative-commons-by-line"></span><span class="icon iconify" data-icon="ri:creative-commons-nc-line"></span><span class="icon iconify" data-icon="ri:creative-commons-sa-line"></span></a> unless otherwise stated.</li></ul></article><div class="post-nav"><div class="post-nav-item"></div><div class="post-nav-item"><a class="post-nav-next" href="/2024/03/22/hello-world/" rel="next" title="Hello World"><span class="post-nav-text">Hello World</span><span class="icon iconify" data-icon="ri:arrow-right-s-line"></span></a></div></div></div><div class="hty-card" id="comment"></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2019 – 2024 </span><span class="with-love" id="animate"><span class="icon iconify" data-icon="ri:cloud-line"></span></span><span class="author"> wub</span></div><div class="powered"><span>Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v7.1.1</span><span class="footer-separator">|</span><span>Theme - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.10.11</span></div></footer></div><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><span class="icon iconify" data-icon="ri:arrow-up-s-line"></span><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a></body></html>
