@@ -1,0 +1,489 @@
+<!DOCTYPE html><html lang="ch"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="wub"><meta name="copyright" content="wub"><meta name="generator" content="Hexo 7.1.1"><meta name="theme" content="hexo-theme-yun"><title>Wub's Blog</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/star-markdown-css@0.4.1/dist/yun/yun-markdown.min.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prism-theme-vars/base.css"><script src="https://fastly.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".markdown-body img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><link rel="icon" type="image/svg+xml" href="/yun.svg"><link rel="mask-icon" href="/yun.svg" color="#0078E7"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fastly.jsdelivr.net/npm/" crossorigin><script id="yun-config">
+    window.Yun = {}
+    window.CONFIG = {"hostname":"wub233.github.io","root":"/","title":"雾柏の站","version":"1.10.11","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms"},"anonymous_image":"https://cdn.yunyoujun.cn/img/avatar/none.jpg","say":{"api":"https://el-bot-api.vercel.app/api/words/young"},"fireworks":{"colors":null},"vendors":{"host":"https://fastly.jsdelivr.net/npm/","darken":"https://fastly.jsdelivr.net/npm/darken@1.5.0"}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/hexo-theme-yun.js" type="module"></script><meta name="description" content="文件上传漏洞 笔记Pikachu靶场Client check 发现只能上传图片。 方法一利用抓包软件Burpsuite。 先将要传入的phpinfo文件的后缀改为图片格式。 开启抓包软件 抓包成功后，将文件后缀名改回 .php  上传成功  验证一下  成功 方法二首先查看网页源代码 发现这段代码限制了文件的上传   找到该函数并删掉  成功选择 MIME type 方法一同  client ch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wub&#39;s Blog">
+<meta property="og:url" content="https://wub233.github.io/2026/06/29/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%20%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Wub&#39;s Blog">
+<meta property="og:description" content="文件上传漏洞 笔记Pikachu靶场Client check 发现只能上传图片。 方法一利用抓包软件Burpsuite。 先将要传入的phpinfo文件的后缀改为图片格式。 开启抓包软件 抓包成功后，将文件后缀名改回 .php  上传成功  验证一下  成功 方法二首先查看网页源代码 发现这段代码限制了文件的上传   找到该函数并删掉  成功选择 MIME type 方法一同  client ch">
+<meta property="og:locale">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YWIyMWU5MDA1NTZjMDQ1NGIwYmU5ZjYwNzcxYjcyNmZfNDEwMjBhMmM3MmRiZTc2OGUwNWIwYzJkOWYyMjYzYTNfSUQ6NzIxNDQ1NzMyODY2MDE4NTA4OV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjlkYjdjMGY4ZGY2MzQ0NjhhMmI2YzYxODNlYTYwNzBfZTVlNmM5YjFmYTZkZmI5MjlmNDM4MzMyODk2NGZjMDlfSUQ6NzIxNDQ2MTc4MjU0NTY2MTk4MF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDliZDRlNTk2MWZjOGZjNmMyMTI5ZTI0ZWUwNzhmNWJfYzgwYjlmOTlmOWNmNmZkN2UwOTRjMWUzNWRjMDJmNDlfSUQ6NzIxNDQ2MjI4NTI5NTY0ODc3MF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NGRjYmI1ZjI5NjQ4ZDU0YzgzN2E5YTAwZTE2ZGJlM2RfMThhYmU4Y2Q1NjhiZTIxODVhNmI2ODI1ZGI3ZjI5YzFfSUQ6NzIxNDQ2MjUxMzM1NjgwMDAwMl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NmEzOGY2OGJhMzBlYjEwYzA2MTYyZmNjOTQyNmMwODFfN2MwN2U5ZDY4ZDBiODViYTcxN2NmZmE5NmIxYTkzN2NfSUQ6NzIxNDQ3ODE3NjYzNzg3ODI3Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGQ4MjgwMjBhZTYyMjBhNGFkODhiYjc5MTg3ODlkYjhfM2IyOTUxMWVhMTk4ZjcwZTI1YmJhYTI1YTExYTlhNmRfSUQ6NzIxNDQ3ODMzMDI1NzUwNjMwOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Mzk1MDQ1YjEwNGY4MjgwYzQwMGIxYTk0YTAzZmRhYmFfYTIzNDU3Y2EwNzMwOWQzOWEwNTA4YWI4YTBkYzNjYTVfSUQ6NzIxNDQ4MDkzOTI0NDY4MzI2NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTMzMDQxN2I4NDcwMDA1YjQ1MTI5NDE2MjVhNDY0MjJfZWVhZmU5ODdkNmY5NmZkNzhmMDY0NDIyNzEzZTE3NGNfSUQ6NzIxNDY4MjkyMzcwNDkyNjIwOV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjBlOWZiMzAyMWNjMjM3NzJlYWUwODFmNzBiMzUyNGNfNmQ3YWM5NWI4ZDViY2FjZjNlOGEwNjU5OWRjZGU0MjNfSUQ6NzIxNDcwOTczNTgyMjU0MDgwMl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NGVhY2UxNDYwOGFiYThmMjYwZjBkMmU5ZjQzYmQyYjBfMTBkMmJkOTEwZmM4MjI0Y2FlZjRhNzg4NzUzY2M4OWRfSUQ6NzIxNDcwNTA3NDc5MzIwMTY2NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWJlY2VjMTA2NGIwNDc4MzNmZmI0ZjI1ZjI3Y2Q2OWRfNzYzMTk2MGQzOTVlNmJkOTY1YTQ0NGFmMjNmZDk3YjhfSUQ6NzIxNDcwNTIyNTU3ODM0ODU0NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDMyNDY3MWM1MDJjM2Y0MTMzZTFmODQ2MzM0YTQ2NTZfZDFmM2JmODJkMDA1MDUwNmFmYTE2YTYwNTE5NmQyYzhfSUQ6NzIxNDcwNTYyNjkwMTk1NDU2MV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGMwMmM2NWI4YjZiZDdmYmY3OTJlMGM3Y2QwYjZiZWZfMmIzYTU5MmQ3NmVkN2Q2NWVhOTZlMTNmYmNjOTE4ZTJfSUQ6NzIxNDcxMDQ5ODM3NjQxNzI4Ml8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YzAwYmZkMThjYmJiMzk3NWQwMjk4MjYzMTNhYmM5YzRfNWI3NDljOWMyN2Y3ZmQ0ODczNTVmMWZlMjNjNWEzYTBfSUQ6NzIxNDcxMDU4MTQwNjgyNjUyNF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjViYjg1OWZmYzZiYmNhMDI5YTUzMzlmYzg2YmE5OWNfNzYxZDkzODJiNzVjZWJkNmJiOWI5Y2M1ZmVlYWJkY2RfSUQ6NzIxNDcxOTI1Mzk5NDUwNDE5Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODBlZmM2MTA3OGRiOWQzZDBmY2NhY2YxZGQ0MjVmMDdfYTZkNjcxZDhjMjU5NDM3M2E1YTI2YTM5OTFiY2ZjOGZfSUQ6NzIxNDcxMTE5Mzk1NjM1MjAwNF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTZhYmZkMTAwYTE5NDk1NmFlNDhkNzMxY2Y0ZTY5ZDRfNGI4ZDNlNGJjOTg4MmVmNWM5ZDNkN2RjYWU1OWQ2MzJfSUQ6NzIxNDcxMTUwODU5OTYzNTk5Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGE1YjZiYzYxZGY1NjVmNmUwODI5Y2I5ZGQwZTZiYTdfMTBkN2YyZTNjY2MzZThiZmZmNzExZjY2NzQzM2QyY2ZfSUQ6NzIxNDcxMjY2NDcwOTM2NTc4OF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjcyNDM0NGYwN2ZjNTczY2UwODIzYjMyMWZkYjdmMzVfNjdhNDU5MzYyZGIzNzJlYjk4OGYzNDZmNmNiN2QxYmRfSUQ6NzIxNDcxNDQwODU5MjY3MDcyMl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NmQyYjg2Nzg2MzQyOWEyNTA1OGZhZjNjNTg1MWY5NDlfZjUzODA4YzA4MWYxOTU1MjYzZjlmYzVkZGE0MWI0NmVfSUQ6NzIxNDc2ODgyODMwNjIxMDgyMF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjUyNTc0ZTc3MDdhYjA2NTY2NzE0ZTM3OGNhYWM5NmJfMGJmNmFkMGM3MDBhODcxOWIyYmQ5MTBmNDc2MWZjM2ZfSUQ6NzIxNDcyMjk4NTU1NzU5MDAxOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YmExOWM2ZjQ0MTkyNjg4MzM0OGIxZDE5OGNiYTcxMTZfMTU2ODY0ZmZiZmVkMGU5NWIxOTNiMjQyZTAwZDlhY2NfSUQ6NzIxNDcyMjI3NjYwMjY5MTYxMl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZGVjNDI4ZGZiZDQ0NjA4NTEzZGJmZTg1MGViNDZlM2NfMjZkY2FkZTMxZDMwNWQyYzU4OGYzYmU0MzMyOTJjZmVfSUQ6NzIxNDcyMzE0NDEwMjIzMjA2NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjVlYjQxZTQ2MjcyMGI3M2RhYjk2OWJkNWQxNjFmYzRfMzA4Y2ZmMTBkYTZjNzNhYzg0MGUxMzAzN2JhY2M4ODFfSUQ6NzIxNDcyNTYxNzkxNjEzMzQwNF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzhhMTJlYTA1OWE5OTJlMjFiNTdjZWI1NjA2N2Q4ZTVfNzM3ZTZiNWNjMjhlOTdiZWI4OGUyZDJiNGJiNjk5M2NfSUQ6NzIxNDcyNTcwMzIxNDg5MTAzNl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDE5MmQ3M2U3YWQ5ZDRkZGYwY2E5YWYzMDAzYzBkYjRfNzNjMDRhZGI1YjgzYmE5YzQ5MzY2YjVmOTFkOTA1Y2JfSUQ6NzIxNDc1NTE5NjYyNTI4OTIxOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjE3NDM5OTYwODRjZTg2MDIwNzk5YmI5ZTJkYmY3ODFfNzhmYjFlNGMzNzUwMzcyZDVjZmFhNjdkNDhkY2RjMjNfSUQ6NzIxNDc1NTEyMTYwMTc3MzU5Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTJlN2NlZWNlYmIwZGEyNWExYWM4OGMzODVlM2EyNjFfMzk4NDRhMTlmZGI3YzY2Y2E4NjU4MjEwNWVhOTQzMjhfSUQ6NzIxNDc1NjU3NDc4OTYzMjAyOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzYwNjJjYTc2YTljOTQ1MjhmNzdmM2JlZWIzODJlYTVfMGNmMWI5OWVkODBhMDM2ZDU3NWViMWU1MTVlMjE1MTRfSUQ6NzIxNDc1Njc5OTY5MjQzOTU1NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjE1NTcyMjI3ZTg0YzQ5NDBhNzg1OWM4YmNiZTQwYzRfMjg2YTRkODNjYWQ3NmY5ZWIyNzljNTIxM2QxZGE2ODZfSUQ6NzIxNDc2MzExMzE5Nzg3OTI5N18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWE5NjE4YWI3NzM0YzE5MjY3ZGIxOGNkNTE3NWE4MGJfMzk1N2YwM2JjZTA0YTgxOTVkNTAzMTgzNDZmNWM1OTFfSUQ6NzIxNDc2Mzc1NzYwMjUzNzQ3NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjkxODU2NTJjMDBhYzk4YTFhMjVmNTJhODkxNjU3ZWJfNTgzMjlmYmUyYzdlODAyZTdhZWZhZmZiOGU5ZjJlNmRfSUQ6NzIxNDc2NjcyODMwMjA2NzcxNV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjM5ZDRhYzlmMWY3N2VhYjdkY2FhMjJjMTQyMmRiNjNfYzhjY2VmMjg0YzczNzM3NjdkOWIzODdhM2Q1ODMzY2RfSUQ6NzIxNDc2NjU3MzQ5ODY3OTMwMF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YWRmNzEzNzgxNjRkMzBlZDE4MDEyYTJmOGZmODhjODBfOGQ0ZDRmNWZkZTgzYWU2YjE1YWZkYmYwMTRlMWRlZmNfSUQ6NzIxNDc2NjM5OTQ3NzA3MTg3Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzhkM2YwMWZhNmExY2Y5YjhkZWYxZjRhMTAzNTMzYTZfNmNmNjA5YmVjMDI2OGRlYzUzYjdhZDAzNmEwNWRiODlfSUQ6NzIxNDc4NTMyNjU4MDAzOTcwOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjFhYzJiZGQyMDc4MTc5NjUyNGZmYzNlNzAxM2U2NTdfZjc3MWY1MjBjNzg5YzEyODRmNjhiNTUxMGZkYjA3NWJfSUQ6NzIxNDc4NTcxMjQ5Nzk2NzEwNl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTgxYzlkYjhhYmFmNGFlZmFhZWY0NWMzZjdlN2UwNzZfMzBlMzJkMjVmMzU1MDg0ZmM2YzkyYzhjZTJlNGM0MWZfSUQ6NzIxNDc4NjUxODMxNjAwNzQyNV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDRmMzEyYjlkOWY2MWM0MjE3YjJhZDU0MzY0MDY0MmVfZjdjNWY5NjQwYzVlODVkODc0MWFlOGFkYTZiZmViYjZfSUQ6NzIxNDc4NjcwOTQxMjcwODM1M18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDM3Nzk3MGRkNmQwMDE2MDgxYzM0OWVmYTI5ODlmMjdfMzE2ZmY0OWIzZTk0ZDhkNTdhZjc2ZDYxMTIwNDliN2ZfSUQ6NzIxNDc4ODM0MTQ5NjE2ODQ1MF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MGRkNjA5ZjQ4ZDkyNGNiNDlkZWZkNzMzOTg4YTc3YjBfMzM0NzUyNGRmNWE1ZGM4YmNjOTI4MGY0MTlmNjgxODBfSUQ6NzIxNDc5NDUwNTIyMzAyODc2NF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjllMjE5Yzk2MDMyM2QxNDE4NDdjNjBhYTJlOTFhZThfZDc0OTg4ZjI0MzBmOWIzYzg4NWZmYTExMGVmZDIzYjZfSUQ6NzIxNDgyNjMwNDIzMzk3OTkwNl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjZiOWY2MWZkMGY0MDFmOTBlYjAzZjQ1NGFjZDk2ZDhfYTFkYTFhYTgxNGE2ZTFhZjFlNjVkZTBjN2FjZGVlZmRfSUQ6NzIxNDgzNjQ1MjIyNjY3ODc4Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDNmNzU0Yzc0NGRhN2VjMzdiYzZjMzliZWE4ZjdjNjFfNDNkNTNlOGJkZGZkNjBlODM3MjQ5ZWQyNjczNTg2ZThfSUQ6NzIxNDg0MTE0MDYxNjIxNjU3N18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjMxNDlkMDUyZDY3N2JmYWViMTU3Y2UyZWUzNGNkNWRfYmExODcwOTc1MzE4YjhiMDQ0OGU2NWQ2M2U5NTNkNzBfSUQ6NzIxNDg0MTc1NDAwMzAzMDAxN18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Y2M4MDdlNmY2NTM3NjJmYjA4YzI3YjQzNDcwOTcyYzZfY2YzYmNkMjA5M2Q5NDcwOGIxZDMzYjNhODc2NzU0OGZfSUQ6NzIxNDg5Mzg0NzgyMDY5NzYyOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjZhNDkyNjcyMGM3YTViNzIzYmE1YzA4OWY2MTllYWZfMDI5YzNhMGQxOGQxYjU5MGI0OGU0MDdkOGRmZmNhZmJfSUQ6NzIxNDg4NzQzNTQxMzYzNTA3M18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzZiNTkyY2IwNTE4NTA3ZmE2Y2I3ODc0NTQyODc1ZmJfNGU5N2RmYjcwMDdlNjNkOWEzNzM2M2E3YTY5NzllNjBfSUQ6NzIxNDg5MDk0NDI2MzQwNTU5Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MmE5MzMzNjc5ZGEwNWE4OGY1ZDFiNzVkYzU5NGQ3ZTNfMGQ5MGZhZmQyMTdhZWJiYTdiOTU4YmY0NTkxOWZhOWZfSUQ6NzIxNDg4NzI4Mzg4MTcyMTg1OV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDhhNjEwOTE3MTA4MTAzYmIzODk5YmM2YzdiYTZlNWVfZjQzZDAyOWI0ZDRhNGNhNDA3ZDYyMzhkZjYzNDJkMjFfSUQ6NzIxNDg5NTE5MTAzODE4MTQwNF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzY2Y2JhMzZhZWQyOWM0ZjcyYWFjYTdiZTQ5ZmE5ZGRfNDBlOGI3NDVhNzBjZGQ0OGY1MGZjYjhiNzAxZDg3YzhfSUQ6NzIxNDg5NzY5NzIzOTc3NzI4Ml8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2I4ZTJmZjdjZWRhYjE0NmFmNTkwNjg4YmI0MmQwYWZfNmE1OGM4YjNlMzA3Y2UzOTI2OTM1YjA4Y2EyN2RiZDBfSUQ6NzIxNDg5ODM2ODQ3NTExOTYxN18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTUyYzRiMjFjYzUxNDY2ZjUxZjdjZDg4OTg5MzFlZGNfYzkwNDBhMWI2ZWEzZTY3NDljYjQ5YWRmY2VmMmRlOWVfSUQ6NzIxNDg5ODU5Mzg2NTI1Mjg2NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjhmM2ZmMWE4OTZjYTZhY2E1NTllYzdiYWFkZTA3ZTdfNzE3MzdjYzVkMGJmMzE1NDI2YmE3ZTM3ZjFiZWZiZjZfSUQ6NzIxNDg5OTg4NjIxMzMwMDIyNl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDAzODVkZGZhYTRmODU1ZTdlZGFmNmFkMWE0MTJkMDJfMTI3NTFmOWZiYmMyOGUwNjFiNWFhNTFkZWM0MzFkNTlfSUQ6NzIxNDkwMDQxNDgwNDcyMTY5Ml8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjZkYzhiMTJhMmE4MjhkNWMzNTEwMTNkZWM1YWViMDZfODIyYmZiZGRlMTI4MTRhMzdmNmQ4NTBhNTZjNDdiMDRfSUQ6NzIxNDkwMDYwNzE3MjIzMTE3MF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTIyNDBjMDc0ZjRmMTZhNWM0M2RhY2JjZDdhNjdmMThfMGZhOTMzNjhlMmZjNDFlZGJjZjRmNmFkMGU3MDlmYTFfSUQ6NzIxNDkwMDc4MDUzMTIzNjg5Ml8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTNhMzc0YzI0ODk4NDk3MDYzNWVmZDVmMTg0NDVkMWRfMjc0YmNiYmQ4ZjFkZjQ0MzAxZDdhYjY1YTdiMzMzZTlfSUQ6NzIxNDkwMTQ3ODAzNTU3MDY5MF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZGVmMDVkYWVlN2UxYTYzOWNlNzU4ZDBiNzVlODdhZWVfNjg3ZDQ2ZjA1MGI2Y2NmZGI4ZjcwMTMzNWYyMTY1NDhfSUQ6NzIxNDkwMTg2ODI1MjY5MjQ4Ml8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODVjOTU3NmFhYWNkNzMyZmNkODNjM2UyNmM0NWEyYjdfODlhOWQzZjIxNDc4OWJlMWUxYzhhYTFjYTUwNWU0OGRfSUQ6NzIxNDkwMjExMjYyMTE2NjU5NF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTA0ZDVhOGEyNTQ1MDhmZmYwOWM0Njk4Y2QyZWE0NTFfZTY0YjJlYmZkZTk0NDE1MGQwZGE1MzdkMzIzM2FhNjRfSUQ6NzIxNDkwMjIzMTU5NjgxMDI0MV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDZkY2Y4OGFlNzU4MDgzY2VlNWY2YzIxNmEwMTIzNWVfNzQ5MzAxNjExMDNhZDkwNzRiYjA5NmQ0NDc2OGM3MmRfSUQ6NzIxNDkwMzc5ODIwNzI1MDQzNF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDFiYjFlMTUxOThlYzA4ZmY1YWE0NTljN2VjYzFkNWFfYmQzODcxYTBkNWI5YmEyY2U3MzcxNmEwOTk1NmJkZTdfSUQ6NzIxNDkwNDA0OTM1Nzk2MzI2NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjI0YzdmNjM2ZjVmYjJjYmIwZGE0NjI0MTUxMzVmOGJfYzg0NDExYTVjMTgyMmNlMWNlYTEwMmQ0MjcyNTk1MjNfSUQ6NzIxNDkwNzA4MTAwMTU4MjU5NF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MWI2ZmY3NjU0YWM5MGE1YzIzODE1OWUzMGQxYjk5ZThfYTUxOTQ2MzQxYTM0OTUxZjI1NGY4MzY4ZTZlYjdiNjFfSUQ6NzIxNDkwODkxOTQ5ODQyNDM0OF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MGViNWQ2NGZhNTk4OTM0NGI3ODc3ZWYwNmUzMWFlN2NfNWMyM2ZlNzljNjQ5M2MzOWIwNWFlN2MwYWQ1MjM3YzBfSUQ6NzIxNDkwOTQ4OTYzOTQ0MDM4Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MmE1YzEyNWUwOWQxZGVlOGEwMTE2YTIxNmZkNDViNmFfZjQ2NGI5YmNhNjIyZjcwZmZlNDk5MjljZDEzMzFiM2JfSUQ6NzIxNDk5MzI4Njc5MDkyMjI2OF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTM3NGJkYWYyMzllZTg2ZWM5OWYwNjRmYjk1Y2MxMjVfNmRiZDE2NGEyNzA2MjA1YzkyYmY3ODUyYTFlY2Q2M2NfSUQ6NzIxNDk5NjI1MjU2MjI5MjczN18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZmM3YTAyNDY3ZWI1ZTRlYmRkYWJiMTIzMDUzNzBkYTRfN2VjZGMwN2MxNTg4NTJmZDkyYWFkODZlMzQ4NWRjZDJfSUQ6NzIxNDk5NjQ0NDg3NTM3NDU5NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTEwN2YzOTUyOWMxZDM1MDQ5Njk0NDA3ODM5MDEwZjJfMDU3MDk4MmEzMzA2OGJmNTg2OGZlZWRmODVhZmFlYTFfSUQ6NzIxNTAwNDQ1NjQ3ODM1OTU1M18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YWY0M2QzZTc3ZjhkYzg5NjNhZDU5YjVmNjQ1NjdmMjhfNjAzMWM2ZjFlNGM5Y2FiOGY3OTUzMjYzOWQzN2NiM2VfSUQ6NzIxNTExOTAwNjE4MDE3OTk5Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDliMDZmM2RiZjEwNTM1Y2NlODYzY2JjMjM0YTY3OTBfZjI5MGZhOTA4ZTEwNzliMjAyYmE2MWRjMjE3NTcyNTlfSUQ6NzIxNDkxMTcyNjY2MjIwNTQ0Ml8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzllZDY3MDk2NjhmYTFkNTJiZWQzY2RlYjE4YjllNDlfN2NlNGJlZTdiZDQ2NWE1ZGFmNDNjMTNhMmFjZDdiYTRfSUQ6NzIxNTExMDkxOTQyODAzMDQ2Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjM3NGRiMjRjZGNmNjUzMzgwMzQzOTU1ZDkyMzQ2ZTdfODA5ZjMwM2E4MmE5MzY5ZmUzOGM5YzBiNTA4ZDkzOGVfSUQ6NzIxNTExMTQ3Nzk0NTI3MDMwMF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDExNWY2ZTUzYjk3ZGE1YmQ4YmZkYzQxYTg3MGZkOTBfNjQ0M2M1NGE5NWRhYzZmYjg3Mjg4MzFkYzgyNzNhODRfSUQ6NzIxNTExMTYxNDkyMzkzMTY1MF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTYwMDQyYWJlODYwYTZkYTE2ZWYxZjYzZjFiOGEzYWZfYjhmNTE3MTBmYWNlZDFlYzNhZDYyMzA1MDdiMDhiZDlfSUQ6NzIxNTExMjI4OTE3NTM1NTQyMF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MmVjN2JlMzAyNjg4MmE4ZDM1ZDQzMzcyNDM0YTg0NWNfMjAxNDlkM2QyY2Q3YTQzMjFjNGNlZTc2ZGRiOTRhYmRfSUQ6NzIxNTExMzYyNTI5NDU4NTg4NF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTk1OTJhNmFmYWE3YWU1YTgwYTQ1ZDkyYjVjNTc3ZDJfMjE4MmE4ZTYxMWE2ZjUxZTU0MTZjYjA3Zjc2YzcwZGNfSUQ6NzIxNTExNDQwMjA1MTAzMTA0Ml8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTA2ZTFiOWE5NzFjMjRlODVkNjc3MzQ0MzY1YTY1MjFfOGFjY2IyZTQ2NDUyYTM0ODZjOTBkOWZmMGQ3MGQzYjJfSUQ6NzIxNTExNjcxOTY5NzAxODkwOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=M2E5M2U4MzdjMzQ2NmVhZTE2MDFlMzIxMzBiMGJlNDVfNzI2NTZkYTZhYzc0MzhiM2JmMTE0YTViZDk3MTVhN2ZfSUQ6NzIxNTEyOTgzNjEyNjIwODAwMl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODkzOTEzY2Y0MTQ3MTQwMDc4Y2NjZDk5OWJiYTk1NjdfNTFhZjQ0ZjBhYTI4NWU5OTMwZmE0MGY2NGZiNzAyYzZfSUQ6NzIxNTEzMjM3MDA3OTgyNTkyMl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=M2Y5Yjk1YWYwMWU5ZTBhZDY3Y2EzOTg1MzE5NmQ4NWFfOGY1OTZmM2E4OWE5Zjg0Mjc3NmUwZWI3MzUyZTZjNGFfSUQ6NzIxNTEzNjM5OTM5MjUzODYyNV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzVlOTBhZjZiNmUzOWQxM2JjMTU4NTYzYTg1ZWE1ZTZfZDU3MGVlNWJiMmY4NjA5OGM4ZjQ1MmEyMzI5NTExMzNfSUQ6NzIxNTEzODE4NjkyOTUwNDI1N18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZGExZDY2YmFhZDBkYzZjYjBjODhhNWFkMWVlMTAzMDlfMDUwYjcxMzMzNjViNjc3YzZlYzdhODI4Zjg1MTgwYThfSUQ6NzIxNTE0NDQ3OTYzMDg1MjEyNF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDVhZWYzMzk0ZDY2YTU2MzI5MDZlYTcxOThiYjQwZjlfMTc2YzQxZmM5ODNhZDBlN2JlYzczMGQwZDExZWRkY2NfSUQ6NzIxNTE0NDk1NTM4NzQ3ODAxOV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDIyNTQ5ZWU2NmIxYzU5MGFlODE5ZDAyMGI5MTM4NWRfOTRiZWU4NGRiYzE5OWYzM2YzYzU4ZmJmOTA5NTk1NGJfSUQ6NzIxNTE0NzY0Mjk1ODc5MDY1N18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDU1YjBkM2VlYTZlZjAwMWVhMDUwZTcyZTkxNGNiZmJfZjUxZDlhYzViYmQ4NDljODE1NGEwYThlYWUxZTEzMWFfSUQ6NzIxNTE0Nzg5NDQ1Mjk2MTMwOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDMzZWQ1MWJhN2I1OTU3MTcxYWM5MjgzZmY4NGU3NDJfMGU5ZTQxZGVkMjgwNDhjYjBjY2JkMjlkNWFkZjMyOWRfSUQ6NzIxNTE1MDMxNDUxMjAzOTkzN18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDI4MDZjZmM2MmNlOWM0MjQ5NTljMGNhY2M3MzM3NDZfODhlOTRhYjc4YmM1NWU5ZWY5ODhiMTQ2ZGI2YWZlN2RfSUQ6NzIxNTE1NjM4MDg1MDc5ODU5NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzgxMzhlZmY5MTViMDlmMThkZjU4MzE4YzlhM2E0MjNfNzdmZWE5ZjQ5NDNhZGJmN2ZlYjY3MTM1MWE5NTdkNWZfSUQ6NzIxNTE1NjYwNjQ1ODQ0NTgyNV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM">
+<meta property="article:published_time" content="2026-06-29T04:40:16.330Z">
+<meta property="article:modified_time" content="2026-06-29T04:40:16.412Z">
+<meta property="article:author" content="wub">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YWIyMWU5MDA1NTZjMDQ1NGIwYmU5ZjYwNzcxYjcyNmZfNDEwMjBhMmM3MmRiZTc2OGUwNWIwYzJkOWYyMjYzYTNfSUQ6NzIxNDQ1NzMyODY2MDE4NTA4OV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM"><script>(function() {
+  if (CONFIG.mode !== 'auto') return
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const setting = localStorage.getItem('darken-mode') || 'auto'
+  if (setting === 'dark' || (prefersDark && setting !== 'light'))
+    document.documentElement.classList.toggle('dark', true)
+})()</script></head><body><script src="https://code.iconify.design/2/2.1.1/iconify.min.js"></script><script>// Define global variable
+IconifyProviders = {
+  // Empty prefix: overwrite default API provider configuration
+  '': {
+    // Use custom API first, use Iconify public API as backup
+    resources: [
+        'https://api.iconify.design',
+    ],
+    // Wait for 1 second before switching API hosts
+    rotate: 1000,
+  },
+};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="Table of Contents"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="Overview"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="wub"><img width="96" loading="lazy" src="/images/avatar.gif" alt="wub"><span class="site-author-status"></span></a><div class="site-author-name"><a href="/about/">wub</a></div><span class="site-name">Wub's Blog</span><sub class="site-subtitle">Stay hungry, Stay foolish</sub><div class="site-description">Here 1s 4 Bl0g</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="Home"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="Archives"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">4</span></a></div><div class="site-state-item"><a href="/categories/" title="Categories"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">0</span></a></div><div class="site-state-item"><a href="/tags/" title="Tags"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">0</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:settings-line"></span></span></a></nav><hr style="margin-bottom:0.5rem"><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="我的小伙伴们" style="color:dodgerblue"><span class="icon iconify" data-icon="ri:genderless-line"></span></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E-%E7%AC%94%E8%AE%B0"><span class="toc-number">1.</span> <span class="toc-text">文件上传漏洞 笔记</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Pikachu%E9%9D%B6%E5%9C%BA"><span class="toc-number">2.</span> <span class="toc-text">Pikachu靶场</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Client-check"><span class="toc-number">2.1.</span> <span class="toc-text">Client check</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80"><span class="toc-number">2.1.1.</span> <span class="toc-text">方法一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C"><span class="toc-number">2.1.2.</span> <span class="toc-text">方法二</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MIME-type"><span class="toc-number">2.2.</span> <span class="toc-text">MIME type</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">方法一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">方法二</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getemagesize"><span class="toc-number">2.3.</span> <span class="toc-text">Getemagesize</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DVWA"><span class="toc-number">3.</span> <span class="toc-text">DVWA</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#LOW"><span class="toc-number">3.1.</span> <span class="toc-text">LOW</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MEDIUM"><span class="toc-number">3.2.</span> <span class="toc-text">MEDIUM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#High"><span class="toc-number">3.3.</span> <span class="toc-text">High</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#up-loadlabs"><span class="toc-number">4.</span> <span class="toc-text">up-loadlabs</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-01"><span class="toc-number">4.1.</span> <span class="toc-text">pass-01</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-02"><span class="toc-number">4.2.</span> <span class="toc-text">pass-02</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-03"><span class="toc-number">4.3.</span> <span class="toc-text">pass-03</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-04"><span class="toc-number">4.4.</span> <span class="toc-text">pass-04</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-05"><span class="toc-number">4.5.</span> <span class="toc-text">pass-05</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-06"><span class="toc-number">4.6.</span> <span class="toc-text">pass-06</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-07"><span class="toc-number">4.7.</span> <span class="toc-text">pass-07</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-08"><span class="toc-number">4.8.</span> <span class="toc-text">pass-08</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-09%EF%BC%88-%EF%BC%89"><span class="toc-number">4.9.</span> <span class="toc-text">pass-09（*）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-10"><span class="toc-number">4.10.</span> <span class="toc-text">pass-10</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-11"><span class="toc-number">4.11.</span> <span class="toc-text">pass-11</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-12"><span class="toc-number">4.12.</span> <span class="toc-text">pass-12</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-13"><span class="toc-number">4.13.</span> <span class="toc-text">pass-13</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-14"><span class="toc-number">4.14.</span> <span class="toc-text">pass-14</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-15"><span class="toc-number">4.15.</span> <span class="toc-text">pass-15</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-16"><span class="toc-number">4.16.</span> <span class="toc-text">pass-16</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-17"><span class="toc-number">4.17.</span> <span class="toc-text">pass-17</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-18"><span class="toc-number">4.18.</span> <span class="toc-text">pass-18</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-19"><span class="toc-number">4.19.</span> <span class="toc-text">pass-19</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-20"><span class="toc-number">4.20.</span> <span class="toc-text">pass-20</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pass-21"><span class="toc-number">4.21.</span> <span class="toc-text">pass-21</span></a></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="https://wub233.github.io/2026/06/29/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%20%E7%AC%94%E8%AE%B0/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="wub"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="Wub's Blog"></span><header class="post-header"><h1 class="post-title" itemprop="name headline"></h1><div class="post-meta"><div class="post-time"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <time title="Created: 2026-06-29 12:40:16" itemprop="dateCreated datePublished" datetime="2026-06-29T12:40:16+08:00">2026-06-29</time></div><div class="post-classify"></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><h1 id="文件上传漏洞-笔记"><a href="#文件上传漏洞-笔记" class="headerlink" title="文件上传漏洞 笔记"></a>文件上传漏洞 笔记</h1><h1 id="Pikachu靶场"><a href="#Pikachu靶场" class="headerlink" title="Pikachu靶场"></a>Pikachu靶场</h1><h2 id="Client-check"><a href="#Client-check" class="headerlink" title="Client check"></a>Client check</h2><p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YWIyMWU5MDA1NTZjMDQ1NGIwYmU5ZjYwNzcxYjcyNmZfNDEwMjBhMmM3MmRiZTc2OGUwNWIwYzJkOWYyMjYzYTNfSUQ6NzIxNDQ1NzMyODY2MDE4NTA4OV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>发现只能上传图片。</p>
+<h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><p>利用抓包软件Burpsuite。</p>
+<p>先将要传入的phpinfo文件的后缀改为图片格式。</p>
+<p>开启抓包软件</p>
+<p>抓包成功后，将文件后缀名改回 .php</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjlkYjdjMGY4ZGY2MzQ0NjhhMmI2YzYxODNlYTYwNzBfZTVlNmM5YjFmYTZkZmI5MjlmNDM4MzMyODk2NGZjMDlfSUQ6NzIxNDQ2MTc4MjU0NTY2MTk4MF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>上传成功</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDliZDRlNTk2MWZjOGZjNmMyMTI5ZTI0ZWUwNzhmNWJfYzgwYjlmOTlmOWNmNmZkN2UwOTRjMWUzNWRjMDJmNDlfSUQ6NzIxNDQ2MjI4NTI5NTY0ODc3MF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>验证一下</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NGRjYmI1ZjI5NjQ4ZDU0YzgzN2E5YTAwZTE2ZGJlM2RfMThhYmU4Y2Q1NjhiZTIxODVhNmI2ODI1ZGI3ZjI5YzFfSUQ6NzIxNDQ2MjUxMzM1NjgwMDAwMl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>成功</p>
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>首先查看网页源代码</p>
+<p>发现这段代码限制了文件的上传</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NmEzOGY2OGJhMzBlYjEwYzA2MTYyZmNjOTQyNmMwODFfN2MwN2U5ZDY4ZDBiODViYTcxN2NmZmE5NmIxYTkzN2NfSUQ6NzIxNDQ3ODE3NjYzNzg3ODI3Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGQ4MjgwMjBhZTYyMjBhNGFkODhiYjc5MTg3ODlkYjhfM2IyOTUxMWVhMTk4ZjcwZTI1YmJhYTI1YTExYTlhNmRfSUQ6NzIxNDQ3ODMzMDI1NzUwNjMwOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>找到该函数并删掉</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Mzk1MDQ1YjEwNGY4MjgwYzQwMGIxYTk0YTAzZmRhYmFfYTIzNDU3Y2EwNzMwOWQzOWEwNTA4YWI4YTBkYzNjYTVfSUQ6NzIxNDQ4MDkzOTI0NDY4MzI2NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>成功选择</p>
+<h2 id="MIME-type"><a href="#MIME-type" class="headerlink" title="MIME type"></a>MIME type</h2><p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTMzMDQxN2I4NDcwMDA1YjQ1MTI5NDE2MjVhNDY0MjJfZWVhZmU5ODdkNmY5NmZkNzhmMDY0NDIyNzEzZTE3NGNfSUQ6NzIxNDY4MjkyMzcwNDkyNjIwOV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<h3 id="方法一-1"><a href="#方法一-1" class="headerlink" title="方法一"></a>方法一</h3><p>同  client check 利用抓包软件，修改文件名后缀</p>
+<h3 id="方法二-1"><a href="#方法二-1" class="headerlink" title="方法二"></a>方法二</h3><p>首先了解一下$_FILES函数 和 MIME 机制</p>
+<p>*$_FILES[‘myFile’][‘name’] 客户端文件的原名称。 *<br>*$_FILES[‘myFile’][‘type’] 文件的 <strong>MIME</strong> 类型，需要浏览器提供该信息的支持，例如”image&#x2F;gif”。 *<br>*$_FILES[‘myFile’][‘size’] 已上传文件的大小，单位为字节。 *<br>*$_FILES[‘myFile’][‘tmp_name’] 文件被上传后在服务端储存的临时文件名，一般是系统默认。可以在php.ini的upload_tmp_dir 指定，但 用 putenv() 函数设置是不起作用的。 *<br>*$_FILES[‘myFile’][‘error’] 和该文件上传相关的错误代码。[‘error’] 是在 PHP 4.2.0 版本中增加的。下面是它的说明：(它们在PHP3.0以后成了常量) *</p>
+<p><em>MIME*<em>机制</em></em>　使允许邮件处理文本，图片等多个不同类型的数据。*</p>
+<p><em>MIME</em>* 来描述标记数据类型**,在MIME扩展中使用一种叫 *<em>多部分对象集合 的方法 来容纳多份不同类型的数据</em></p>
+<p><em>多部分对象集合的对象有:</em></p>
+<p><em>multipart&#x2F;from-data</em></p>
+<p><em>该对象在Web 表单文件上传时使用.</em></p>
+<p><em>multipart&#x2F;byteranges</em></p>
+<p><em>该对象在 状态码 206响应报文包含了多个范围时使用。</em></p>
+<p><em>PS：</em></p>
+<p><em>在HTTP报文中<strong>使用多部分对象集合</strong>时，需要在首部字段里加上<strong>Content-type</strong>。</em></p>
+<p><em>使用 boundary 字符串来划分多部分对象集合指名的各类实体。</em></p>
+<p><em>例：</em></p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjBlOWZiMzAyMWNjMjM3NzJlYWUwODFmNzBiMzUyNGNfNmQ3YWM5NWI4ZDViY2FjZjNlOGEwNjU5OWRjZGU0MjNfSUQ6NzIxNDcwOTczNTgyMjU0MDgwMl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>开始做题</p>
+<p>查看源代码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NGVhY2UxNDYwOGFiYThmMjYwZjBkMmU5ZjQzYmQyYjBfMTBkMmJkOTEwZmM4MjI0Y2FlZjRhNzg4NzUzY2M4OWRfSUQ6NzIxNDcwNTA3NDc5MzIwMTY2NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWJlY2VjMTA2NGIwNDc4MzNmZmI0ZjI1ZjI3Y2Q2OWRfNzYzMTk2MGQzOTVlNmJkOTY1YTQ0NGFmMjNmZDk3YjhfSUQ6NzIxNDcwNTIyNTU3ODM0ODU0NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>此处用到了一个自定义的 upload_sick 函数 ，转到定义</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDMyNDY3MWM1MDJjM2Y0MTMzZTFmODQ2MzM0YTQ2NTZfZDFmM2JmODJkMDA1MDUwNmFmYTE2YTYwNTE5NmQyYzhfSUQ6NzIxNDcwNTYyNjkwMTk1NDU2MV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>从此处 我们可以看到 该网页做判断的方法是 通过$_FILES 函数获取表单上传的 文件MIME类型 。 </p>
+<p>而该函数获取方式 是从报文中获取信息</p>
+<p>所以利用抓包软件修改请求报文</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGMwMmM2NWI4YjZiZDdmYmY3OTJlMGM3Y2QwYjZiZWZfMmIzYTU5MmQ3NmVkN2Q2NWVhOTZlMTNmYmNjOTE4ZTJfSUQ6NzIxNDcxMDQ5ODM3NjQxNzI4Ml8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>上传成功</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YzAwYmZkMThjYmJiMzk3NWQwMjk4MjYzMTNhYmM5YzRfNWI3NDljOWMyN2Y3ZmQ0ODczNTVmMWZlMjNjNWEzYTBfSUQ6NzIxNDcxMDU4MTQwNjgyNjUyNF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<h2 id="Getemagesize"><a href="#Getemagesize" class="headerlink" title="Getemagesize"></a>Getemagesize</h2><p><strong>getimagesize函数</strong></p>
+<p>getimagesize()：它是php提供的，通过对目标文件的16进制进行读取，通过该文件的前面几个字符串，来判断文件类型。<br>getmagesize()返回结果中有文件大小和文件类型。</p>
+<p><strong>了解 文件头 和 文件包含漏洞 的一些相关知识</strong></p>
+<p>对于 不同格式的 图片文件，以二进制格式打开，其首部四个字节是用来标识文件格式</p>
+<p>以 png 格式为例（引用了一下 胡宇轩 的笔记）</p>
+<p>我们将一个png格式的图片文件用 010 editor打开后在它的文件头之后会有一个png文件的特有的数据块，每一个部分都有着它特殊的含义</p>
+<p>而IHDR所有内容的表示按照顺序是这样表示的：</p>
+<p>4字节宽度，4字节高度，1字节位深度，1字节颜色类型，1字节压缩方法，1字节滤波方法，1字节隔行扫描方法</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjViYjg1OWZmYzZiYmNhMDI5YTUzMzlmYzg2YmE5OWNfNzYxZDkzODJiNzVjZWJkNmJiOWI5Y2M1ZmVlYWJkY2RfSUQ6NzIxNDcxOTI1Mzk5NDUwNDE5Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>我们首先看前面 89 50 4E 47 丨 0D 0A 1A 0A 这八个字节所表示的就是PNG文件特有的二进制下的文件头，有他就表示有PNG文件。</p>
+<p><strong>文件包含漏洞</strong>，在 PHP中，当使用include() 函数包含文件时，只有代码执行到 include() 函数时才将文件包含进来，发生错误时只给出一个警告，继续向下执行。</p>
+<p>开始做题</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODBlZmM2MTA3OGRiOWQzZDBmY2NhY2YxZGQ0MjVmMDdfYTZkNjcxZDhjMjU5NDM3M2E1YTI2YTM5OTFiY2ZjOGZfSUQ6NzIxNDcxMTE5Mzk1NjM1MjAwNF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>这题 我们首先试试用抓包软件修改文件后缀名看看能不能过</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTZhYmZkMTAwYTE5NDk1NmFlNDhkNzMxY2Y0ZTY5ZDRfNGI4ZDNlNGJjOTg4MmVmNWM5ZDNkN2RjYWU1OWQ2MzJfSUQ6NzIxNDcxMTUwODU5OTYzNTk5Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>发现行不通</p>
+<p>看看源代码，一步步找</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGE1YjZiYzYxZGY1NjVmNmUwODI5Y2I5ZGQwZTZiYTdfMTBkN2YyZTNjY2MzZThiZmZmNzExZjY2NzQzM2QyY2ZfSUQ6NzIxNDcxMjY2NDcwOTM2NTc4OF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjcyNDM0NGYwN2ZjNTczY2UwODIzYjMyMWZkYjdmMzVfNjdhNDU5MzYyZGIzNzJlYjk4OGYzNDZmNmNiN2QxYmRfSUQ6NzIxNDcxNDQwODU5MjY3MDcyMl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NmQyYjg2Nzg2MzQyOWEyNTA1OGZhZjNjNTg1MWY5NDlfZjUzODA4YzA4MWYxOTU1MjYzZjlmYzVkZGE0MWI0NmVfSUQ6NzIxNDc2ODgyODMwNjIxMDgyMF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>这时我们 可以** 伪造文件头**</p>
+<p>通过系统自带的 copy指令</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjUyNTc0ZTc3MDdhYjA2NTY2NzE0ZTM3OGNhYWM5NmJfMGJmNmFkMGM3MDBhODcxOWIyYmQ5MTBmNDc2MWZjM2ZfSUQ6NzIxNDcyMjk4NTU1NzU5MDAxOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>生成的图片文件会在末尾接上代码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YmExOWM2ZjQ0MTkyNjg4MzM0OGIxZDE5OGNiYTcxMTZfMTU2ODY0ZmZiZmVkMGU5NWIxOTNiMjQyZTAwZDlhY2NfSUQ6NzIxNDcyMjI3NjYwMjY5MTYxMl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>上传成功</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZGVjNDI4ZGZiZDQ0NjA4NTEzZGJmZTg1MGViNDZlM2NfMjZkY2FkZTMxZDMwNWQyYzU4OGYzYmU0MzMyOTJjZmVfSUQ6NzIxNDcyMzE0NDEwMjIzMjA2NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>想要使代码运行，需要使用到 文件包含漏洞</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjVlYjQxZTQ2MjcyMGI3M2RhYjk2OWJkNWQxNjFmYzRfMzA4Y2ZmMTBkYTZjNzNhYzg0MGUxMzAzN2JhY2M4ODFfSUQ6NzIxNDcyNTYxNzkxNjEzMzQwNF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzhhMTJlYTA1OWE5OTJlMjFiNTdjZWI1NjA2N2Q4ZTVfNzM3ZTZiNWNjMjhlOTdiZWI4OGUyZDJiNGJiNjk5M2NfSUQ6NzIxNDcyNTcwMzIxNDg5MTAzNl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>在最下面发现代码成功运行。</p>
+<h1 id="DVWA"><a href="#DVWA" class="headerlink" title="DVWA"></a>DVWA</h1><h2 id="LOW"><a href="#LOW" class="headerlink" title="LOW"></a>LOW</h2><p>没什么好说的，可以直接上传.php文件</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDE5MmQ3M2U3YWQ5ZDRkZGYwY2E5YWYzMDAzYzBkYjRfNzNjMDRhZGI1YjgzYmE5YzQ5MzY2YjVmOTFkOTA1Y2JfSUQ6NzIxNDc1NTE5NjYyNTI4OTIxOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>打开看一看，成功运行</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjE3NDM5OTYwODRjZTg2MDIwNzk5YmI5ZTJkYmY3ODFfNzhmYjFlNGMzNzUwMzcyZDVjZmFhNjdkNDhkY2RjMjNfSUQ6NzIxNDc1NTEyMTYwMTc3MzU5Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<h2 id="MEDIUM"><a href="#MEDIUM" class="headerlink" title="MEDIUM"></a>MEDIUM</h2><p>利用burpsuite 抓包改文件后缀名</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTJlN2NlZWNlYmIwZGEyNWExYWM4OGMzODVlM2EyNjFfMzk4NDRhMTlmZGI3YzY2Y2E4NjU4MjEwNWVhOTQzMjhfSUQ6NzIxNDc1NjU3NDc4OTYzMjAyOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>成功上传</p>
+<p>检查一下，没问题。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzYwNjJjYTc2YTljOTQ1MjhmNzdmM2JlZWIzODJlYTVfMGNmMWI5OWVkODBhMDM2ZDU3NWViMWU1MTVlMjE1MTRfSUQ6NzIxNDc1Njc5OTY5MjQzOTU1NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>然后 又改了一下 content-type ，发现还是可上传，猜想是根据MIME来验证</p>
+<p>See see 源代码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjE1NTcyMjI3ZTg0YzQ5NDBhNzg1OWM4YmNiZTQwYzRfMjg2YTRkODNjYWQ3NmY5ZWIyNzljNTIxM2QxZGE2ODZfSUQ6NzIxNDc2MzExMzE5Nzg3OTI5N18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>利用了文件的MIME类型进行判断。</p>
+<h2 id="High"><a href="#High" class="headerlink" title="High"></a>High</h2><p>直接抓包改后缀名显然不成功</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWE5NjE4YWI3NzM0YzE5MjY3ZGIxOGNkNTE3NWE4MGJfMzk1N2YwM2JjZTA0YTgxOTVkNTAzMTgzNDZmNWM1OTFfSUQ6NzIxNDc2Mzc1NzYwMjUzNzQ3NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>看看源代码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjkxODU2NTJjMDBhYzk4YTFhMjVmNTJhODkxNjU3ZWJfNTgzMjlmYmUyYzdlODAyZTdhZWZhZmZiOGU5ZjJlNmRfSUQ6NzIxNDc2NjcyODMwMjA2NzcxNV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>利用和pikachhu的getemagesize的方法</p>
+<p>先伪造木马头，上传后 利用 low 的文件包含漏洞打开运行代码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjM5ZDRhYzlmMWY3N2VhYjdkY2FhMjJjMTQyMmRiNjNfYzhjY2VmMjg0YzczNzM3NjdkOWIzODdhM2Q1ODMzY2RfSUQ6NzIxNDc2NjU3MzQ5ODY3OTMwMF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YWRmNzEzNzgxNjRkMzBlZDE4MDEyYTJmOGZmODhjODBfOGQ0ZDRmNWZkZTgzYWU2YjE1YWZkYmYwMTRlMWRlZmNfSUQ6NzIxNDc2NjM5OTQ3NzA3MTg3Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<h1 id="up-loadlabs"><a href="#up-loadlabs" class="headerlink" title="up-loadlabs"></a>up-loadlabs</h1><h2 id="pass-01"><a href="#pass-01" class="headerlink" title="pass-01"></a>pass-01</h2><p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzhkM2YwMWZhNmExY2Y5YjhkZWYxZjRhMTAzNTMzYTZfNmNmNjA5YmVjMDI2OGRlYzUzYjdhZDAzNmEwNWRiODlfSUQ6NzIxNDc4NTMyNjU4MDAzOTcwOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>直接在浏览器中将 onsubmit属性给删了</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjFhYzJiZGQyMDc4MTc5NjUyNGZmYzNlNzAxM2U2NTdfZjc3MWY1MjBjNzg5YzEyODRmNjhiNTUxMGZkYjA3NWJfSUQ6NzIxNDc4NTcxMjQ5Nzk2NzEwNl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>上传成功</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTgxYzlkYjhhYmFmNGFlZmFhZWY0NWMzZjdlN2UwNzZfMzBlMzJkMjVmMzU1MDg0ZmM2YzkyYzhjZTJlNGM0MWZfSUQ6NzIxNDc4NjUxODMxNjAwNzQyNV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p><strong>上传文件保存路径</strong>通过响应头得到是在 upload-labs\upload</p>
+<p>测试一下</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDRmMzEyYjlkOWY2MWM0MjE3YjJhZDU0MzY0MDY0MmVfZjdjNWY5NjQwYzVlODVkODc0MWFlOGFkYTZiZmViYjZfSUQ6NzIxNDc4NjcwOTQxMjcwODM1M18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>成功</p>
+<p>或者</p>
+<p>利用抓包软件改文件后缀名也行</p>
+<h2 id="pass-02"><a href="#pass-02" class="headerlink" title="pass-02"></a>pass-02</h2><p>用burpsuite抓下包，修改 首部content-type。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDM3Nzk3MGRkNmQwMDE2MDgxYzM0OWVmYTI5ODlmMjdfMzE2ZmY0OWIzZTk0ZDhkNTdhZjc2ZDYxMTIwNDliN2ZfSUQ6NzIxNDc4ODM0MTQ5NjE2ODQ1MF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>上传成功</p>
+<h2 id="pass-03"><a href="#pass-03" class="headerlink" title="pass-03"></a>pass-03</h2><p>先提一嘴 <strong>黑名单验证</strong></p>
+<p>后缀名检测:判断文件后缀名的检测方式。</p>
+<p>后缀名检测的两种方式:黑名单与白名单。</p>
+<ul>
+<li><p>黑名单:定义上传的文件格式,如”php、jsp、zip、rar、tar等格式”,如果上传文件触发该规则,一律拦截不允许上传。</p>
+</li>
+<li><p>白名单: 定义上传的文件格式,如”jpg、jpeg、png、gif、ico等格式”,如果上传文件不符合该规则,同样一律拦截不允许上传。</p>
+</li>
+</ul>
+<p>look look源码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MGRkNjA5ZjQ4ZDkyNGNiNDlkZWZkNzMzOTg4YTc3YjBfMzM0NzUyNGRmNWE1ZGM4YmNjOTI4MGY0MTlmNjgxODBfSUQ6NzIxNDc5NDUwNTIyMzAyODc2NF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>限制了后缀名，但是限制不严格</p>
+<p>可以用 .phtml .phps .php5 .pht 来进行绕过</p>
+<p>上传一个 .phps 文件</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjllMjE5Yzk2MDMyM2QxNDE4NDdjNjBhYTJlOTFhZThfZDc0OTg4ZjI0MzBmOWIzYzg4NWZmYTExMGVmZDIzYjZfSUQ6NzIxNDgyNjMwNDIzMzk3OTkwNl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>成功上传。</p>
+<p>另外，想要解析.phps等这类文件。需要在 apache 的 httpd.conf 中加一行 AddType application&#x2F;x-httpd-php .php .phtml .phps .php5 .pht，否则显示空白页</p>
+<h2 id="pass-04"><a href="#pass-04" class="headerlink" title="pass-04"></a>pass-04</h2><p>先了解 htaccess 文件</p>
+<p><strong>htaccess</strong> 文件是Apache服务器中的一个配置文件，他负责相关目录下的网页配置。通过htaccess文件，可以帮助我们实现：网页301重定向，自定义404错误页面，改变文件扩展名，允许或组织特定的用户或者，目录的访问，禁止目录列表，配置默认文档等功能。</p>
+<p><code>.htaccess</code>文件只能用于<code>apahce</code>，不能用于<code>iis</code>和<code>nginx</code>等中间件</p>
+<p>找到的一个参考网页<a target="_blank" rel="noopener" href="https://www.cnblogs.com/engeng/articles/5948089.html"><strong>apache .htaccess文件详解和配置技巧总结</strong></a></p>
+<p>开始做题</p>
+<p>看看源代码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjZiOWY2MWZkMGY0MDFmOTBlYjAzZjQ1NGFjZDk2ZDhfYTFkYTFhYTgxNGE2ZTFhZjFlNjVkZTBjN2FjZGVlZmRfSUQ6NzIxNDgzNjQ1MjIyNjY3ODc4Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>列了一大堆 黑名单。改后缀名 是行不通了。</p>
+<p>面对这种情况，我们可以 上传一个 .htaccess配置文件，</p>
+<p>新建一个记事本，写入内容</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDNmNzU0Yzc0NGRhN2VjMzdiYzZjMzliZWE4ZjdjNjFfNDNkNTNlOGJkZGZkNjBlODM3MjQ5ZWQyNjczNTg2ZThfSUQ6NzIxNDg0MTE0MDYxNjIxNjU3N18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p><strong>该段代码的意思是 当遇上文件名为 “1.jpg”的文件时，将其解析为.php文件</strong></p>
+<p>保存为.htaccess文件，上传该文件</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjMxNDlkMDUyZDY3N2JmYWViMTU3Y2UyZWUzNGNkNWRfYmExODcwOTc1MzE4YjhiMDQ0OGU2NWQ2M2U5NTNkNzBfSUQ6NzIxNDg0MTc1NDAwMzAzMDAxN18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>上传成功</p>
+<p>在上转保存为 .jpg 文件的php文件，打开即可</p>
+<p>由于 版本问题，我的无法显示</p>
+<h2 id="pass-05"><a href="#pass-05" class="headerlink" title="pass-05"></a>pass-05</h2><p>前置知识</p>
+<p>类似于.htaccess可以覆盖apache的配置文件，而.user.ini则可以覆盖php.ini的配置.</p>
+<p>Ps:  </p>
+<ul>
+<li><p>.user.ini只能用于Server API为FastCGI模式下，而正常情况下apache不是运行在此模块下的</p>
+</li>
+<li><p>.htaccess和.user.ini都只能用于访问本目录下的文件时进行覆盖。</p>
+</li>
+</ul>
+<p>然鹅 .user.ini 并不能覆盖所有php.ini 属性，php.ini 属性分为四类：</p>
+<ul>
+<li><p>PHP_INI_USER        可在用户脚本（例如 ini_set()）或 Windows 注册表（自 PHP 5.3 起）以及 .user.ini 中设定</p>
+</li>
+<li><p>PHP_INI_PERDIR        可在 php.ini，.htaccess 或 httpd.conf 中设定</p>
+</li>
+<li><p>PHP_INI_SYSTEM        可在 php.ini 或 httpd.conf 中设定</p>
+</li>
+<li><p>PHP_INI_ALL        可在任何地方设定</p>
+</li>
+</ul>
+<p><strong>但是实际上，只要不是</strong>**<code>PHP_INI_SYSTEM</code><strong><strong>模式下的属性，均可以在</strong></strong><code>.user.ini</code>**<strong>中设置</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/ini.list.php">PHP 官网参考</a></p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Y2M4MDdlNmY2NTM3NjJmYjA4YzI3YjQzNDcwOTcyYzZfY2YzYmNkMjA5M2Q5NDcwOGIxZDMzYjNhODc2NzU0OGZfSUQ6NzIxNDg5Mzg0NzgyMDY5NzYyOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>第一个为后置，第二个为前置</p>
+<p>开始做题</p>
+<p>查看源代码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjZhNDkyNjcyMGM3YTViNzIzYmE1YzA4OWY2MTllYWZfMDI5YzNhMGQxOGQxYjU5MGI0OGU0MDdkOGRmZmNhZmJfSUQ6NzIxNDg4NzQzNTQxMzYzNTA3M18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>发现相较于pass4，把.htaccess屏蔽掉了。</p>
+<p>但是我们可以转入 .user.ini 文件，在文件中写入 <em>auto_prepend_file&#x3D;1.gif</em></p>
+<p>传入后，再转入木马文件，将文件名修改为 1.gif</p>
+<p><strong>注意： 在访问php文件时，才会自动包含1.gif</strong></p>
+<p>upload文件夹中自带了一个 readme.php 文件，打开该文件，代码成功运行</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzZiNTkyY2IwNTE4NTA3ZmE2Y2I3ODc0NTQyODc1ZmJfNGU5N2RmYjcwMDdlNjNkOWEzNzM2M2E3YTY5NzllNjBfSUQ6NzIxNDg5MDk0NDI2MzQwNTU5Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<h2 id="pass-06"><a href="#pass-06" class="headerlink" title="pass-06"></a>pass-06</h2><p>大小写过滤不严格</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MmE5MzMzNjc5ZGEwNWE4OGY1ZDFiNzVkYzU5NGQ3ZTNfMGQ5MGZhZmQyMTdhZWJiYTdiOTU4YmY0NTkxOWZhOWZfSUQ6NzIxNDg4NzI4Mzg4MTcyMTg1OV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>利用burpsuite 抓包改后缀名</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDhhNjEwOTE3MTA4MTAzYmIzODk5YmM2YzdiYTZlNWVfZjQzZDAyOWI0ZDRhNGNhNDA3ZDYyMzhkZjYzNDJkMjFfSUQ6NzIxNDg5NTE5MTAzODE4MTQwNF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>成功传入。</p>
+<p>用php 7.3.4打不开，有大小写敏感，换到5.3.29就能打开了</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzY2Y2JhMzZhZWQyOWM0ZjcyYWFjYTdiZTQ5ZmE5ZGRfNDBlOGI3NDVhNzBjZGQ0OGY1MGZjYjhiNzAxZDg3YzhfSUQ6NzIxNDg5NzY5NzIzOTc3NzI4Ml8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<h2 id="pass-07"><a href="#pass-07" class="headerlink" title="pass-07"></a>pass-07</h2><p>看看源代码，发现妹有 首尾去空。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2I4ZTJmZjdjZWRhYjE0NmFmNTkwNjg4YmI0MmQwYWZfNmE1OGM4YjNlMzA3Y2UzOTI2OTM1YjA4Y2EyN2RiZDBfSUQ6NzIxNDg5ODM2ODQ3NTExOTYxN18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>缺少</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTUyYzRiMjFjYzUxNDY2ZjUxZjdjZDg4OTg5MzFlZGNfYzkwNDBhMWI2ZWEzZTY3NDljYjQ5YWRmY2VmMmRlOWVfSUQ6NzIxNDg5ODU5Mzg2NTI1Mjg2NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>于是利用burpsuite抓包，后缀名加空格</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjhmM2ZmMWE4OTZjYTZhY2E1NTllYzdiYWFkZTA3ZTdfNzE3MzdjYzVkMGJmMzE1NDI2YmE3ZTM3ZjFiZWZiZjZfSUQ6NzIxNDg5OTg4NjIxMzMwMDIyNl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>上传成功</p>
+<p>测试一下</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDAzODVkZGZhYTRmODU1ZTdlZGFmNmFkMWE0MTJkMDJfMTI3NTFmOWZiYmMyOGUwNjFiNWFhNTFkZWM0MzFkNTlfSUQ6NzIxNDkwMDQxNDgwNDcyMTY5Ml8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>这个操作也只有PHP5才行的通</p>
+<h2 id="pass-08"><a href="#pass-08" class="headerlink" title="pass-08"></a>pass-08</h2><p>看看源码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjZkYzhiMTJhMmE4MjhkNWMzNTEwMTNkZWM1YWViMDZfODIyYmZiZGRlMTI4MTRhMzdmNmQ4NTBhNTZjNDdiMDRfSUQ6NzIxNDkwMDYwNzE3MjIzMTE3MF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>没有删除点的操作，缺少</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTIyNDBjMDc0ZjRmMTZhNWM0M2RhY2JjZDdhNjdmMThfMGZhOTMzNjhlMmZjNDFlZGJjZjRmNmFkMGU3MDlmYTFfSUQ6NzIxNDkwMDc4MDUzMTIzNjg5Ml8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>于是利用burpsuite抓包，后缀名加点</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTNhMzc0YzI0ODk4NDk3MDYzNWVmZDVmMTg0NDVkMWRfMjc0YmNiYmQ4ZjFkZjQ0MzAxZDdhYjY1YTdiMzMzZTlfSUQ6NzIxNDkwMTQ3ODAzNTU3MDY5MF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>上传成功</p>
+<p>测试一下</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZGVmMDVkYWVlN2UxYTYzOWNlNzU4ZDBiNzVlODdhZWVfNjg3ZDQ2ZjA1MGI2Y2NmZGI4ZjcwMTMzNWYyMTY1NDhfSUQ6NzIxNDkwMTg2ODI1MjY5MjQ4Ml8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>成功</p>
+<p>该操作也是只有在PHP5下行得通</p>
+<h2 id="pass-09（-）"><a href="#pass-09（-）" class="headerlink" title="pass-09（*）"></a>pass-09（*）</h2><p>了解一下：</p>
+<p><strong>如果文件名+“::$DATA”会把::$DATA之后的数据当成文件流处理,不会检测后缀名，且保持::$DATA之前的文件名，目的就是不检查后缀名</strong></p>
+<p>例如”webshell.php::$DATA”Windows会自动去掉末尾的::$DATA变成”webshell.php”</p>
+<p>看看源码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODVjOTU3NmFhYWNkNzMyZmNkODNjM2UyNmM0NWEyYjdfODlhOWQzZjIxNDc4OWJlMWUxYzhhYTFjYTUwNWU0OGRfSUQ6NzIxNDkwMjExMjYyMTE2NjU5NF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>发现没有去除字符串::$DATA</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTA0ZDVhOGEyNTQ1MDhmZmYwOWM0Njk4Y2QyZWE0NTFfZTY0YjJlYmZkZTk0NDE1MGQwZGE1MzdkMzIzM2FhNjRfSUQ6NzIxNDkwMjIzMTU5NjgxMDI0MV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>还是抓包改后缀名</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDZkY2Y4OGFlNzU4MDgzY2VlNWY2YzIxNmEwMTIzNWVfNzQ5MzAxNjExMDNhZDkwNzRiYjA5NmQ0NDc2OGM3MmRfSUQ6NzIxNDkwMzc5ODIwNzI1MDQzNF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>上传成功</p>
+<p>测试一下</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDFiYjFlMTUxOThlYzA4ZmY1YWE0NTljN2VjYzFkNWFfYmQzODcxYTBkNWI5YmEyY2U3MzcxNmEwOTk1NmJkZTdfSUQ6NzIxNDkwNDA0OTM1Nzk2MzI2NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>成功，这个 PHP5 和PHP7 都行得通</p>
+<h2 id="pass-10"><a href="#pass-10" class="headerlink" title="pass-10"></a>pass-10</h2><p>看看源码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjI0YzdmNjM2ZjVmYjJjYmIwZGE0NjI0MTUxMzVmOGJfYzg0NDExYTVjMTgyMmNlMWNlYTEwMmQ0MjcyNTk1MjNfSUQ6NzIxNDkwNzA4MTAwMTU4MjU5NF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>该过滤的全都有</p>
+<p>但是，<strong>都是单次过滤</strong></p>
+<p>于是抓包改文件名加 “. .“过滤后剩一个点 </p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MWI2ZmY3NjU0YWM5MGE1YzIzODE1OWUzMGQxYjk5ZThfYTUxOTQ2MzQxYTM0OTUxZjI1NGY4MzY4ZTZlYjdiNjFfSUQ6NzIxNDkwODkxOTQ5ODQyNDM0OF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>上传成功</p>
+<p>测试一下</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MGViNWQ2NGZhNTk4OTM0NGI3ODc3ZWYwNmUzMWFlN2NfNWMyM2ZlNzljNjQ5M2MzOWIwNWFlN2MwYWQ1MjM3YzBfSUQ6NzIxNDkwOTQ4OTYzOTQ0MDM4Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>成功，但只有在PHP5过的去，PHP7 <em>move_uploaded_file($temp_file, $img_path 函数过不去</em></p>
+<h2 id="pass-11"><a href="#pass-11" class="headerlink" title="pass-11"></a>pass-11</h2><p>注意：<strong>str_ireplace() 函数 是从前往后找</strong></p>
+<p>看看源码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MmE1YzEyNWUwOWQxZGVlOGEwMTE2YTIxNmZkNDViNmFfZjQ2NGI5YmNhNjIyZjcwZmZlNDk5MjljZDEzMzFiM2JfSUQ6NzIxNDk5MzI4Njc5MDkyMjI2OF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>意思是 将 $deny_ext 中的敏感词全部过滤掉<strong>一遍</strong>，</p>
+<p>所以 将后缀名 改为 “.pphphp”，<strong>写两遍</strong></p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTM3NGJkYWYyMzllZTg2ZWM5OWYwNjRmYjk1Y2MxMjVfNmRiZDE2NGEyNzA2MjA1YzkyYmY3ODUyYTFlY2Q2M2NfSUQ6NzIxNDk5NjI1MjU2MjI5MjczN18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>上传成功</p>
+<p>测试一下</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZmM3YTAyNDY3ZWI1ZTRlYmRkYWJiMTIzMDUzNzBkYTRfN2VjZGMwN2MxNTg4NTJmZDkyYWFkODZlMzQ4NWRjZDJfSUQ6NzIxNDk5NjQ0NDg3NTM3NDU5NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<h2 id="pass-12"><a href="#pass-12" class="headerlink" title="pass-12"></a>pass-12</h2><p>先了解<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhangzhuangtongxue/article/details/78198191"> %00截断</a></p>
+<p>在url中%00表示ascll码中的0 ，而ascii中0作为特殊字符保留，表示字符串结束，所以当<strong>url中出现%00时就会认为读取已结束</strong></p>
+<p>再补充两个函数</p>
+<p><strong>strrpos() 函数：</strong>查找字符串在另一字符串中最后一次出现的位置。</p>
+<p>例：查找 “php” 在字符串中最后一次出现的位置：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">echo strrpos(&quot;You love php, I love php too!&quot;,&quot;php&quot;);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>注意：</strong>strrpos() 函数对大小写敏感</p>
+<p><strong>substr() 函数：</strong>返回字符串的一部分。</p>
+<p>从字符串中返回 “world”：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">echo substr(&quot;Hello world&quot;,6);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong>如果 <em>start</em> 参数是负数且 <em>length</em> 小于或等于 <em>start</em>，则 <em>length</em> 为 0。</p>
+<p>开始做题</p>
+<p><em>先得把PHP版本调到5.3下，然后把magic_quotes_gpc关闭</em></p>
+<p>看看源代码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTEwN2YzOTUyOWMxZDM1MDQ5Njk0NDA3ODM5MDEwZjJfMDU3MDk4MmEzMzA2OGJmNTg2OGZlZWRmODVhZmFlYTFfSUQ6NzIxNTAwNDQ1NjQ3ODM1OTU1M18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>看到是用<strong>get方法</strong>得到初始路径</p>
+<p>利用burpsuite抓包</p>
+<p>这样改</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YWY0M2QzZTc3ZjhkYzg5NjNhZDU5YjVmNjQ1NjdmMjhfNjAzMWM2ZjFlNGM5Y2FiOGY3OTUzMjYzOWQzN2NiM2VfSUQ6NzIxNTExOTAwNjE4MDE3OTk5Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>然后就上传成功了</p>
+<p>基本思路是这样，我由于版本高了实现不了，不做展示</p>
+<h2 id="pass-13"><a href="#pass-13" class="headerlink" title="pass-13"></a>pass-13</h2><p>看看源代码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDliMDZmM2RiZjEwNTM1Y2NlODYzY2JjMjM0YTY3OTBfZjI5MGZhOTA4ZTEwNzliMjAyYmE2MWRjMjE3NTcyNTlfSUQ6NzIxNDkxMTcyNjY2MjIwNTQ0Ml8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>思路与pass12思路一样</p>
+<p>但由于是采用的是post方法，所以要将**%00进行url编码后**加到末尾</p>
+<h2 id="pass-14"><a href="#pass-14" class="headerlink" title="pass-14"></a>pass-14</h2><p>利用文件头伪造知识</p>
+<p><a href="https://link.zhihu.com/?target=https://blog.csdn.net/xiangshangbashaonian/article/details/80156865">文件头总结</a></p>
+<p>跟pikachu靶场的第三题差不多</p>
+<p>开始做题，看看源代码，发现读取文件前两个字节来做类型判断。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzllZDY3MDk2NjhmYTFkNTJiZWQzY2RlYjE4YjllNDlfN2NlNGJlZTdiZDQ2NWE1ZGFmNDNjMTNhMmFjZDdiYTRfSUQ6NzIxNTExMDkxOTQyODAzMDQ2Nl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>于是利用系统自带的copy指令 合成一个木马图片。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjM3NGRiMjRjZGNmNjUzMzgwMzQzOTU1ZDkyMzQ2ZTdfODA5ZjMwM2E4MmE5MzY5ZmUzOGM5YzBiNTA4ZDkzOGVfSUQ6NzIxNTExMTQ3Nzk0NTI3MDMwMF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>转入木马图片</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDExNWY2ZTUzYjk3ZGE1YmQ4YmZkYzQxYTg3MGZkOTBfNjQ0M2M1NGE5NWRhYzZmYjg3Mjg4MzFkYzgyNzNhODRfSUQ6NzIxNTExMTYxNDkyMzkzMTY1MF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>成功上传。</p>
+<p>网站自带一个文件包含漏洞</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTYwMDQyYWJlODYwYTZkYTE2ZWYxZjYzZjFiOGEzYWZfYjhmNTE3MTBmYWNlZDFlYzNhZDYyMzA1MDdiMDhiZDlfSUQ6NzIxNTExMjI4OTE3NTM1NTQyMF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>于是在地址栏输入 include.php?file&#x3D;upload&#x2F;服务器中文件名</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MmVjN2JlMzAyNjg4MmE4ZDM1ZDQzMzcyNDM0YTg0NWNfMjAxNDlkM2QyY2Q3YTQzMjFjNGNlZTc2ZGRiOTRhYmRfSUQ6NzIxNTExMzYyNTI5NDU4NTg4NF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>成功</p>
+<h2 id="pass-15"><a href="#pass-15" class="headerlink" title="pass-15"></a>pass-15</h2><p>方法与 pass-14 相同，只是判断方式 变成了 用 getimagesize()函数，前面讲过，不再赘述。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTk1OTJhNmFmYWE3YWU1YTgwYTQ1ZDkyYjVjNTc3ZDJfMjE4MmE4ZTYxMWE2ZjUxZTU0MTZjYjA3Zjc2YzcwZGNfSUQ6NzIxNTExNDQwMjA1MTAzMTA0Ml8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<h2 id="pass-16"><a href="#pass-16" class="headerlink" title="pass-16"></a>pass-16</h2><p>了解 exif_imagetype 函数</p>
+<p>exif_imagetype</p>
+<p>(PHP 4 &gt;&#x3D; 4.3.0, PHP 5, PHP 7, PHP 8)</p>
+<p>exif_imagetype — <strong>判断一个图像的类型</strong></p>
+<p><strong>说明</strong><a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/function.exif-imagetype.php#refsect1-function.exif-imagetype-description">** **</a><strong>：</strong></p>
+<p>exif_imagetype(string <code>$filename</code>): int|false</p>
+<p>exif_imagetype() <strong>读取一个图像的第一个字节并检查其签名。</strong></p>
+<p>本函数可用来避免调用其它 <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/ref.exif.php">exif</a> 函数用到了不支持的文件类型上或和 $_SERVER[‘HTTP_ACCEPT’] 结合使用来检查浏览器是否可以显示某个指定的图像。</p>
+<p>源码：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTA2ZTFiOWE5NzFjMjRlODVkNjc3MzQ0MzY1YTY1MjFfOGFjY2IyZTQ2NDUyYTM0ODZjOTBkOWZmMGQ3MGQzYjJfSUQ6NzIxNTExNjcxOTY5NzAxODkwOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>用这个函数需要先把php配置改一下</p>
+<h2 id="pass-17"><a href="#pass-17" class="headerlink" title="pass-17"></a>pass-17</h2><p>首先了解** 二次渲染**</p>
+<p><strong>二次渲染原理</strong></p>
+<p>在我们上传文件后，网站会对图片进行二次处理（格式、尺寸要求等），<strong>服务器会把里面的内容进行替换更新，</strong>处理完成后，<strong>根据我们原有的图片生成一个新的图片</strong>并放到网站对应的标签进行显示。</p>
+<p>由Gif文件或 URL 创建一个新图象。成功则返回一图像标识符&#x2F;图像资源，失败则返回false，导致图片马的数据丢失，上传图片马失败</p>
+<p>开始做题</p>
+<p>看看源码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=M2E5M2U4MzdjMzQ2NmVhZTE2MDFlMzIxMzBiMGJlNDVfNzI2NTZkYTZhYzc0MzhiM2JmMTE0YTViZDk3MTVhN2ZfSUQ6NzIxNTEyOTgzNjEyNjIwODAwMl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>发现后端采用了二次渲染手段</p>
+<p>我们尝试一下上一题的手段</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODkzOTEzY2Y0MTQ3MTQwMDc4Y2NjZDk5OWJiYTk1NjdfNTFhZjQ0ZjBhYTI4NWU5OTMwZmE0MGY2NGZiNzAyYzZfSUQ6NzIxNTEzMjM3MDA3OTgyNTkyMl8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>哒咩！行不通。</p>
+<p>于是把原图和服务器修改过的图片进行比较，<strong>看看哪个部分没有被修改（利用脚本）</strong>。将php代码放到没有被更改的部分，配合包含漏洞</p>
+<p>对于GIF 的上传，只需要判断没有修改的位置，然后将php代码添加即可</p>
+<p>对于PNG的上传，需要修改PLTE数据块或者修改IDAT数据块，</p>
+<p>该文章介绍了几种不同格式图片的绕过方式：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45588247/article/details/119177948">【文件上传绕过】——二次渲染漏洞</a></p>
+<p>将增强 后的图片再进行上传，结合文件上传漏洞，即可成功</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=M2Y5Yjk1YWYwMWU5ZTBhZDY3Y2EzOTg1MzE5NmQ4NWFfOGY1OTZmM2E4OWE5Zjg0Mjc3NmUwZWI3MzUyZTZjNGFfSUQ6NzIxNTEzNjM5OTM5MjUzODYyNV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<h2 id="pass-18"><a href="#pass-18" class="headerlink" title="pass-18"></a>pass-18</h2><p>先了解 <strong>条件竞争（爆破）</strong></p>
+<p><strong>条件竞争</strong>是指一个系统的运行结果依赖于不受控制的事件的先后顺序。当这些不受控制的事件并没有按照开发者想要的方式运行时，就可能会出现bug。尤其在当前我们的系统中大量对资源进行共享，如果处理不当的话，就会产生条件竞争漏洞</p>
+<p><strong>就是如果<strong><strong>并发</strong></strong>处理不当或相关操作逻辑顺序设计的不合理，导致出现了漏洞</strong></p>
+<p>开始做题，看看源码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzVlOTBhZjZiNmUzOWQxM2JjMTU4NTYzYTg1ZWE1ZTZfZDU3MGVlNWJiMmY4NjA5OGM4ZjQ1MmEyMzI5NTExMzNfSUQ6NzIxNTEzODE4NjkyOTUwNDI1N18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>这里的move_uploaded_file()函数在外面，意思是<strong>先上传后判断</strong>，于是<strong>我们可以利用这个上传的间隙去执行php文件</strong>。</p>
+<p>然后进行爆破</p>
+<p>我是根据这篇文章里的步骤来的<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45588247/article/details/118796606?spm=1001.2014.3001.5501">【文件上传绕过】——条件竞争漏洞</a></p>
+<p>然后爆了好久出不来。。。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZGExZDY2YmFhZDBkYzZjYjBjODhhNWFkMWVlMTAzMDlfMDUwYjcxMzMzNjViNjc3YzZlYzdhODI4Zjg1MTgwYThfSUQ6NzIxNTE0NDQ3OTYzMDg1MjEyNF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>不过方法是会了</p>
+<h2 id="pass-19"><a href="#pass-19" class="headerlink" title="pass-19"></a>pass-19</h2><p>和pass-18一样</p>
+<p>但是做了文件头的检测，上传改为图片格式上传即可</p>
+<h2 id="pass-20"><a href="#pass-20" class="headerlink" title="pass-20"></a>pass-20</h2><p>先看看源码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDVhZWYzMzk0ZDY2YTU2MzI5MDZlYTcxOThiYjQwZjlfMTc2YzQxZmM5ODNhZDBlN2JlYzczMGQwZDExZWRkY2NfSUQ6NzIxNTE0NDk1NTM4NzQ3ODAxOV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>多了一个保存名字</p>
+<p>方法一（版本低于5.3）</p>
+<p>据源码，$img_path 是由$file_name组成，$flie_name又由 ‘savename’ 控制。</p>
+<p>因此可以抓包使用  00截断</p>
+<p>方法二</p>
+<p>move_uploaded_file()有一个 <strong>忽略掉文件末尾的 &#x2F;.</strong> 的特性。</p>
+<p>抓包改 savename</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDIyNTQ5ZWU2NmIxYzU5MGFlODE5ZDAyMGI5MTM4NWRfOTRiZWU4NGRiYzE5OWYzM2YzYzU4ZmJmOTA5NTk1NGJfSUQ6NzIxNTE0NzY0Mjk1ODc5MDY1N18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>成功上传</p>
+<p>测试一下</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDU1YjBkM2VlYTZlZjAwMWVhMDUwZTcyZTkxNGNiZmJfZjUxZDlhYzViYmQ4NDljODE1NGEwYThlYWUxZTEzMWFfSUQ6NzIxNTE0Nzg5NDQ1Mjk2MTMwOF8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>成功</p>
+<h2 id="pass-21"><a href="#pass-21" class="headerlink" title="pass-21"></a>pass-21</h2><p>先了解几个函数</p>
+<p><strong>explode() 函数</strong></p>
+<p>定义和用法</p>
+<p>explode(<em>separator</em><em>,string,limit</em>)</p>
+<p>explode() 函数使用一个字符串分割另一个字符串，并返回由字符串组成的数组。</p>
+<p><strong>注释：</strong>“separator” 参数不能是一个空字符串。</p>
+<p><strong>注释：</strong>该函数是二进制安全的。</p>
+<p><strong>end() 函数</strong>：输出数组中最后一个元素的值</p>
+<p><strong>count() 函数****：</strong>返回数组中元素的数目</p>
+<p>看看源码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDMzZWQ1MWJhN2I1OTU3MTcxYWM5MjgzZmY4NGU3NDJfMGU5ZTQxZGVkMjgwNDhjYjBjY2JkMjlkNWFkZjMyOWRfSUQ6NzIxNTE1MDMxNDUxMjAzOTkzN18xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>利用了白名单验证方法，</p>
+<p>检测了MIME类型 -》修改 content-type</p>
+<p>然后是对svename 进行分割，使其成为数组来验证，又因为是<strong>把最后一个元素拿出检测（end($flie)）</strong></p>
+<p>所以预先抓包将 savename 作为数组上传</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDI4MDZjZmM2MmNlOWM0MjQ5NTljMGNhY2M3MzM3NDZfODhlOTRhYjc4YmM1NWU5ZWY5ODhiMTQ2ZGI2YWZlN2RfSUQ6NzIxNTE1NjM4MDg1MDc5ODU5NV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>上传成功</p>
+<p>测试一下</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzgxMzhlZmY5MTViMDlmMThkZjU4MzE4YzlhM2E0MjNfNzdmZWE5ZjQ5NDNhZGJmN2ZlYjY3MTM1MWE5NTdkNWZfSUQ6NzIxNTE1NjYwNjQ1ODQ0NTgyNV8xNzgyNzA3OTk5OjE3ODI3OTQzOTlfVjM" alt="Image" loading="lazy"></p>
+<p>成功</p>
+</div></section><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="Donate" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><span class="icon iconify" data-icon="ri:hand-coin-line"></span></span><div id="reward-comment">I'm so cute. Please give me money.</div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>Post author: </strong>wub</li><li class="post-copyright-link"><strong>Post link: </strong><a href="https://wub233.github.io/2026/06/29/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%20%E7%AC%94%E8%AE%B0/" title="">https://wub233.github.io/2026/06/29/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%20%E7%AC%94%E8%AE%B0/</a></li><li class="post-copyright-license"><strong>Copyright Notice: </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><span class="icon iconify" data-icon="ri:creative-commons-line"></span><span class="icon iconify" data-icon="ri:creative-commons-by-line"></span><span class="icon iconify" data-icon="ri:creative-commons-nc-line"></span><span class="icon iconify" data-icon="ri:creative-commons-sa-line"></span></a> unless otherwise stated.</li></ul></article><div class="post-nav"><div class="post-nav-item"></div><div class="post-nav-item"><a class="post-nav-next" href="/2026/06/29/HTTP%E5%9B%BE%E8%A7%A3%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" rel="next" title=""><span class="post-nav-text"></span><span class="icon iconify" data-icon="ri:arrow-right-s-line"></span></a></div></div></div><div class="hty-card" id="comment"></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2019 – 2026 </span><span class="with-love" id="animate"><span class="icon iconify" data-icon="ri:cloud-line"></span></span><span class="author"> wub</span></div><div class="powered"><span>Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v7.1.1</span><span class="footer-separator">|</span><span>Theme - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.10.11</span></div></footer></div><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><span class="icon iconify" data-icon="ri:arrow-up-s-line"></span><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a></body></html>

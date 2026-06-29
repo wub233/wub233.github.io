@@ -1,0 +1,976 @@
+<!DOCTYPE html><html lang="ch"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="wub"><meta name="copyright" content="wub"><meta name="generator" content="Hexo 7.1.1"><meta name="theme" content="hexo-theme-yun"><title>Wub's Blog</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/star-markdown-css@0.4.1/dist/yun/yun-markdown.min.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prism-theme-vars/base.css"><script src="https://fastly.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".markdown-body img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><link rel="icon" type="image/svg+xml" href="/yun.svg"><link rel="mask-icon" href="/yun.svg" color="#0078E7"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fastly.jsdelivr.net/npm/" crossorigin><script id="yun-config">
+    window.Yun = {}
+    window.CONFIG = {"hostname":"wub233.github.io","root":"/","title":"雾柏の站","version":"1.10.11","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms"},"anonymous_image":"https://cdn.yunyoujun.cn/img/avatar/none.jpg","say":{"api":"https://el-bot-api.vercel.app/api/words/young"},"fireworks":{"colors":null},"vendors":{"host":"https://fastly.jsdelivr.net/npm/","darken":"https://fastly.jsdelivr.net/npm/darken@1.5.0"}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/hexo-theme-yun.js" type="module"></script><meta name="description" content="HTTP图解阅读笔记✧( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )✧ 第一章 了解WEB及网络基础网络基础 TCP&#x2F;IP1. TCP&#x2F;IP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wub&#39;s Blog">
+<meta property="og:url" content="https://wub233.github.io/2026/06/29/HTTP%E5%9B%BE%E8%A7%A3%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Wub&#39;s Blog">
+<meta property="og:description" content="HTTP图解阅读笔记✧( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )✧ 第一章 了解WEB及网络基础网络基础 TCP&#x2F;IP1. TCP&#x2F;IP">
+<meta property="og:locale">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Njk5ZmQ1YmRkOTAyYjQ4Mzg2NTUyNjg1M2ZjOTA2MTVfN2VhNTU1YmYyODNlNTgxNGQwNGU2YThmZjBjYTA3ODlfSUQ6NzIwNzc0MzIyMjM4NTY1NTgxMV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YWQxMGY0ODkxOWY2Mjg4YjM0MDMyYzAwZDg3NjE4ZjlfMzQ5MGM5NTVmYmYwZGEyMjkyMWExODliNmE5Mzk3MGRfSUQ6NzIwNzgwMTU1OTk4NzMwNjQ5OV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NWFlNTRhYzY2NTkwYjg2NWI5NzU3MTU3ODg2ODdhMWNfMzJiMDYzYzdmNjg3YmJmYzU1Mzg5NDQyZGZlNmUzYjJfSUQ6NzIwNzgwNzk5NjQ0MDQyODU0NV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGM1NDZmY2Q4OWM0NTJjNDkzY2IzODFlNGQ2NWY0NDVfYTI4MGU1ZGUwOTk2YmEzMGJiNDQxZjQ3NmI4N2Q5NTBfSUQ6NzIwNzgyNDU4NDI3NDU1ODk3OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTE4NzFiNjJiYzhjYmQyMTFkNTAyOTZiMDFmNTljNjRfMzM5ZmJhZDQ5NzRhMTk0ZjkyZjZlY2YzMzhkY2FkZGZfSUQ6NzIwNzgyNTY5NDYxNjU1MTQyN18xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Y2I0YjgyNDZkNzBiODlkMjcwMjMyZWE1OTdlMDA1MjZfOWJiMmFjMDQ0NDBiYTkzYWRjNDJlYTA0YWJhZGNmMThfSUQ6NzIwODA1NzE2NDY4MDkwNDcwNV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OWFjZDZmNWM2YzMzMzRjMTI5ZTkxMmQwNTU3YjBkZTRfYzhjNjBhYWQ5ZTI1MzU2OTg0NDRlNGViYWUzYmQ3ZGVfSUQ6NzIwODA1ODIwNzgwODU4NTc1Nl8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWRlYWZmMzc2NmQ0YmJmOTgzYWU3ODAwOGEwYTU4ZDBfN2ZhZWNmMTUzYjZlYmNhZTEyN2IyYTEyYTM2ZmExMGRfSUQ6NzIwODA2NzAyMzEyODM5NTc3OF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTdmZWYxMzQ0NWE3NjkxN2QwNzkwYTU2MDc5ZTg5NWJfY2Q3MjZiMDAzMmM4MDg3MDM4Nzk1ZDQ5MzkzNWU5MGZfSUQ6NzIwODA2NjIzNzE0NDkwNzc3N18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDY1MDRmZTI2ODc3MWQ5YzRmZTBhYTFhMWVlYTU0YjhfNjk0NDNiNGY1N2NhOWQ3YTQ3YWZhN2MwNDU2Y2NlMTdfSUQ6NzIwODA2Njg4MDM1MDY1MDM5Nl8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTEzNWZjYmU1NTkwZWMxYjk0ZjViNjMyYTFlNDYwOTRfM2QxMjA1YTE2M2UyMWUyYmVkYmE0ZjEwZGY1YjYwNmNfSUQ6NzIwODA2NzcyNzMxMDE1OTkwMF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTQ5YTE3ODc3YmVmNTJjZDQyZTU2NGFjZmY4YTJlNWFfNTEyNTM2YjFiM2Y1MTNlZWYyNWY1Yzc2YjEyZmU1ZDVfSUQ6NzIwODA2OTk3NjAxODgxMjkzMF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDk4OWU3NGI4NGI5ZjgyYzRhMmU0ODYzM2Y2MDI0NDFfODYwYzVlYmFlYTA0YTJkYjMxYTY5MTJhZThiYWUyNGFfSUQ6NzIwODA2ODgxMDQzODU1NzY5OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTFlNDg4MTk5Yzc0MWJiZmQyNjlhZDRiMWIxNmJkMmZfZTM1ODEyMjYxODMyNjU2MTUzZTI3MGE2NjZlOWJkZDNfSUQ6NzIwODA3MTAzMDcxNDY0NjU1Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NmNlY2Q0YjljYTI0ZGRiYWQ1MzZkYjI2YWY5ODk3ODJfM2FjODU1YjcwOWNmYmRjYjg1MWQ3NmQ2MGVmMzIwZDFfSUQ6NzIwODA3MTA4Nzg2NTcyNDkyOV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjY0Mzc5ODY5YjBmNTBlNjQzMTMzMmY1ZTg0NjEyNGFfN2NiMDlmMTQ3MzIwZjQ0NGQ5NWU3M2NlNTNkNjVlOWVfSUQ6NzIwODA3MjA1MjU0NDE5MjU0MF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjRhMDBiNTkyOTcyNDhmODc2MzVhN2NiN2Y5NGMzMGVfMmY0MzAxZDM0NGQ0YWFiZmU2MGNjZDE1NDJmMTk5NWNfSUQ6NzIwODA3MjEyOTA4OTI5MDI0Ml8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDQ3YzA2MGRhNzhmZmRkNzVhYmY4MGNlNTVkMGI4NTdfZWYwMWQxZTM4YjBiOGRlZDY0MjY0YjVhMTRiOWEwN2FfSUQ6NzIwODE3MTgzNTIyNTAxNDMwMF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjM1Nzk4MjM3YTg0OTYxNWMzMTQ0ZmQwMzk3N2FhZDVfZTRhZDgyYzdkNDdhNWYwMzcwYzlhNmM0NDg3Njg2YTVfSUQ6NzIwODE3NDE4MTk0OTcxODUyOV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTY3NWY3ODczNzdhMjdlNzA5M2RhNzU2ZTBjY2MyOGRfZGY3ZGZlNDEzYmNiNGM4NTgyYTUzN2MyMWU3NmNjZjRfSUQ6NzIwODE3NTIzNTYwMTgyNTc5Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YmM0N2Q0YmVjM2NmODQ2ODM2YmJkYTc1N2M4YzlkODFfZTYxOWI1MmFkZTU1NGQ5N2I0MDUxNDE0MDI1YTcyMDJfSUQ6NzIwODE3NTg3MzM2OTg4MjY1Ml8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTZjNjg3ZmIzYTY2MTI1OTg2NjViZDE1OWNlZTRmZDBfMTM3NzEyMmE5ZmU1OTZjZWUyNmFiZmQ4OGRjMWE4ZGZfSUQ6NzIwODE3NzUwNTM2OTQ3MzAyNl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjU2MTk0OTU1ZmFmNTkzNWU4NmQ0YzA4NmEwNTQxMGNfZTE0NzA0YzkxMzc0M2MxMjBkMmUzZjljNjE5MTljMzNfSUQ6NzIwODE3ODQ3MzQ2OTI2MzkwMF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTY4ZWI2N2UxYzQ3ZTg3MzI2NTJlOGFkMjgyMTM0OTVfZGMxYWExZWJkZWFiYThlMjBlZGIxNjRhMjA5MzI0MjJfSUQ6NzIwODE3OTQzMTI2ODE4ODE2M18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjVhM2JiMTIyNDg4NjE2MDdlMGFmMjVkNDNkZjhlYzZfMThiYzYwNGNhODBjNDM0MTQ3YzQxNDc4MGQ0YjVjOTlfSUQ6NzIwODE3OTUwMjQ0OTU3Mzg4OV8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjE2YmE1NWJkOTEyNjg0Zjk1NDU4YmQyNmNhNGRmMzdfYTcyMjc2NzcyZDMyODhkNzc1OGJkNDk2ZDk2OWZlYTFfSUQ6NzIwODE4NDAzMDE2NzEzODMzMl8xNzgyNzA2MTA0OjE3ODI3OTI1MDRfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjE1ODAyZDVkZTFlMTRhZGU5NDk4ZGJkYjFjMWRiODJfODNiYTY1YjA4ZGEwMWZmMmRmNTdkOTA2MGZhY2E0YWJfSUQ6NzIwODE4NDQ5MDI1MjkxMDU5M18xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MThjYzA2ZmYzN2E5MWI3NWU2YzE3M2E2YWY5ODM3NjBfZWY1Y2NlYjdiNDk2NzYzOTM1MTc0YWI3YjUyMGYwMTdfSUQ6NzIwODE4NDgyMjM2NjM3MTg0MV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTAxZDdkMmQxNmEwM2RlOTE3ZDhjYjdkMjRjMzZiZWFfYWIzOGRjYzhmMmE3MGQ5ZTUxM2JmZmU5MjYzZDcwN2JfSUQ6NzIwODE4NjQ2NjMwNzA4MDE5M18xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MWM4ZjA1ZThkNDgwNTg0ZTMwOTNhOWZjOWZlMTExYjFfMjM1MjMzMDM5MTIxOTQ3MjQwNWQwOTUxZGE2ZDcxMDJfSUQ6NzIwODE4NjYwOTA3MzQ1NTEwNl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Zjc3ZjU1ZWZiODcwOTdlMDM5NWJjYzgxZTFhNWY5MTFfZjU1N2QyZDhjMjA4NjBlZWMzNTU2ODdhYjFlZGU1YzdfSUQ6NzIwODQ3MzU2MzM5ODIwOTU2NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTc4NzNiZTU3MDUyMjM5OWFmOWE4ZjFmYzkxZmY0YjJfMThhNDMyYmY2Mjc4Y2FjOTNmMzg1N2NjOGUyMWY5OTlfSUQ6NzIwODQ3ODIzNDEzNTU0MzgzNl8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzliNjI4YmVjNmVlNjU1YjkzNzk3NGQyYzNiZmE0YmZfNDgzMjgzZDMwYTFlZTgxMzYyMjE3MjM4MTg4OTMzMDFfSUQ6NzIwODU3MzQ4ODU4MjM2MTA5MF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2U1MThmYTJjYTkzMzExM2E0NWE3NjI4ZDg4ZTIzYjdfNDE4ZDg3MzU2OGIxMWRlNzY2MjJmMDhiYzIxNzM2M2ZfSUQ6NzIwODg4MDMzODExMzc4OTk1M18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTE2MDFhNTRmNDg3NWIxZjhkODA3YmFkMmU2ZDFlZTRfN2E2ZTUyMWQ4NDVjNGNiMmZjMWI3ZmY1NWE5Njg5YzlfSUQ6NzIwODg4MTA3OTM5NzQwMDU3OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MWRjZmVmZjhkY2RkYjg1ODg0YjliYzgxYWRhMGY2MTJfNWIwNjdmNTAxYzg5Yjk0Zjg2ZmNjNGU0OGIwNDQyY2NfSUQ6NzIwODg4NTUwMDc0OTMzMjQ4MV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2IyNjlkYzZhYmJiYjM0MzJjMWM1MzJmZjM3Mjk1OTZfZDM4ZGQzNTc4N2ZkMjFjNDVlYzRmYTNiMjExZjc4ZjlfSUQ6NzIwODkwMjc4OTA4NTM0Nzg0NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MGQxZTQ3NTZiNmIyZjNmNjI3MmJhOTkzZDdkYTljNDBfYmIxNmMzNjA4ZTA3MzA4ODY3ODIwNmZlNTMzYTc4NjFfSUQ6NzIwODkwMzEwNTgxODQ3NjU3Ml8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTE0YzczNjUzZmM3YWFkOTE4ZWEwMTY4Yjk3NjcwODBfZGQ4ZDJlYTU5YzQyZTM5MWM5OTVhZjFkM2U3YjNlMzdfSUQ6NzIwODkwNTg2NDMxMjE3NjY0NF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjJiNTA4ZDdkNjJjODY4ODM3MmVjMjU0ZDA2ZjRkMDNfNjNiMmRhYjViZDZiZDVkNDMwMGI5MWY2YjQwYjkyZDVfSUQ6NzIwODkxNDA4NjMzNDI1MTAzNl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWVhZjMzY2QxOGRlMGU2NmRjNTE2NDEyM2MzYTUxZGNfMDIyMWY4NDFkZGIwYmU3NjU5YTUzZTEzMDNhYjk0YzlfSUQ6NzIwODkxNDQzMDY4NDAwNDM1NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NWY0NmNhN2VmZDQwYjU2NGFiODY5MmVjYzcxMjI5YzdfNDg1NzA3OTMyYzlhMzdhNDU4MmFmZjE3NmZkODM5YTFfSUQ6NzIwODkyNDU3MTY0OTYwNTY2MF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTRjMDhlNGIzNmRhMDk3OGU2OTI3OWEyMTlhOWM1NTZfZDFmNTdjOGYzMjM2NWI5YzUxNDQ3NzQ0NWQ2OGMwNWZfSUQ6NzIwODkyMzM5NDM1NTQxMjk5NV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MmUzNTI1ZjZlYjZjN2UzMjUyZDMyZTc0MWI5ZGY0ZTVfNzljZThkYzI3NDBlYTE4MjVjN2MxNDc1Y2MzZmU3NGFfSUQ6NzIwODkyNzk1NzkxNjU4MTkxNl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTdhZTg5OTM0MDAzZTNmYTVjN2NhYzM3NGRhNDgzNmFfZDAwOTgwZDY3MGI5ZTNiMDdlMTkxNTRmYjM2NDNkNGZfSUQ6NzIwODkyOTUzNTQzNzI3NTEzN18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YzQ3OThiZmIxNTk5Y2Q0MzRiMjI2NzQ1YTAyY2YyZDlfYWU0ZmE4ZDBkOGExZmM0N2JjNmQ2MzVhMjE3ZTNkMzVfSUQ6NzIwODkzMDQxMzEzMjMwMDI5MF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzhlZjk1NDc0NzhhYzUyMDU1Y2M5ZWRlNjc4NzhlOWNfYWQ3NTU2YTBmYjA5MTAzMGFlMjRlNzc4MGU3MjNiMDFfSUQ6NzIwODkzMDM0NTc1OTE2MjM2OV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGU4MTEwZDdhMDBkNWUwOGNlYzcyZjZhYWQ0NjcwYzVfYjhhMmFjNGMxNmM1MmRjNzRkZjRhOWQ4NjllZGVlZjBfSUQ6NzIwODkzMTg4MTIyNjc0NzkwNl8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OWVlMjNlNmE2NjFiOTZhNTI1YjBmZjBlZTQxNmE5NDBfNTM3Y2Y5M2JhM2YyOTg0Y2Y3ZjE3OGMzYzJkZWRjZmRfSUQ6NzIwODkzMjIwMTM3MzY5NjAwMV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=M2IyMjI1ZDFkM2Y1Y2QwOTlkNWEzZDE1NTFmOWY0ODNfZDQ4ODU0OGFmZjhlYTYxYTcyMDZlNDAxMzNkZGY0Y2NfSUQ6NzIwODkzMjM0MjQ2MTcxMDM2NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NWI2NTgxZTk2MGU1OTU4NTg2ZDhmYWI0OTM0NTRhMzRfYjk0Njk2ZGY1OTRhODM4ZWQxZGYwMGM0N2M1MmU0MzhfSUQ6NzIwODkzMzc3MzU3OTE5MDI3Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjI1ZjcxNDk5NjVlYTY4ZTQ3YWY5MjIyYTViMDllM2JfMGZiMjgxZDZhYjAyMjU3OWVhYmJmYzgzOWQwOTFlODdfSUQ6NzIwODkzNjUyODM4MTI4MDI1OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTY5MWM0ODRjZTE4ZTY3YzNlM2NhODE4YmJkOWVhOTFfMWU2MWQ3YjRmYzYwYzRhOTJhNTRiZTFmYjkyNzA1YzNfSUQ6NzIwODkzNzE1MTc3MjI5NTE5Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YWE2ZmZiMzg0YWJkZTc5MzcxYTNmNjY2MzY2ZDljMjZfYzBiYjQ4NmE4NTQ3ZTU5MzRmYTFjN2I0YmE2Y2NjMzVfSUQ6NzIwODkzNzUwMjM4NjcwMDI4OV8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZGQxYjU5ZjExNDBjYjhjN2EyOTkxNzJiOGQ4NWY5MTBfMmZiYTkxNjZiZmViMDQ4YzZkNDA4YTE0YzQxNGVkOTVfSUQ6NzIwODg4NTc1OTY2MTc4NTA5MF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjU5Yzk5YWIwY2I5ZTc4NDhjMzdhYjE1ZjBkYzIzNWJfNDA3OGU1M2NjOTk3YjZkZmNmYzBhMjhhMDcyZjA5Y2FfSUQ6NzIwOTA4NDc1MzkwMTg0NjU1Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjQ4MGUxOGZjZTg2MTI5MDhhYzVhMjlkMGUwYTFjODZfNTI2ODM0Zjc2NDk4NDQwOWM1MzE2ODQzM2RkZTFmMjdfSUQ6NzIwOTA4NzU3NjA3MzczMjEyNF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODQ5MDBlYjRlZTA2ZWM2OTc2OGI0NDk1NTM0ZGI3ZDdfYjcyMzg0ZGVjNmFkYzY3Nzk0MmQwY2E0Mjc0MTA5MjBfSUQ6NzIwOTA4ODIwMDYyMTU4ODQ4Ml8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTI5MTZhMDcwOWZjMjBkNmJkNGVjZTIyNTRhNDQ4N2ZfMDc0N2E2MWY2NmRhNWQ2MDQ4ZWVlMzg5ZjMwOTZlZTBfSUQ6NzIwOTA4OTc5OTM3MzI1ODc1NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDE1ZDBlYjA3OWFhZjllYTZmOTE3Zjg4ODMyMGQyZWZfZWZlYjRjNDRkNDkxYjZlZDg5NGE5ZWE3MmQ3MGFkMTVfSUQ6NzIwOTA5MDQyMzc3ODc3MDk0Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTBlZTIyMDhkYWVhNGE1YmJkM2M5ODAwYmIwNDMwNWFfMTc4YWQ2YjkyNzMzMDMwOTM5MjQwNTQwYTBmYjgwMDBfSUQ6NzIwOTA5MzY5MTk1NTMzMTA3M18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDBlYjExYzA3ZjMyMTkzODc0NzY0OWIwODBiYWVjOWZfOWE5NDAyNjEzZjA0NWZjNGZjNTdjY2RjY2ZiYzZmOWNfSUQ6NzIwOTA5NDA2NTYxMDY4NjQ2N18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NmU1MjI4NzQ3NzZjYzE5YzAxN2JhYWUzYzBiNDA4MDlfYzVlOGY2Y2Y2ZDYzNzdlNjkzZDM2OWRhMWE2MmQzNGNfSUQ6NzIwOTI1MTkwNzQ5ODQ5MTkzMl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzcyMGI1MGQyZTY4Y2FmN2VjNDBjMjM4NjI0MGZmZWNfYjdhYzgzY2JmOTZlMzRkYzU4NDRhZDhhYzQ2MzhlMDdfSUQ6NzIwOTI1NzI4OTMyMzIwMDUxNF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTc4OWU0OWY5MmM0MTRiNmIwMzcyZjIzN2Q4ODdlMDdfZjdhNjM4OTYzNTM2MTA4YzFkNWU0N2NmMmYwOWU4MjRfSUQ6NzIwOTI2MDI2OTg5MjI3MjEyOV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MGU2ZTdlZThhMjJkYzM3MTViMGE3MTU2NTBjMzFiMDlfMmJmODJhNzhlZTUyOTI0ZmNlY2Q2YWU2MDUzMWFkMDVfSUQ6NzIwOTI2MDIzNTc3MjIzMTcwOF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDJmMTg5OWRmMTE4ODZlNjk5MGFhZDcwY2NmMzI5ODNfNWYzYmUxZTI2MTExOGZhMDdhODc3MGE5ZTcwNDgzM2VfSUQ6NzIwOTI2MTEyMTc3MjAyNzkwNV8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YWM0NGNlZjhkOTNlOWE3YzEyOWViZmY2N2YxZmEyYTNfMTkwOWIyOGJmYjI2NDY5NzYxMTk4ZGZiNzNlZTVjYWVfSUQ6NzIwOTI2MTE4Njc4Nzk2Njk3OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Zjk2YjRmMDY5MTQyZjk5ZTRiNDAwNGZmNTY2OGU3NThfMzk1MzNkZWEyYTUzYzZlNDkwMzcyZDcyZWNkZGYzNzVfSUQ6NzIwOTI2NDgyOTYyOTAwNTgyOF8xNzgyNzA2MTA0OjE3ODI3OTI1MDRfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODMxMDdiNjk5YzQ3NDJiNDQyZmYxYjllYTMzMzY1NDNfN2M5NjJmZWQ3ZDNmYWU4MTU2YWRlYjE0NmUzMzZjYzJfSUQ6NzIwOTI2NTM2MjYyNDM0ODE2Ml8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OThlYzc3NWZiMmU5YjA0Nzg2MDhmODhhYTZhNmMxYzRfNGI4ODI1YzcyMmZkNjFkMTUxMTQ1YTFiMDhjN2UyZDZfSUQ6NzIwODg4OTA1MTcxMjMzOTk5Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTZhMWUzYmNlYTZmYzc1MDE5Y2JmOTgzZDQxNjM4NDhfMmM1NDBmN2RiOWNkY2NkYTk4MGRmNmQ4M2ZlMmE3NTNfSUQ6NzIwOTI2OTAxNjUzMDE0MTE4Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjBmMjUxMWE1MGRhYTYzN2QwNjI1NWFkZWZlMTMxMWRfZjQ5Y2YyNzZkOTVkMDFkMGRlMmJmYmRkY2Y5YmQxMDBfSUQ6NzIwOTI3MTI2NzU2MjY1MTY0OV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MWU4N2Y2YTc0MjA3OGNkMWQ1YTJiYTk1MDcxZDFhNjFfZjI0N2MwYjg1ZWUzZjIzZmYzODU2OGE4NTk2MzE3YWNfSUQ6NzIwOTI3MTMxMzIyNjA4ODQ3Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YzZhYWNkOTExYzY5YzA4MzRjM2VlYmQ5ODhjYmQ3ODJfYjExOTRjODk2ZTgyN2Y4NThkYzQxMWNmOTJhNTU2ZWVfSUQ6NzIwOTI3MjA4MDEzMzU3MDU4OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTVhYTk1YjRjOWVlMGRhNWUzODA4M2FmYTk3YzljMTZfYWI0YjQ5MzhhOWUyNjI2ZWQ1YWMxYjEzNjcyYzAzZTZfSUQ6NzIwOTI3NDc0NTk5MjkzNzQ3M18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZThmY2I0NmYwNWI3OGVmMjRjYzA0MTA2MDZjYjNiMzJfZmNmNDMxMjg0YzIxNDhhYTk1MzEyMGMzYTE0MzU1MjRfSUQ6NzIwOTI3NDY3MzM1MDExNTM1Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2Q5YTQ4ZTE2NWYyMWFlYmJkZjM0MWYyMGIzMDg0OGRfNTMwMjExMjRhNGZhMDU1YWUxYmJkZjljMjdjYWZjZWJfSUQ6NzIwOTI3NTMzMTkzOTc3ODU2MV8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjgzMDEzMDIzM2IyYmE0MTZhMDlmYzhlMDg3YzE1ODdfZjE2NDUxOTAyMmEyMGZlYjQzYTQxYTQ1YzNlZGY0MzNfSUQ6NzIxMjA5MDExODQyNzk2NzUxNl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWMwMmU2MTQzY2NhNzAwZmUyMzRiZTY5NzAyNzA3OGZfNjM4N2NjOGQzZTZjYzUwYTkzYjE5MTgxYmYxZDFhOGVfSUQ6NzIwODg4OTE5NDUwNzI4ODU3N18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDYxODE4MzExY2M1YmRiYmI5ZDMyYmZhNjQ4NWIxYzZfM2E3YTFlNjk5NTk3YmNmZDYxNzg2ODA1YWU2ZjQwNGRfSUQ6NzIwOTI3Nzg5OTY2NzUyMTU2NF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NWY1MjM0ZmE2MDczYzg4MmU5ZWU2MjUyNTk4NmM4NDFfNjcyOTBlYzg5NWFkNGI1ZDBiYzhhNGIyMWI1NjIwMzJfSUQ6NzIwOTI3ODM4ODg5OTU2MTUwMF8xNzgyNzA2MTA0OjE3ODI3OTI1MDRfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Y2M0ZWMyM2JlZWQ3Mjk3NmI5ZmZlZTcwMmRkNTIwYTVfOWZlNWMxNzE0OTZkMTcxMDQ5MGI0YzVhZTAyYjIzYWZfSUQ6NzIwOTI3ODk0NTM4Mjk1NzA1OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODk0ZWY2OTY3MjgxNjgxN2VmNGUwN2YwODBjYzNhZDFfNzU3ZjE3ZjRhZWQyMWYwNjQ0NzNmZjc0ZDAzMjMxOWRfSUQ6NzIwOTI4MDQ5NDg5NzM4MTM3N18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Nzc3YWQwNGJiNzA5ZGFhMzY4NmNkNDM1YTM5NzQ2NjBfZDcwY2I3MDBjM2NjOGE1ZjZkMTFkODg1NWQyNzFiNzNfSUQ6NzIwOTI4MTIwMjI2MjQ5MTE2NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDM0YWEwOTU4M2FmMGQzOGM3YmVmMjgyNTc2NGI3MWVfZmFiMzcxYjEyYTIxYTliOTQwYmQ5MGU4ZjA3NjhmMjBfSUQ6NzIwOTI4MTUxMDQ4OTI0MzY1MV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjkxOWNkNTUyNzY1MTJiMzUzNGE5ZDE0ZTc3NGI1NjdfNmM3MzA3NjUwNTYxNDM2MjJmNGNiMmY2ZGM1NTg1ZmNfSUQ6NzIwOTI4MjcwMDczNjU5Mzk0OF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Nzk3YmRlMTk3ODBlYWMzNmQxM2NkMjRkMTBjYzEzMzlfNzVmZTBhOWEyNjczMmZlMjQ1OGQ5ZDk2NzVlNmU0OGJfSUQ6NzIwOTI4MjgwMTE5ODE3MDExM18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTkwZWI5ZjQxOTQzMjllNGJmMWU2MjM3NDUwZTczZjFfZWZhYjMwMGY2MmFlMmZmYzMwMWMzZDgzMWJkNWY4YzhfSUQ6NzIwOTI4NDA3MzQ1NjQ4NDM1NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZThmZjljOGQxYTdlY2U5MjQ4YjIyNTFiY2ZkMDQxNzNfMjdmYjBkMzkzOTNjOTU0ZjUwNzk1MDZkYTJlNTZkYjhfSUQ6NzIwOTI4NDE2ODM0ODM4NTI4M18xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTlhNzdlOGQ5ZDI5NGVhMTYyODNkYzRlZWNjZDk4MTRfYTM2MTRhZmM4ODIzYjQxYTFjYmEyZDc2MzM4MDI5ZDBfSUQ6NzIwOTI4OTU4MTExODgzMjY0Ml8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjQ3NmMxMjUyZDYwNDk0ZDJjN2U5NmU0MTE1MmNkMTVfOWJlZDNkM2YzNDI1NDU1ZDNhOTc1NTlhMDc3MDEzMDVfSUQ6NzIxMjA3NzA0MDM3NTAwNTE4Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Y2Y5N2Y3MjNkYTBhY2JjYjZkYjJkNmFmZGEwMTRjNzBfMzI2MDUyODIxZjgzOGFiMjNiZmRhYzQxMzViNzdiZjFfSUQ6NzIxMjE0MjY4NzI5Njc5ODcyMl8xNzgyNzA2MTA0OjE3ODI3OTI1MDRfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGI2MmM4MzFkYjBmZjY0YzcxMmFmZDc2ZTM0NmM3NmFfMjZlOGE5ODk0N2FiOTZjOGY5ZTYwYWZjNzlmN2VjNDZfSUQ6NzIxMjE0ODU5MzQyNjI4NDU0NV8xNzgyNzA2MTA0OjE3ODI3OTI1MDRfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2RkMDBmNzNmMDAxYzE4Y2EyNTUxYjJiZTJiNjkyODJfYjQ2NDJkZjk0ZTY1ZDM1Nzg3ZGY0ZjBiYzAwNjYxMmFfSUQ6NzIxMjE1NTY5ODczNjY2MDQ4M18xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NmY3YmYxNDA1MjFkOWI1NjdjZjE0Yzg0NDkxM2Y3MzRfMzExMjEwNWY2OTFhZjg0MDQyZDRjNGZmZDc0NzhhMzlfSUQ6NzIxMjE2OTE5MzM0NDM4NTAyNl8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTcyMjI3YzM2YzZlYjBlMzc2NWRkODc4YjdhMWUxYTZfYmRhMzQ2MzNkNDcyNjA3N2UzMDk5M2VlMmM3ZjdhZWFfSUQ6NzIxMjE3MjU5MjA3NzE0NDA2Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGJmM2VjNjkzM2RiZjUwOWQ2MzMyNWJkM2EyOTNjYmZfZGVmY2JjY2MwY2YwYjg4MWIyZGY0YTdiMDZiOTI5OTFfSUQ6NzIxMjE3NDk3NTM1NTA3NjYwOV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YzgwOTVhYTFiZmU2YjhiZDBlYjk2ZDZkODJiNzhjODRfNzJhOTY4YjIzNjg0ZmFkZTgzYmI5ZDU0OWZlZDJlOThfSUQ6NzIxMjE4NDA4NDkwOTQ0MTAyNV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjhhNjk4ZGJkMWFjYWRhMDliOTlkZTcyOWI4NGNlOTlfYzUxODQ2ZjA1NWJhODEyNDJmNDczNGFmYWY0N2ZlZDhfSUQ6NzIxMjE4NTgxNDkzMzk5NTU0OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MGMxOTAxMDk1NDE3YTZiMTZkNzUwMmY1MmM4YTdmZjZfMGQxMDg2Zjk1OTY5YTc2N2JhN2RkYmEyYzIyOTIxZjNfSUQ6NzIxMjE4Njc0MjMwNzIyNTYwMl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTQzOTRiOWIxMjhhMmZkYjkzZGM1YWJjNWU4NzE5NmJfZTY1MTAwZDFhODNjNDYzZjA2MjFiNWM5MjgwYzczMmVfSUQ6NzIxMjE4NzU5NDI4Nzk3MjM4MF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZmI3OTJiZTAzMjhhOGVjOTZjYmIwOWQ4NDViODZlN2JfMjE3ZjBhNGQxOGVkZmI4ZWZlOTc3OGY5MGNkMzQ2ODRfSUQ6NzIxMjE5MDE4MzQ3Nzk2ODg5N18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Y2YzMDQ2MTJjMDJjNWRhOGJjZDg0ZWJiZDc2ZGU3NDFfMTJlYmNkNzVkMzc4MjFlYjMwMmQzY2E2ODdiMzI5ZmRfSUQ6NzIxMjE5MDY4MjU3OTM2OTk4N18xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2E4ZjZlM2NjMjBhN2NiZjUzZTZjNDg2MzM0OTA3NDRfOGVkOTYyNjJmMjM2ZGRkNmNkNGU0ZmI5MGUyNzY0ODdfSUQ6NzIxMjE5MjUzNjQ1MzA1NDQ5Ml8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTk5YThiYWI3MzVjNTdhYmJmNmJmZThiM2NmMDgyNzhfYzk2ZTJjNmI2YjA5N2E3ZTI1YTNmNDg5M2YxNjYwOGVfSUQ6NzIxMjE5MjY0MDYzNTMzODc1NF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MmViOWE5NzM2NzU3ZjFkMDIyYjVlZDE2ZThmMmUyMmZfNzU1MWM3MWNjYjg5OTM4NDE3NTlmMzg5ZjY4ZWYwZmVfSUQ6NzIxMjE5MjY4NjU1NDcyNjQwMV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjEwYzNlMmUxMjI5OTA2YzBiNTJmM2FmYTc1NGRkOWRfMGFmNTE3MmJjZTU4NzNiMmUxMjhkZWNjZWI4NGI2OGJfSUQ6NzIxMjI2MjEyMzIyMDU0OTYzM18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZmNlMmE5YmJiNjVkMWRiMDUyMmQ0Yzg4NWIzZDQyNDNfMGUyMjY1Y2JlYTFhYjljMTFhYzJiZTQ5YzNjNzQ2MjNfSUQ6NzIxMjI2MjUyNzAyMTk1NzEyMl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDc1MWI3YjBiNjk3MjBiNTcwN2E5YzM3MDViNWE3MGFfZTlmMWI3MWRjMjY3MjFiOTVkYzlmYzkwMzI2MWYxZjJfSUQ6NzIxMjI2NTQyMTg4ODYxODUyNF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTYwZDlhYWNjNDA2MWU0ZDk4OTBkN2FhMmM5MTU5MWJfYjc1OTc1MWE2MWUyMWViOTcyMjI4NDJlY2M0YzJmYTFfSUQ6NzIxMjI2NTc0ODUwNzQyNjg0NF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDM2YTRiZTIwNzI1OTM4Y2QwOTU2MGExZjA3YjY5ZGFfMTdlZmU0MTJiZWI3NGY0ZmYxMTJkN2UyNjAxMTIyOGNfSUQ6NzIxMjI2NzIzMDMzMDg2MzYxOF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Mzc1NWNiMjJiMzFkNzk5MmM2NzFiMWFhNzA4Nzc3YjZfMmRjZmZjM2RhMTNmMGUxZTllMmI3NzJjNGM5N2ViZGFfSUQ6NzIxMjI2ODYzOTkzMDk5MDU5M18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Y2Q4NzVjMDY3YTEzNjIxOTE0ZmU5MzgyMDRmMTgzZjJfMDg0Njk5YzhjNDBhMWYzYzY4YWRkNThmNDBjNTk0NTRfSUQ6NzIxMjI3MDY4MzI3Mzk2OTY2NV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTJlNTA0NjliNzMwZmZjMDY0NzMwODJjYjg0NTc3ZGNfNGMyMzZjZTY1ZDZlZmNlZTk4MDI2N2EzYzFlZDQ0ODlfSUQ6NzIxMjI3MjAyNzY5NTE1MzE4MF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MWE3NWVjMzA4MjkzOWJlZTNmNDljMmQ2MzQzMGJiNzZfOTA1OTEwNjRlZDQzMDJlNTYwZmM4ODBiMWE2MDM1YTBfSUQ6NzIxMjI3MjQ5NjIyODQzMzk0OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjQ2ZTM1OTdlODhkNTQwYWI2NjYxNTQ0MTcxYTY4Y2FfY2RiMjM4YTExNmNlYmMxMTQxODYyYzJmNjY1MDllOWZfSUQ6NzIxMjI3MzgyMDUxNjg3NjI4OV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODRiMWYxYzNkMDhmNTdiMjllOGE1YTI4MDYxMWRhNGZfYjhkNjc5ZmE5OGQ5MjllYzNmMjk5ZjJhMjM0OTlhNWJfSUQ6NzIxMjI3NDczMTA1NDA4ODE5NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWQxYjE2YjcyYmI2Y2E2MmQ1OWI1MWMyN2NhYTQ1YWNfMmJmYzBhMjNkYTkyYmYyMmU5MmM2Y2M4OWFjZGY2NTNfSUQ6NzIxMjUyMjQ1MTc2OTk5OTM2MV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MmZjZTZiYmU1ODI4YjNlZmZhMDI3MDdhYjJmZDVjNzdfOTc5NDVkZjM3ZWNiM2NhYmJlMDVkNjBkYjU5MjNmOTFfSUQ6NzIxMjUyMjU1NTE2MDAxODk0NV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZmJkNTc3NTAwYzM4Y2FlMWEwMzJhYTE3ZGZhNjVlZDlfNmZhOTY1MTNiNjg3YWEwMjZjZTkyNDVmMjJiMDE3MmRfSUQ6NzIxMjUyMjY5MzkyNzg0NTkxNl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzZmMWE5NzRlZTAwOGZiMTI4YjgwZDQyMWM0MDdkNGRfZTEwY2YwMjI1OGFiMDcyNWIyOTljOWYwYmY5MTM1MjhfSUQ6NzIxMjUyMzU5NzE5NjUwOTIxMl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MWNjZmMzOTM0YjRhZWM1OGJhNGNkMDU5NGY5NTMxYzdfZWQ4ZjEzZmI4YjMxNjVmNzZjOWE5ZTJhNmE0YmRkODlfSUQ6NzIxMjUzNDU4NTQyNTg3MDg1MV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDI4MjA2N2I1YzAwNGU2MmNkM2U1MGZhYjlmZTk3NjdfM2MwZGM4MTM3N2JkZGZiNjY5YjNkMGI1MTVmMWIyOWZfSUQ6NzIxMjUzNjQ2ODczNTU3NDAxOF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjU4MWJkMDVlNTVkNGJkNjc3YTcxZTJlYTAwMTEzMTNfYWFiMzEwMTFhZjBiZTNjZjk0NTFhMzQwYzMxOGJjYjVfSUQ6NzIxMjUzNjU2NTMyMTk1NzM3OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDIwNmFjMGI3YmY1NGQxYWRmYTg4NmZhNDc3MDdhNDhfZTNjMWU0NmU1NTMwYmE2MTIzMTg5N2Y5YmNkZjI0ZDVfSUQ6NzIxMjUzOTAwOTkyNTU3ODc1Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDI4ZTljYTQyYTJkOGI1NjU1M2VjMjhkYWU1Y2QyOTVfNDk4NjI5YmU5YzdjNjU5ZWY1MDg0MWZkZjVhMGE3MjdfSUQ6NzIxMjUzOTE4ODU4NzEwMjIzNl8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MmVkMDkyZGJkNDJhZTlmNjVmMTQ1YzNiNDM3ZGU4NmFfMjY4MjA1ZTRhMTc2MTY5YzgwODlmMGVkMzA1MDMxZDlfSUQ6NzIxMjU0MDI2OTc3NzYzMzI4Ml8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjYwZDcwYjA2Y2IxMzAwN2RjYTdhNjYyMDM1YzI2NTZfMjIyMjJhZWVkMWE5MWZkZTU0ZGQ5NjZiMmNkNDFjMDVfSUQ6NzIxMjU0MjExOTI0ODc1NjczOF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTY0MWYwOGYyYTIxZjE3NzcwMWUxOGU2OTIxNzM4MzNfZWVjNmRhMTFmMjFiYjEwZDk2NmI3ZmY0ZWYzNjhmZGZfSUQ6NzIxMjU0MjUxNDQxNzU5ODQ2NV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZGFhMzVmYzNmN2IyYTE3NzQ5Y2MwNjk1MTJlYjUwMTVfZjUwNDk5NzBkZjc2ZWNkN2ZhNzRjYmY0Yzk2MzcxYTBfSUQ6NzIxMjU0MjY5OTg4NTUyNzA0MV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2YxMjE0ZDVkNzA4ZWVkZjY4NTY5OWI2ODlmM2M2MzVfNTVjZDYxZWVhZDk4NzczNmQyMWQ4ZDAwNTljNjUxMTNfSUQ6NzIxMjU0NTUyNzA1MTkxMTE3MV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODg1MTA3YTlhZjgyMzdkZDI0YjBjN2M0ZjA2N2Q2YjNfMGRmMzQ0MjY3Y2FiNjMzZTQxNWY2ODU2NTJkZGJhNjhfSUQ6NzIxMjU0NTcyMDQyNjA4NjQwNF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OWQwYmEyODRmZmJiMzNhMjFmZGRmNWIxY2RkMzNjYTRfNjcwZGJiNjdkMjFiYmI2Y2FlNDU3MDk2MDA2YzllYWJfSUQ6NzIxMjU0ODc3MDQxNTIzMTAwNF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTY0ZjY4MjM2ZjhiM2VlNmE0YTQ5OWI3YmExMzk4ZWJfYzk3OWVhZGM5OTQ3OGNkNzg5N2I2ZjFkNDgyOTY2ZjFfSUQ6NzIxMjU0ODkzMjk0NDU3NjUxM18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MWZiYzlhMWE1YzdkNzU0MDcyMjdmZTBiMjQyZjdjZjRfODYwYTJjYzAyY2NhYjY0NDkwOGU5OTE1ZWM4ZTRjZTlfSUQ6NzIxMjU0OTczMjQ5MzgzNjMxNl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=M2Q1N2Y2MDc4ZWVkMTgwMmViZDIxNWZhZjViZGJiZTZfZGM2ODFjNzIyMDkwMDlhNjMwNTViM2EzZjAxZmM5NjBfSUQ6NzIxMjU1MjMyMzgxNjk5Njg2Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWI3MjE3OGNmNDVmYmZlM2EzNTIxNTk0ODEyZWUxZTRfMTM2ZTY3NWE3M2U2ZGFlMTRhMjJlZjU4YzhlMzQwZWFfSUQ6NzIxMjU1MjQ4MDIxOTM4MTc2Ml8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODQ3MWJlNmY4ODI5MmNlOGYwMTgxOTc0YzYwMWI2ZjFfM2Y3Y2RhZDhmYWMzODE0Mzk1YjRmYTZhMjhkNmUzYjJfSUQ6NzIxMjU1NTk5NDg2ODg5MTY0OV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YThiOGMxZTE1NWNhZDQzZTc0NDBjNTIwODAzNDQ5ZGZfNTJjYzMyZmJmZmUwMGY4NmI3MTYzMWFjNDJhNmYzNjRfSUQ6NzIxMjU1NjE4MjQ4MDIyNDI1N18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NWJhY2MxZWRiZDRlNDU4MzMxMmMyZTJmODlkYWJmMjRfYWEyMjQ4Y2UxYjNlODY3ZWUzZTFjNTM5YTg3YWM5ZmFfSUQ6NzIxMjU1NjM2Mjg0MzI5MTY3Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjcwNmJmNjc0MzQxY2U4OWVjYjdkNDAxODhhZDFiZTNfMGE1NzM3ZDFmMWVmNjE0MGE0NjI4NDYxNjBlOWU3NWJfSUQ6NzIxMjU1NzA2NzIxNDI3NDU4OF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NGUxOTVmMjYxNDA3NGY5ZWMzNzMwZWQ3NTc4YWUxZDhfZTNmNDQ5MmRmMGY2ZDU5NDY1ZmI0ZTk5ZGY1NGQ3ZjBfSUQ6NzIxMjY0NDg0NDEyMzA2MjI3M18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2YyZTk3NDAwZDE3Zjg2ZDEwMGQzYWY1MjI5MWZkNzZfOWM3MTUyMTY5OTQ5NTdiNmZiODZkZmYyMjZkMGE4NTFfSUQ6NzIxMjY0ODA4MTg2OTc4MzA2OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YWI5Nzc1NjQ4NzY1MzJhY2NhNzBmMzRmOWUxZjRiMjJfZGU3MDAyZTJmOTAzN2FlZjNjYjA0NjdmN2M0NWE1ZGJfSUQ6NzIxMjY0ODE4MTA0NTk1MjUxNF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTc1ZWIxZTg1ZmYzZTExMjVmYzVjMmQyMDU0ODUwMWVfODU4N2MxMTliY2Y5ZGFmOThiYjBiMjk1YTE0MmNkNGJfSUQ6NzIxMjY1MDk4ODY0OTI1MDgyMF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGY2YTc3MzMwMzc4YTAzZTg4OTcwZDgyNjgxNGEzM2NfNjAwMTI1MDY2YjI1OGVkOGU1M2M4Y2M0NjA5YjQzMTJfSUQ6NzIxMjY1MjAwOTA2MDQ4MzA3NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjU4MDJiMTU2NzRhNWU4ZDg0MDZiZDRlNWZiMGMxNGNfOTVjNDVjNTgzYjk4N2RhZDk2M2UyYTk1NWYzZmJiYjdfSUQ6NzIxMjY1NDMwMTIzNDEzNTA0M18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="og:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NmI3ZTU4ZTdlZmE1YmRjNTIzNWM4MzA5ZWI3M2QyZTRfMTU5YjM3MjVlNDhkM2QzYzRmN2QwZjc2YTdmYWUzOTBfSUQ6NzIxMjgwNDIzNzk3NjM3MTIwMl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM">
+<meta property="article:published_time" content="2026-06-29T04:08:37.862Z">
+<meta property="article:modified_time" content="2026-06-29T04:08:37.951Z">
+<meta property="article:author" content="wub">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Njk5ZmQ1YmRkOTAyYjQ4Mzg2NTUyNjg1M2ZjOTA2MTVfN2VhNTU1YmYyODNlNTgxNGQwNGU2YThmZjBjYTA3ODlfSUQ6NzIwNzc0MzIyMjM4NTY1NTgxMV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM"><script>(function() {
+  if (CONFIG.mode !== 'auto') return
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const setting = localStorage.getItem('darken-mode') || 'auto'
+  if (setting === 'dark' || (prefersDark && setting !== 'light'))
+    document.documentElement.classList.toggle('dark', true)
+})()</script></head><body><script src="https://code.iconify.design/2/2.1.1/iconify.min.js"></script><script>// Define global variable
+IconifyProviders = {
+  // Empty prefix: overwrite default API provider configuration
+  '': {
+    // Use custom API first, use Iconify public API as backup
+    resources: [
+        'https://api.iconify.design',
+    ],
+    // Wait for 1 second before switching API hosts
+    rotate: 1000,
+  },
+};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="Table of Contents"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="Overview"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="wub"><img width="96" loading="lazy" src="/images/avatar.gif" alt="wub"><span class="site-author-status"></span></a><div class="site-author-name"><a href="/about/">wub</a></div><span class="site-name">Wub's Blog</span><sub class="site-subtitle">Stay hungry, Stay foolish</sub><div class="site-description">Here 1s 4 Bl0g</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="Home"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="Archives"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">4</span></a></div><div class="site-state-item"><a href="/categories/" title="Categories"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">0</span></a></div><div class="site-state-item"><a href="/tags/" title="Tags"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">0</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:settings-line"></span></span></a></nav><hr style="margin-bottom:0.5rem"><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="我的小伙伴们" style="color:dodgerblue"><span class="icon iconify" data-icon="ri:genderless-line"></span></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP%E5%9B%BE%E8%A7%A3%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0"><span class="toc-number">1.</span> <span class="toc-text">HTTP图解阅读笔记</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-%E4%BA%86%E8%A7%A3WEB%E5%8F%8A%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80"><span class="toc-number">2.</span> <span class="toc-text">第一章 了解WEB及网络基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80-TCP-IP"><span class="toc-number">2.1.</span> <span class="toc-text">网络基础 TCP&#x2F;IP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-TCP-IP-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">2.1.1.</span> <span class="toc-text">1. TCP&#x2F;IP 基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-IP-%E7%9A%84%E9%87%8D%E8%A6%81%E7%89%B9%E7%82%B9%EF%BC%9A-%E5%88%86%E5%B1%82%E7%AE%A1%E7%90%86"><span class="toc-number">2.1.2.</span> <span class="toc-text">TCP&#x2F;IP 的重要特点： 分层管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%BA%94%E7%94%A8%E5%B1%82"><span class="toc-number">2.1.2.1.</span> <span class="toc-text">1.应用层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="toc-number">2.1.2.2.</span> <span class="toc-text">2.传输层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="toc-number">2.1.2.3.</span> <span class="toc-text">3.网络层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="toc-number">2.1.2.4.</span> <span class="toc-text">4.链路层</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-IP-%E9%80%9A%E4%BF%A1%E4%BC%A0%E8%BE%93%E6%B5%81"><span class="toc-number">2.1.3.</span> <span class="toc-text">TCP&#x2F;IP 通信传输流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IP%E3%80%81TCP%E5%92%8CDNS"><span class="toc-number">2.1.4.</span> <span class="toc-text">IP、TCP和DNS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#IP"><span class="toc-number">2.1.4.1.</span> <span class="toc-text">IP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP"><span class="toc-number">2.1.4.2.</span> <span class="toc-text">TCP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DNS"><span class="toc-number">2.1.4.3.</span> <span class="toc-text">DNS</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-URI%E4%B8%8EURL"><span class="toc-number">2.1.5.</span> <span class="toc-text">5.URI与URL</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#URL%EF%BC%88%E7%BB%9F%E4%B8%80%E8%B5%84%E6%BA%90%E5%AE%9A%E4%BD%8D%E7%AC%A6%EF%BC%89"><span class="toc-number">2.1.5.1.</span> <span class="toc-text">URL（统一资源定位符）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#URI%EF%BC%88%E7%BB%9F%E4%B8%80%E8%B5%84%E6%BA%90%E6%A0%87%E8%AF%86%E7%AC%A6%EF%BC%89"><span class="toc-number">2.1.5.2.</span> <span class="toc-text">URI（统一资源标识符）</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E7%AE%80%E5%8D%95%E7%9A%84HTTP%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.</span> <span class="toc-text">第二章  简单的HTTP协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94"><span class="toc-number">3.0.1.</span> <span class="toc-text">请求与响应</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E6%8A%A5%E6%96%87"><span class="toc-number">3.0.1.1.</span> <span class="toc-text">请求报文</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87"><span class="toc-number">3.0.1.2.</span> <span class="toc-text">响应报文</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP%E6%98%AF%E4%B8%8D%E4%BF%9D%E5%AD%98%E7%8A%B6%E6%80%81%E7%9A%84%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.0.2.</span> <span class="toc-text">HTTP是不保存状态的协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82URI%E5%AE%9A%E4%BD%8D%E8%B5%84%E6%BA%90"><span class="toc-number">3.0.3.</span> <span class="toc-text">请求URI定位资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%8A%E7%9F%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%84%8F%E5%9B%BE%E7%9A%84HTTP%E6%96%B9%E6%B3%95"><span class="toc-number">3.0.4.</span> <span class="toc-text">告知服务器意图的HTTP方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GET-%EF%BC%9A%E8%8E%B7%E5%8F%96%E8%B5%84%E6%BA%90"><span class="toc-number">3.0.4.1.</span> <span class="toc-text">GET ：获取资源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#POST-%EF%BC%9A%E4%BC%A0%E8%BE%93%E5%AE%9E%E4%BD%93%E4%B8%BB%E4%BD%93"><span class="toc-number">3.0.4.2.</span> <span class="toc-text">POST ：传输实体主体</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HEAD-%E8%8E%B7%E5%BE%97%E6%8A%A5%E6%96%87%E9%A6%96%E9%83%A8"><span class="toc-number">3.0.4.3.</span> <span class="toc-text">HEAD : 获得报文首部</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DELETE-%E5%88%A0%E9%99%A4%E6%96%87%E4%BB%B6"><span class="toc-number">3.0.4.4.</span> <span class="toc-text">DELETE : 删除文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OPTIONS-%E8%AF%A2%E9%97%AE%E6%94%AF%E6%8C%81%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">3.0.4.5.</span> <span class="toc-text">OPTIONS : 询问支持的方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TRACE-%E8%BF%BD%E8%B8%AA%E8%B7%AF%E5%BE%84"><span class="toc-number">3.0.4.6.</span> <span class="toc-text">TRACE:追踪路径</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CONNECT-%E8%A6%81%E6%B1%82%E7%94%A8%E9%9A%A7%E9%81%93%E5%8D%8F%E8%AE%AE%E8%BF%9E%E6%8E%A5"><span class="toc-number">3.0.4.7.</span> <span class="toc-text">CONNECT:要求用隧道协议连接(*)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-1-0%E5%92%8CHTTP-1-1%E6%94%AF%E6%8C%81%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">3.0.5.</span> <span class="toc-text">HTTP&#x2F;1.0和HTTP&#x2F;1.1支持的方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E8%BF%9E%E6%8E%A5"><span class="toc-number">3.0.6.</span> <span class="toc-text">持久连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E7%BA%BF%E5%8C%96"><span class="toc-number">3.0.7.</span> <span class="toc-text">管线化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Cookie%E7%9A%84%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86"><span class="toc-number">3.0.8.</span> <span class="toc-text">使用Cookie的状态管理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-HTTP%E6%8A%A5%E6%96%87%E5%86%85%E7%9A%84HTTP%E4%BF%A1%E6%81%AF"><span class="toc-number">4.</span> <span class="toc-text">第三章 HTTP报文内的HTTP信息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E6%8A%A5%E6%96%87"><span class="toc-number">4.1.</span> <span class="toc-text">HTTP报文</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E6%8A%A5%E6%96%87-1"><span class="toc-number">4.1.0.1.</span> <span class="toc-text">请求报文</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87-1"><span class="toc-number">4.1.0.2.</span> <span class="toc-text">响应报文</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E7%A0%81%E6%8F%90%E4%BE%9B%E4%BC%A0%E8%BE%93%E9%80%9F%E7%8E%87"><span class="toc-number">4.2.</span> <span class="toc-text">编码提供传输速率</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A0-%E5%8C%BA%E5%88%86-%E6%8A%A5%E6%96%87%E4%B8%BB%E4%BD%93-%E4%B8%8E-%E5%AE%9E%E4%BD%93%E4%B8%BB%E4%BD%93"><span class="toc-number">4.2.0.1.</span> <span class="toc-text">① 区分 报文主体 与 实体主体</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A1-%E5%8E%8B%E7%BC%A9%E4%BC%A0%E8%BE%93%E5%86%85%E5%AE%B9%E7%9A%84%E5%86%85%E5%AE%B9%E7%BC%96%E7%A0%81"><span class="toc-number">4.2.0.2.</span> <span class="toc-text">② 压缩传输内容的内容编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A2-%E5%88%86%E5%89%B2%E4%BC%A0%E9%80%81%E7%9A%84%E5%88%86%E5%9D%97%E4%BC%A0%E8%BE%93%E7%BC%96%E7%A0%81"><span class="toc-number">4.2.0.3.</span> <span class="toc-text">③ 分割传送的分块传输编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A3-%E5%8F%91%E9%80%81%E5%A4%9A%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%9A%84%E5%A4%9A%E9%83%A8%E5%88%86%E5%AF%B9%E8%B1%A1%E9%9B%86%E5%90%88"><span class="toc-number">4.2.0.4.</span> <span class="toc-text">④ 发送多种数据的多部分对象集合</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#multipart-from-data"><span class="toc-number">4.2.0.4.1.</span> <span class="toc-text">multipart&#x2F;from-data</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#multipart-byteranges"><span class="toc-number">4.2.0.4.2.</span> <span class="toc-text">multipart&#x2F;byteranges</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A4-%E8%8E%B7%E5%8F%96%E9%83%A8%E5%88%86%E5%86%85%E5%AE%B9%E7%9A%84%E8%8C%83%E5%9B%B4%E8%AF%B7%E6%B1%82"><span class="toc-number">4.2.0.5.</span> <span class="toc-text">⑤ 获取部分内容的范围请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A5%E5%86%85%E5%AE%B9%E5%8D%8F%E5%95%86%E8%BF%94%E5%9B%9E%E6%9C%80%E5%90%88%E9%80%82%E7%9A%84%E5%86%85%E5%AE%B9"><span class="toc-number">4.2.0.6.</span> <span class="toc-text">⑥内容协商返回最合适的内容</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%9C%E7%9A%84HTTP%E7%8A%B6%E6%80%81%E7%A0%81"><span class="toc-number">5.</span> <span class="toc-text">第四章 返回结果的HTTP状态码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B1%87%E6%80%BB"><span class="toc-number">5.1.</span> <span class="toc-text">汇总</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E4%B8%8EHTTP%E5%8D%8F%E4%BD%9C%E7%9A%84Web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">6.</span> <span class="toc-text">第五章 与HTTP协作的Web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E5%8D%95%E5%8F%B0%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA%E5%AE%9E%E7%8E%B0%E5%A4%9A%E4%B8%AA%E5%9F%9F%E5%90%8D"><span class="toc-number">6.1.</span> <span class="toc-text">用单台虚拟主机实现多个域名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E4%BF%A1%E6%95%B0%E6%8D%AE%E8%BD%AC%E5%8F%91%E7%A8%8B%E5%BA%8F%EF%BC%9A%E4%BB%A3%E7%90%86%E3%80%81%E7%BD%91%E5%85%B3%E3%80%81%E9%9A%A7%E9%81%93"><span class="toc-number">6.2.</span> <span class="toc-text">通信数据转发程序：代理、网关、隧道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%90%86"><span class="toc-number">6.2.1.</span> <span class="toc-text">代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E5%85%B3"><span class="toc-number">6.2.2.</span> <span class="toc-text">网关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%A7%E9%81%93"><span class="toc-number">6.2.3.</span> <span class="toc-text">隧道</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%9D%E5%AD%98%E8%B5%84%E6%BA%90%E7%9A%84%E7%BC%93%E5%AD%98"><span class="toc-number">6.3.</span> <span class="toc-text">保存资源的缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">6.3.1.</span> <span class="toc-text">缓存服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%BC%93%E5%AD%98"><span class="toc-number">6.3.2.</span> <span class="toc-text">客户端缓存</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-HTTP%E9%A6%96%E9%83%A8"><span class="toc-number">7.</span> <span class="toc-text">第六章 HTTP首部</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E6%8A%A5%E6%96%87%E9%A6%96%E9%83%A8"><span class="toc-number">7.1.</span> <span class="toc-text">HTTP报文首部</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP%E8%AF%B7%E6%B1%82%E6%8A%A5%E6%96%87"><span class="toc-number">7.1.1.</span> <span class="toc-text">HTTP请求报文</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87"><span class="toc-number">7.1.2.</span> <span class="toc-text">HTTP响应报文</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E9%A6%96%E9%83%A8%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.</span> <span class="toc-text">HTTP首部字段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E7%A7%8DHTTP%E9%A6%96%E9%83%A8%E5%AD%97%E6%AE%B5%E7%B1%BB%E5%9E%8B"><span class="toc-number">7.2.1.</span> <span class="toc-text">四种HTTP首部字段类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A0%E9%80%9A%E7%94%A8%E9%A6%96%E9%83%A8%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.1.</span> <span class="toc-text">①通用首部字段</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Cache-Control%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.1.1.</span> <span class="toc-text">Cache-Control字段</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Public-%E6%8C%87%E4%BB%A4"><span class="toc-number">7.2.1.1.1.1.</span> <span class="toc-text">Public 指令</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Private-%E6%8C%87%E4%BB%A4"><span class="toc-number">7.2.1.1.1.2.</span> <span class="toc-text">Private 指令</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#No-cache-%E6%8C%87%E4%BB%A4"><span class="toc-number">7.2.1.1.1.3.</span> <span class="toc-text">No-cache 指令</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#No-store-%E6%8C%87%E4%BB%A4"><span class="toc-number">7.2.1.1.1.4.</span> <span class="toc-text">No-store 指令</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#s-maxage%E6%8C%87%E4%BB%A4"><span class="toc-number">7.2.1.1.1.5.</span> <span class="toc-text">s-maxage指令</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Max-age%E6%8C%87%E4%BB%A4"><span class="toc-number">7.2.1.1.1.6.</span> <span class="toc-text">Max-age指令</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Min-fresh%E6%8C%87%E4%BB%A4"><span class="toc-number">7.2.1.1.1.7.</span> <span class="toc-text">Min-fresh指令</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Max-stale%E6%8C%87%E4%BB%A4"><span class="toc-number">7.2.1.1.1.8.</span> <span class="toc-text">Max-stale指令</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Only-if-cached-%E6%8C%87%E4%BB%A4"><span class="toc-number">7.2.1.1.1.9.</span> <span class="toc-text">Only-if-cached 指令</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#must-revalidate%E6%8C%87%E4%BB%A4"><span class="toc-number">7.2.1.1.1.10.</span> <span class="toc-text">must-revalidate指令</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Proxy-revalidate%E6%8C%87%E4%BB%A4"><span class="toc-number">7.2.1.1.1.11.</span> <span class="toc-text">Proxy-revalidate指令</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#No-transform%E6%8C%87%E4%BB%A4"><span class="toc-number">7.2.1.1.1.12.</span> <span class="toc-text">No-transform指令</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Cache-Control-%E6%89%A9%E5%B1%95"><span class="toc-number">7.2.1.1.1.13.</span> <span class="toc-text">Cache-Control 扩展</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Conenction%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.1.2.</span> <span class="toc-text">Conenction字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Data%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.1.3.</span> <span class="toc-text">Data字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Pragma%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.1.4.</span> <span class="toc-text">Pragma字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Trailer%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.1.5.</span> <span class="toc-text">Trailer字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Transfer-Encoding%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.1.6.</span> <span class="toc-text">Transfer-Encoding字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Upgrade%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.1.7.</span> <span class="toc-text">Upgrade字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Via%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.1.8.</span> <span class="toc-text">Via字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Warning%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.1.9.</span> <span class="toc-text">Warning字段</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A1%E8%AF%B7%E6%B1%82%E9%A6%96%E9%83%A8%E5%AD%97%E6%AE%B5%E5%90%8D"><span class="toc-number">7.2.1.2.</span> <span class="toc-text">②请求首部字段名</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Accept%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.1.</span> <span class="toc-text">Accept字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Accept-Charset%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.2.</span> <span class="toc-text">Accept-Charset字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Accept-Encoding%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.3.</span> <span class="toc-text">Accept-Encoding字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Accept-language%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.4.</span> <span class="toc-text">Accept-language字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Authorization%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.5.</span> <span class="toc-text">Authorization字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Expect%E5%AD%97%E6%AE%B5%EF%BC%88-%EF%BC%89"><span class="toc-number">7.2.1.2.6.</span> <span class="toc-text">Expect字段（*）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#From%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.7.</span> <span class="toc-text">From字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Host%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.8.</span> <span class="toc-text">Host字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#If-watch%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.9.</span> <span class="toc-text">If-watch字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#If-Modified-Since%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.10.</span> <span class="toc-text">If-Modified-Since字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#If-None-Match%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.11.</span> <span class="toc-text">If-None-Match字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#If-Range%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.12.</span> <span class="toc-text">If-Range字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#If-Unmodified-Since%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.13.</span> <span class="toc-text">If-Unmodified-Since字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Max-Forwards%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.14.</span> <span class="toc-text">Max-Forwards字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Proxy-Authorization%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.15.</span> <span class="toc-text">Proxy-Authorization字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Range%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.16.</span> <span class="toc-text">Range字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Referer%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.17.</span> <span class="toc-text">Referer字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#TE%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.2.18.</span> <span class="toc-text">TE字段</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A2%E5%93%8D%E5%BA%94%E9%A6%96%E9%83%A8%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.3.</span> <span class="toc-text">③响应首部字段</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Accept-Ranges%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.3.1.</span> <span class="toc-text">Accept-Ranges字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Age%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.3.2.</span> <span class="toc-text">Age字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ETag%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.3.3.</span> <span class="toc-text">ETag字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Location%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.3.4.</span> <span class="toc-text">Location字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Proxy-Authenticate%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.3.5.</span> <span class="toc-text">Proxy-Authenticate字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Retry-After%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.3.6.</span> <span class="toc-text">Retry-After字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Sever%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.3.7.</span> <span class="toc-text">Sever字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Vary%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.3.8.</span> <span class="toc-text">Vary字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#WWW-Authenticate%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.3.9.</span> <span class="toc-text">WWW-Authenticate字段</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A3%E5%AE%9E%E4%BD%93%E9%A6%96%E9%83%A8%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.4.</span> <span class="toc-text">④实体首部字段</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Allow%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.4.1.</span> <span class="toc-text">Allow字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Content-Encoding%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.4.2.</span> <span class="toc-text">Content-Encoding字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Content-language%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.4.3.</span> <span class="toc-text">Content-language字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Content-Length"><span class="toc-number">7.2.1.4.4.</span> <span class="toc-text">Content-Length</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Content-Location%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.4.5.</span> <span class="toc-text">Content-Location字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Content-MD5%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.4.6.</span> <span class="toc-text">Content-MD5字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Content-Range%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.4.7.</span> <span class="toc-text">Content-Range字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Content-Type%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.4.8.</span> <span class="toc-text">Content-Type字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Expires%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.4.9.</span> <span class="toc-text">Expires字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Last-Modified%E5%AD%97%E6%AE%B5"><span class="toc-number">7.2.1.4.10.</span> <span class="toc-text">Last-Modified字段</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9EHTTP-1-1%E9%A6%96%E9%83%A8%E5%AD%97%E6%AE%B5"><span class="toc-number">7.3.</span> <span class="toc-text">非HTTP&#x2F;1.1首部字段</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%BACookie%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%A6%96%E9%83%A8%E5%AD%97%E6%AE%B5"><span class="toc-number">7.3.0.0.1.</span> <span class="toc-text">为Cookie服务的首部字段</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Set-Cookie%E5%AD%97%E6%AE%B5"><span class="toc-number">7.3.0.0.1.1.</span> <span class="toc-text">Set-Cookie字段</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#expires%E5%B1%9E%E6%80%A7"><span class="toc-number">7.3.0.0.1.2.</span> <span class="toc-text">expires属性</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Path%E5%B1%9E%E6%80%A7"><span class="toc-number">7.3.0.0.1.3.</span> <span class="toc-text">Path属性</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#domain%E5%B1%9E%E6%80%A7"><span class="toc-number">7.3.0.0.1.4.</span> <span class="toc-text">domain属性</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Secure-%E5%B1%9E%E6%80%A7"><span class="toc-number">7.3.0.0.1.5.</span> <span class="toc-text">Secure 属性</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#HttpOnly%E5%B1%9E%E6%80%A7"><span class="toc-number">7.3.0.0.1.6.</span> <span class="toc-text">HttpOnly属性</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Cookie%E5%AD%97%E6%AE%B5"><span class="toc-number">7.3.0.0.1.7.</span> <span class="toc-text">Cookie字段</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#X-Frame-Options%E5%AD%97%E6%AE%B5"><span class="toc-number">7.3.0.0.2.</span> <span class="toc-text">X-Frame-Options字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#X-XSS-Protection%E5%AD%97%E6%AE%B5"><span class="toc-number">7.3.0.0.3.</span> <span class="toc-text">X-XSS-Protection字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DNT%E5%AD%97%E6%AE%B5"><span class="toc-number">7.3.0.0.4.</span> <span class="toc-text">DNT字段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#P3P%E5%AD%97%E6%AE%B5%EF%BC%88-%EF%BC%89"><span class="toc-number">7.3.0.0.5.</span> <span class="toc-text">P3P字段（*）</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%AF%E5%AF%B9%E7%AB%AF%E9%A6%96%E9%83%A8-%E5%92%8C-%E9%80%90%E8%B7%B3%E9%A6%96%E9%83%A8"><span class="toc-number">7.4.</span> <span class="toc-text">端对端首部 和 逐跳首部</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E7%A1%AE%E8%AE%A4%E8%AE%BF%E9%97%AE%E7%94%A8%E6%88%B7%E8%BA%AB%E4%BB%BD%E7%9A%84%E8%AE%A4%E8%AF%81"><span class="toc-number">8.</span> <span class="toc-text">第八章 确认访问用户身份的认证</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E4%BD%BF%E7%94%A8%E7%9A%84%E8%AE%A4%E8%AF%81%E6%96%B9%E5%BC%8F"><span class="toc-number">8.1.</span> <span class="toc-text">HTTP使用的认证方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BASIC%E8%AE%A4%E8%AF%81"><span class="toc-number">8.1.1.</span> <span class="toc-text">BASIC认证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DIGSET%E8%AE%A4%E8%AF%81"><span class="toc-number">8.1.2.</span> <span class="toc-text">DIGSET认证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSL%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%A4%E8%AF%81"><span class="toc-number">8.1.3.</span> <span class="toc-text">SSL客户端认证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%A1%A8%E5%8D%95%E8%AE%A4%E8%AF%81"><span class="toc-number">8.1.4.</span> <span class="toc-text">基于表单认证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Session%E7%AE%A1%E7%90%86%E5%8F%8A-Cookie%E7%AE%A1%E7%90%86"><span class="toc-number">8.2.</span> <span class="toc-text">Session管理及 Cookie管理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E5%9F%BA%E4%BA%8EHTTP%E5%8A%9F%E8%83%BD%E8%BF%BD%E5%8A%A0%E5%8D%8F%E8%AE%AE"><span class="toc-number">9.</span> <span class="toc-text">第九章 基于HTTP功能追加协议</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Ajax%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-number">9.1.</span> <span class="toc-text">Ajax的解决方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Comet%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-number">9.2.</span> <span class="toc-text">Comet的解决方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SPDY%E5%8D%8F%E8%AE%AE"><span class="toc-number">9.3.</span> <span class="toc-text">SPDY协议</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E8%BF%9B%E8%A1%8C%E5%85%A8%E5%8F%8C%E5%B7%A5%E9%80%9A%E4%BF%A1%E7%9A%84WebSockt"><span class="toc-number">10.</span> <span class="toc-text">使用浏览器进行全双工通信的WebSockt</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Websocket%E7%9A%84%E4%B8%BB%E8%A6%81%E7%89%B9%E7%82%B9"><span class="toc-number">10.1.</span> <span class="toc-text">Websocket的主要特点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Websocket%E6%8F%A1%E6%89%8B"><span class="toc-number">10.1.1.</span> <span class="toc-text">Websocket握手</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E6%96%87%E4%BB%B6%E7%9A%84WebDAV"><span class="toc-number">10.2.</span> <span class="toc-text">Web服务器管理文件的WebDAV</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A9%E5%B1%95HTTP-1-1%E7%9A%84WebDAV"><span class="toc-number">10.2.1.</span> <span class="toc-text">扩展HTTP&#x2F;1.1的WebDAV</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WebDAV%E5%86%85%E6%96%B0%E5%A2%9E%E7%9A%84%E6%96%B9%E6%B3%95%E5%8F%8A%E5%85%B6%E7%8A%B6%E6%80%81%E7%A0%81"><span class="toc-number">10.2.2.</span> <span class="toc-text">WebDAV内新增的方法及其状态码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WebDAV%E7%9A%84%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94%E5%AE%9E%E4%BE%8B"><span class="toc-number">10.2.3.</span> <span class="toc-text">ＷebDAV的请求与响应实例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0-%E6%9E%84%E5%BB%BAWeb%E5%86%85%E5%AE%B9%E7%9A%84%E6%8A%80%E6%9C%AF"><span class="toc-number">11.</span> <span class="toc-text">第十章 构建Web内容的技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML"><span class="toc-number">11.1.</span> <span class="toc-text">HTML</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E5%BA%94%E7%94%A8CSS"><span class="toc-number">11.1.1.</span> <span class="toc-text">设计应用CSS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81HTML%EF%BC%88%EF%BC%8A%EF%BC%89"><span class="toc-number">11.1.2.</span> <span class="toc-text">动态HTML（＊）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%98%93%E6%8E%A7%E5%88%B6%E7%9A%84HTML%E5%92%8CDOM"><span class="toc-number">11.1.3.</span> <span class="toc-text">更易控制的HTML和DOM</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web%E5%BA%94%E7%94%A8"><span class="toc-number">11.2.</span> <span class="toc-text">Web应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CGI"><span class="toc-number">11.2.1.</span> <span class="toc-text">CGI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Servlet"><span class="toc-number">11.2.2.</span> <span class="toc-text">Servlet</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8F%91%E5%B8%83%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8F%8A%E8%AF%AD%E8%A8%80"><span class="toc-number">11.3.</span> <span class="toc-text">数据发布的格式及语言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XML"><span class="toc-number">11.3.1.</span> <span class="toc-text">XML</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSS-Atom"><span class="toc-number">11.3.2.</span> <span class="toc-text">RSS&#x2F;Atom</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON"><span class="toc-number">11.3.3.</span> <span class="toc-text">JSON</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-Web%E7%9A%84%E6%94%BB%E5%87%BB%E6%8A%80%E6%9C%AF"><span class="toc-number">12.</span> <span class="toc-text">第十一章 Web的攻击技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%92%88%E5%AF%B9web%E7%9A%84%E6%94%BB%E5%87%BB%E6%8A%80%E6%9C%AF"><span class="toc-number">12.1.</span> <span class="toc-text">针对web的攻击技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%AF%E7%AF%A1%E6%94%B9%E8%AF%B7%E6%B1%82"><span class="toc-number">12.1.1.</span> <span class="toc-text">在客户端可篡改请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%92%88%E5%AF%B9web%E5%BA%94%E7%94%A8%E7%9A%84%E6%94%BB%E5%87%BB%E6%A8%A1%E5%BC%8F"><span class="toc-number">12.1.2.</span> <span class="toc-text">针对web应用的攻击模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%A0%E8%BE%93%E5%87%BA%E5%80%BC%E8%BD%AC%E4%B9%89%E4%B8%8D%E5%AE%8C%E5%85%A8%E5%BC%95%E5%8F%91%E7%9A%84%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E"><span class="toc-number">12.2.</span> <span class="toc-text">因输出值转义不完全引发的安全漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB-XSS"><span class="toc-number">12.2.1.</span> <span class="toc-text">跨站脚本攻击(XSS)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB"><span class="toc-number">12.2.2.</span> <span class="toc-text">SQL注入攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OS%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB"><span class="toc-number">12.2.3.</span> <span class="toc-text">OS命令注入攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP%E9%A6%96%E9%83%A8%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB"><span class="toc-number">12.2.4.</span> <span class="toc-text">HTTP首部注入攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP%E5%93%8D%E5%BA%94%E6%88%AA%E6%96%AD%E6%94%BB%E5%87%BB"><span class="toc-number">12.2.5.</span> <span class="toc-text">HTTP响应截断攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%82%AE%E4%BB%B6%E9%A6%96%E9%83%A8%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB"><span class="toc-number">12.2.6.</span> <span class="toc-text">邮件首部注入攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E6%94%BB%E5%87%BB"><span class="toc-number">12.2.7.</span> <span class="toc-text">目录遍历攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E"><span class="toc-number">12.2.8.</span> <span class="toc-text">远程文件包含漏洞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%A0%E8%AE%BE%E7%BD%AE%E6%88%96%E8%AE%BE%E8%AE%A1%E4%B8%8A%E7%9A%84%E7%BC%BA%E9%99%B7%E5%BC%95%E5%8F%91%E7%9A%84%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E"><span class="toc-number">12.3.</span> <span class="toc-text">因设置或设计上的缺陷引发的安全漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%BA%E5%88%B6%E6%B5%8F%E8%A7%88"><span class="toc-number">12.3.1.</span> <span class="toc-text">强制浏览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E6%AD%A3%E7%A1%AE%E7%9A%84%E9%94%99%E8%AF%AF%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86"><span class="toc-number">12.3.2.</span> <span class="toc-text">不正确的错误消息处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E6%94%BE%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-number">12.3.3.</span> <span class="toc-text">开放重定向</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%A0%E4%BC%9A%E8%AF%9D%E7%AE%A1%E7%90%86%E7%96%8F%E5%BF%BD%E5%BC%95%E5%8F%91%E7%9A%84%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E"><span class="toc-number">12.4.</span> <span class="toc-text">因会话管理疏忽引发的安全漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%9A%E8%AF%9D%E5%8A%AB%E6%8C%81"><span class="toc-number">12.4.1.</span> <span class="toc-text">会话劫持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%9A%E8%AF%9D%E5%9B%BA%E5%AE%9A%E6%94%BB%E5%87%BB"><span class="toc-number">12.4.2.</span> <span class="toc-text">会话固定攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0"><span class="toc-number">12.4.3.</span> <span class="toc-text">跨站请求伪造</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E"><span class="toc-number">12.5.</span> <span class="toc-text">其他安全漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3"><span class="toc-number">12.5.1.</span> <span class="toc-text">密码破解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%82%B9%E5%87%BB%E5%8A%AB%E6%8C%81"><span class="toc-number">12.5.2.</span> <span class="toc-text">点击劫持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DoS%E6%94%BB%E5%87%BB"><span class="toc-number">12.5.3.</span> <span class="toc-text">DoS攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E9%97%A8%E7%A8%8B%E5%BA%8F"><span class="toc-number">12.5.4.</span> <span class="toc-text">后门程序</span></a></li></ol></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="https://wub233.github.io/2026/06/29/HTTP%E5%9B%BE%E8%A7%A3%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="wub"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="Wub's Blog"></span><header class="post-header"><h1 class="post-title" itemprop="name headline"></h1><div class="post-meta"><div class="post-time"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <time title="Created: 2026-06-29 12:08:37" itemprop="dateCreated datePublished" datetime="2026-06-29T12:08:37+08:00">2026-06-29</time></div><div class="post-classify"></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><h1 id="HTTP图解阅读笔记"><a href="#HTTP图解阅读笔记" class="headerlink" title="HTTP图解阅读笔记"></a>HTTP图解阅读笔记</h1><p>✧( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )( •̀ ω •́ )✧</p>
+<h1 id="第一章-了解WEB及网络基础"><a href="#第一章-了解WEB及网络基础" class="headerlink" title="第一章 了解WEB及网络基础"></a>第一章 了解WEB及网络基础</h1><h2 id="网络基础-TCP-IP"><a href="#网络基础-TCP-IP" class="headerlink" title="网络基础 TCP&#x2F;IP"></a>网络基础 TCP&#x2F;IP</h2><h3 id="1-TCP-IP-基本概念"><a href="#1-TCP-IP-基本概念" class="headerlink" title="1. TCP&#x2F;IP 基本概念"></a>1. TCP&#x2F;IP 基本概念</h3><p>协议： 计算机与网络设备相互通信，需要遵守同一规则，即为协议</p>
+<p>TCP&#x2F;IP： 一般是指一个以TCP、IP为代表的<strong>协议簇</strong></p>
+<h3 id="TCP-IP-的重要特点：-分层管理"><a href="#TCP-IP-的重要特点：-分层管理" class="headerlink" title="TCP&#x2F;IP 的重要特点： 分层管理"></a>TCP&#x2F;IP 的重要特点： 分层管理</h3><p>TCP&#x2F;IP协议族按层次分为</p>
+<h4 id="1-应用层"><a href="#1-应用层" class="headerlink" title="1.应用层"></a><strong>1.应用层</strong></h4><p>作用：定义数据格式并按照对应的格式解读数据</p>
+<p>一般包括 ：HTTP（万维网服务）、FTP（文件传输）、SMTP（电子邮件）、SSH（安全远程登陆）、DNS（域名解析）以及许多其他协议</p>
+<h4 id="2-传输层"><a href="#2-传输层" class="headerlink" title="2.传输层"></a>2.传输层</h4><p>作用：保证数据传输的可靠性（TCP协议），给每个应用程序标识身份（UDP协议），实现端口到端口的通信。</p>
+<p>一般包括： TCP与UDP协议</p>
+<h4 id="3-网络层"><a href="#3-网络层" class="headerlink" title="3.网络层"></a>3.网络层</h4><p>作用：定义网络地址、区分网段、子网内MAC寻址、对于不同子网的数据包进行路由。</p>
+<p>一般包括：ICMP、IP、IGMP、ARP</p>
+<h4 id="4-链路层"><a href="#4-链路层" class="headerlink" title="4.链路层"></a>4.链路层</h4><p>作用：数据包从一个设备的网络层传输到另外一个设备的网络层的方法，<del>或是一个~~~~虚拟专有网络~~~~（~~~~VPN~~~~）或者隧道（？——？）</del></p>
+<p>一般包括：控制操作系统和操作系统硬件的设备驱动、NIC（网卡）、光纤等物理可见部分</p>
+<h3 id="TCP-IP-通信传输流"><a href="#TCP-IP-通信传输流" class="headerlink" title="TCP&#x2F;IP 通信传输流"></a>TCP&#x2F;IP 通信传输流</h3><p>书图：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Njk5ZmQ1YmRkOTAyYjQ4Mzg2NTUyNjg1M2ZjOTA2MTVfN2VhNTU1YmYyODNlNTgxNGQwNGU2YThmZjBjYTA3ODlfSUQ6NzIwNzc0MzIyMjM4NTY1NTgxMV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>上图表示TCP&#x2F;IP协议数据的封装和分用，简略地来说：发送端每通过一层会增加该层的首部，接收端每通过一层则删除该层的首部。</p>
+<h3 id="IP、TCP和DNS"><a href="#IP、TCP和DNS" class="headerlink" title="IP、TCP和DNS"></a>IP、TCP和DNS</h3><h4 id="IP"><a href="#IP" class="headerlink" title="IP"></a>IP</h4><p>IP协议位于网络层，作用是根据源主机和目的主机的地址来传送数据。其中两个重要条件是：</p>
+<p>1.IP地址：节点（计算机或交换机）被分配的地址 （可变换）</p>
+<p>2.MAC地址： 与网卡绑定的地址。</p>
+<p>ps：ARP协议可以通过IP地址反查出MAC地址</p>
+<h4 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h4><p>TCP协议位于传输层，提供可靠的字节流服务（指：将大块的数据分割成以报文段为单位的数据包进行管理）</p>
+<p>TCP的三次握手策略</p>
+<p>作用：准确无误的将数据送至目标处。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YWQxMGY0ODkxOWY2Mjg4YjM0MDMyYzAwZDg3NjE4ZjlfMzQ5MGM5NTVmYmYwZGEyMjkyMWExODliNmE5Mzk3MGRfSUQ6NzIwNzgwMTU1OTk4NzMwNjQ5OV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>第一次握手：发送端发送一个带SYN标志的数据包给接受端</p>
+<p>第二次握手：接收端接受到后，回传一个带有SYN&#x2F;ACK的数据包表示确认</p>
+<p>第三次握手：发送端再回传一个带ACK标志的数据包，表示握手结束。</p>
+<p>PS ：若在某个阶段莫名<strong>中断</strong>，TCP会再次以<strong>相同的顺序发相同的数据包。</strong></p>
+<h4 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h4><p>DNS协议是位于应用层，提供域名到IP地址之间的解析服务（双向）。</p>
+<p>相较于IP地址，域名易于被人类接受，用域名作为IP地址的助记符。</p>
+<h3 id="5-URI与URL"><a href="#5-URI与URL" class="headerlink" title="5.URI与URL"></a>5.URI与URL</h3><h4 id="URL（统一资源定位符）"><a href="#URL（统一资源定位符）" class="headerlink" title="URL（统一资源定位符）"></a>URL（统一资源定位符）</h4><p>URL 为 Uniform   Resource   Locater  的缩写，是使用 Web浏览器等访问Web页面是输入的网页地址。</p>
+<h4 id="URI（统一资源标识符）"><a href="#URI（统一资源标识符）" class="headerlink" title="URI（统一资源标识符）"></a>URI（统一资源标识符）</h4><p>URI 为 Uniform   Resource   Identifier 的缩写，是由某个协议方案表示的资源的定位标识符。</p>
+<p>格式：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NWFlNTRhYzY2NTkwYjg2NWI5NzU3MTU3ODg2ODdhMWNfMzJiMDYzYzdmNjg3YmJmYzU1Mzg5NDQyZGZlNmUzYjJfSUQ6NzIwNzgwNzk5NjQ0MDQyODU0NV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>协议方案名：指定协议类型，不区分大小写</p>
+<p>登录信息（可选）： 用户名和密码作为获取资源的必要信息</p>
+<p>服务器地址：使用绝对URI必须指定待访问的服务器地址，名称可以是ｈａｃｋ．ｊｐ这种DNS可解析的名称,或是192.168.1.1这类IPv4地址名,或是[0:0:0:0:0:0:0:1]这种方括号IPv6地址名.</p>
+<p>服务器端口号(可选):指定服务器连接的网络端口号.</p>
+<p>带层次的文件路径:指定服务器上的文件路径来定位特指的资源.</p>
+<p>查询字符串(可选):针对已指定的文件路径内的资源,查询文件名称(?)</p>
+<p>片段表示符(可选):可标记已获取资源中的子资源.</p>
+<h1 id="第二章-简单的HTTP协议"><a href="#第二章-简单的HTTP协议" class="headerlink" title="第二章  简单的HTTP协议"></a>第二章  简单的HTTP协议</h1><h3 id="请求与响应"><a href="#请求与响应" class="headerlink" title="请求与响应"></a>请求与响应</h3><h4 id="请求报文"><a href="#请求报文" class="headerlink" title="请求报文"></a>请求报文</h4><p>构成：请求报文是由请求方法、请求URL、协议版本、可选的请求首部字和内容实体构成的。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGM1NDZmY2Q4OWM0NTJjNDkzY2IzODFlNGQ2NWY0NDVfYTI4MGU1ZGUwOTk2YmEzMGJiNDQxZjQ3NmI4N2Q5NTBfSUQ6NzIwNzgyNDU4NDI3NDU1ODk3OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h4 id="响应报文"><a href="#响应报文" class="headerlink" title="响应报文"></a>响应报文</h4><p>构成：响应报文基本上由协议版本、状态码、用以解释状态码的原因短语、可选的响应首部字段以及实体主体构成。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTE4NzFiNjJiYzhjYmQyMTFkNTAyOTZiMDFmNTljNjRfMzM5ZmJhZDQ5NzRhMTk0ZjkyZjZlY2YzMzhkY2FkZGZfSUQ6NzIwNzgyNTY5NDYxNjU1MTQyN18xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h3 id="HTTP是不保存状态的协议"><a href="#HTTP是不保存状态的协议" class="headerlink" title="HTTP是不保存状态的协议"></a>HTTP是不保存状态的协议</h3><p>HTTP是一种不保存状态，即无状态协议，其自身不具备保存之前发送过的请求或响应的功能</p>
+<p>注意：可以使用Cookie 技术实现期望的保持状态功能</p>
+<h3 id="请求URI定位资源"><a href="#请求URI定位资源" class="headerlink" title="请求URI定位资源"></a>请求URI定位资源</h3><p>HTTP协议使用URI定位互联网上的资源。</p>
+<p>指定请求URI的方式：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Y2I0YjgyNDZkNzBiODlkMjcwMjMyZWE1OTdlMDA1MjZfOWJiMmFjMDQ0NDBiYTkzYWRjNDJlYTA0YWJhZGNmMThfSUQ6NzIwODA1NzE2NDY4MDkwNDcwNV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>图 ：以 <a target="_blank" rel="noopener" href="http://hackr/.jp/index/.htm%E4%BD%9C%E4%B8%BA%E8%AF%B7%E6%B1%82%E7%9A%84%E4%BE%8B%E5%AD%90%E3%80%82">http://hackr\.jp/index\.htm作为请求的例子。</a></p>
+<p>若是对服务器本身发起请求，可以用一个 * 来代替请求URL</p>
+<p>例：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OWFjZDZmNWM2YzMzMzRjMTI5ZTkxMmQwNTU3YjBkZTRfYzhjNjBhYWQ5ZTI1MzU2OTg0NDRlNGViYWUzYmQ3ZGVfSUQ6NzIwODA1ODIwNzgwODU4NTc1Nl8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h3 id="告知服务器意图的HTTP方法"><a href="#告知服务器意图的HTTP方法" class="headerlink" title="告知服务器意图的HTTP方法"></a>告知服务器意图的HTTP方法</h3><h4 id="GET-：获取资源"><a href="#GET-：获取资源" class="headerlink" title="GET ：获取资源"></a>GET ：获取资源</h4><p>作用 : 请求已被URI识别的资源（符合URI格式？）。若请求文本，则返回文本，若请求的是特殊程序，则返回执行后结果。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWRlYWZmMzc2NmQ0YmJmOTgzYWU3ODAwOGEwYTU4ZDBfN2ZhZWNmMTUzYjZlYmNhZTEyN2IyYTEyYTM2ZmExMGRfSUQ6NzIwODA2NzAyMzEyODM5NTc3OF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h4 id="POST-：传输实体主体"><a href="#POST-：传输实体主体" class="headerlink" title="POST ：传输实体主体"></a>POST ：传输实体主体</h4><p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTdmZWYxMzQ0NWE3NjkxN2QwNzkwYTU2MDc5ZTg5NWJfY2Q3MjZiMDAzMmM4MDg3MDM4Nzk1ZDQ5MzkzNWU5MGZfSUQ6NzIwODA2NjIzNzE0NDkwNzc3N18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>GET也能传输主体，但两者有区别。</p>
+<p>区别：</p>
+<p>+ GET一般用于 获取&#x2F;查询 资源信息，而POST一般用于 更新 资源信息</p>
+<p>+ GET提交请求的数据会附在URL之后（**提交的数据会在地址栏中显示出来  且  长度会有限制 **），POST提交把提交的数据放置在HTTP包的包体（Request body）中。</p>
+<p>+ GET采用 只支持文本（ASCII字符），并且采用urlencode</p>
+<p>POST 支持文本，采用urlencode，也支持二进制，能够用来传输文件</p>
+<p>PUT：传输文件</p>
+<p>作用 : HTTP&#x2F;1.1 的 PUT方法不带验证机制，存在安全性问题</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDY1MDRmZTI2ODc3MWQ5YzRmZTBhYTFhMWVlYTU0YjhfNjk0NDNiNGY1N2NhOWQ3YTQ3YWZhN2MwNDU2Y2NlMTdfSUQ6NzIwODA2Njg4MDM1MDY1MDM5Nl8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h4 id="HEAD-获得报文首部"><a href="#HEAD-获得报文首部" class="headerlink" title="HEAD : 获得报文首部"></a>HEAD : 获得报文首部</h4><p>作用 : 确认URI的有效性和资源更新的日期时间</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTEzNWZjYmU1NTkwZWMxYjk0ZjViNjMyYTFlNDYwOTRfM2QxMjA1YTE2M2UyMWUyYmVkYmE0ZjEwZGY1YjYwNmNfSUQ6NzIwODA2NzcyNzMxMDE1OTkwMF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h4 id="DELETE-删除文件"><a href="#DELETE-删除文件" class="headerlink" title="DELETE : 删除文件"></a>DELETE : 删除文件</h4><p>作用:按请求URI删除指定的资源,但存在和PUT方法一样的安全性问题</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTQ5YTE3ODc3YmVmNTJjZDQyZTU2NGFjZmY4YTJlNWFfNTEyNTM2YjFiM2Y1MTNlZWYyNWY1Yzc2YjEyZmU1ZDVfSUQ6NzIwODA2OTk3NjAxODgxMjkzMF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h4 id="OPTIONS-询问支持的方法"><a href="#OPTIONS-询问支持的方法" class="headerlink" title="OPTIONS : 询问支持的方法"></a>OPTIONS : 询问支持的方法</h4><p>作用 : 查询针对请求URI指定的资源支持的方法</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDk4OWU3NGI4NGI5ZjgyYzRhMmU0ODYzM2Y2MDI0NDFfODYwYzVlYmFlYTA0YTJkYjMxYTY5MTJhZThiYWUyNGFfSUQ6NzIwODA2ODgxMDQzODU1NzY5OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h4 id="TRACE-追踪路径"><a href="#TRACE-追踪路径" class="headerlink" title="TRACE:追踪路径"></a>TRACE:追踪路径</h4><p>作用 : 让Web服务器端将之前的请求通信环回给客户端</p>
+<p>内容:在MAX-Forward中输入一个数值,每经一个服务器器端减一,为0时停止传输,最后收到的服务器返回200 OK的响应.(易引发XST攻击)</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTFlNDg4MTk5Yzc0MWJiZmQyNjlhZDRiMWIxNmJkMmZfZTM1ODEyMjYxODMyNjU2MTUzZTI3MGE2NjZlOWJkZDNfSUQ6NzIwODA3MTAzMDcxNDY0NjU1Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NmNlY2Q0YjljYTI0ZGRiYWQ1MzZkYjI2YWY5ODk3ODJfM2FjODU1YjcwOWNmYmRjYjg1MWQ3NmQ2MGVmMzIwZDFfSUQ6NzIwODA3MTA4Nzg2NTcyNDkyOV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h4 id="CONNECT-要求用隧道协议连接"><a href="#CONNECT-要求用隧道协议连接" class="headerlink" title="CONNECT:要求用隧道协议连接(*)"></a>CONNECT:要求用隧道协议连接(*)</h4><p>要求在于代理服务器通信时建立隧道,用隧道协议进行TCP通信.主要使用 SSL 与 TLS 加密后经网络隧道传输.</p>
+<p>格式:</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjY0Mzc5ODY5YjBmNTBlNjQzMTMzMmY1ZTg0NjEyNGFfN2NiMDlmMTQ3MzIwZjQ0NGQ5NWU3M2NlNTNkNjVlOWVfSUQ6NzIwODA3MjA1MjU0NDE5MjU0MF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>报文结构:</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjRhMDBiNTkyOTcyNDhmODc2MzVhN2NiN2Y5NGMzMGVfMmY0MzAxZDM0NGQ0YWFiZmU2MGNjZDE1NDJmMTk5NWNfSUQ6NzIwODA3MjEyOTA4OTI5MDI0Ml8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h3 id="HTTP-1-0和HTTP-1-1支持的方法"><a href="#HTTP-1-0和HTTP-1-1支持的方法" class="headerlink" title="HTTP&#x2F;1.0和HTTP&#x2F;1.1支持的方法"></a>HTTP&#x2F;1.0和HTTP&#x2F;1.1支持的方法</h3><p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDQ3YzA2MGRhNzhmZmRkNzVhYmY4MGNlNTVkMGI4NTdfZWYwMWQxZTM4YjBiOGRlZDY0MjY0YjVhMTRiOWEwN2FfSUQ6NzIwODE3MTgzNTIyNTAxNDMwMF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h3 id="持久连接"><a href="#持久连接" class="headerlink" title="持久连接"></a>持久连接</h3><p>HTTP的初始版本中，每进行一次HTTP通信就要断开一次TCP连接。发送时会造成无谓的TCP连接断开。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjM1Nzk4MjM3YTg0OTYxNWMzMTQ0ZmQwMzk3N2FhZDVfZTRhZDgyYzdkNDdhNWYwMzcwYzlhNmM0NDg3Njg2YTVfSUQ6NzIwODE3NDE4MTk0OTcxODUyOV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>持久连接：</p>
+<p>特点：只要任意一端没有明确提出断开连接，则保持TCP连接状态。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTY3NWY3ODczNzdhMjdlNzA5M2RhNzU2ZTBjY2MyOGRfZGY3ZGZlNDEzYmNiNGM4NTgyYTUzN2MyMWU3NmNjZjRfSUQ6NzIwODE3NTIzNTYwMTgyNTc5Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h3 id="管线化"><a href="#管线化" class="headerlink" title="管线化"></a>管线化</h3><p>作用： 一个请求发出后，不用等待响应就可直接发送下一个请求。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YmM0N2Q0YmVjM2NmODQ2ODM2YmJkYTc1N2M4YzlkODFfZTYxOWI1MmFkZTU1NGQ5N2I0MDUxNDE0MDI1YTcyMDJfSUQ6NzIwODE3NTg3MzM2OTg4MjY1Ml8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h3 id="使用Cookie的状态管理"><a href="#使用Cookie的状态管理" class="headerlink" title="使用Cookie的状态管理"></a>使用Cookie的状态管理</h3><p>上文提到可用Cookie实现保持状态功能</p>
+<p>简略地来讲：Cookie技术通过在请求响应报文中写入Cookie信息来控制客户端的状态。</p>
+<p>一般步骤：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTZjNjg3ZmIzYTY2MTI1OTg2NjViZDE1OWNlZTRmZDBfMTM3NzEyMmE5ZmU1OTZjZWUyNmFiZmQ4OGRjMWE4ZGZfSUQ6NzIwODE3NzUwNTM2OTQ3MzAyNl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>在客户端第一次连接到服务器时，服务器会在响应报文中添加一个叫做Set-Cookie的首部字段信息，通知客户端保存Cookie。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjU2MTk0OTU1ZmFmNTkzNWU4NmQ0YzA4NmEwNTQxMGNfZTE0NzA0YzkxMzc0M2MxMjBkMmUzZjljNjE5MTljMzNfSUQ6NzIwODE3ODQ3MzQ2OTI2MzkwMF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<p>第二次客户端向服务器发送请求时，客户端会自动在请求报文中加入Cookie值后发送出去。服务器端接受后会对发送的Cookie值进行匹配，得到之前的状态信息</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTY4ZWI2N2UxYzQ3ZTg3MzI2NTJlOGFkMjgyMTM0OTVfZGMxYWExZWJkZWFiYThlMjBlZGIxNjRhMjA5MzI0MjJfSUQ6NzIwODE3OTQzMTI2ODE4ODE2M18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjVhM2JiMTIyNDg4NjE2MDdlMGFmMjVkNDNkZjhlYzZfMThiYzYwNGNhODBjNDM0MTQ3YzQxNDc4MGQ0YjVjOTlfSUQ6NzIwODE3OTUwMjQ0OTU3Mzg4OV8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h1 id="第三章-HTTP报文内的HTTP信息"><a href="#第三章-HTTP报文内的HTTP信息" class="headerlink" title="第三章 HTTP报文内的HTTP信息"></a>第三章 HTTP报文内的HTTP信息</h1><h2 id="HTTP报文"><a href="#HTTP报文" class="headerlink" title="HTTP报文"></a>HTTP报文</h2><p>概念：用于HTTP协议交互的信息被称为HTTP报文。客户端的HTTP报文叫请求报文，服务器端的叫响应报文。</p>
+<p>结构：大致可分为　报文首部　和　报文主体　，用空行（CR＋LF）来划分。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjE2YmE1NWJkOTEyNjg0Zjk1NDU4YmQyNmNhNGRmMzdfYTcyMjc2NzcyZDMyODhkNzc1OGJkNDk2ZDk2OWZlYTFfSUQ6NzIwODE4NDAzMDE2NzEzODMzMl8xNzgyNzA2MTA0OjE3ODI3OTI1MDRfVjM" alt="Image" loading="lazy"></p>
+<h4 id="请求报文-1"><a href="#请求报文-1" class="headerlink" title="请求报文"></a>请求报文</h4><p>结构：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjE1ODAyZDVkZTFlMTRhZGU5NDk4ZGJkYjFjMWRiODJfODNiYTY1YjA4ZGEwMWZmMmRmNTdkOTA2MGZhY2E0YWJfSUQ6NzIwODE4NDQ5MDI1MjkxMDU5M18xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<p>实例：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MThjYzA2ZmYzN2E5MWI3NWU2YzE3M2E2YWY5ODM3NjBfZWY1Y2NlYjdiNDk2NzYzOTM1MTc0YWI3YjUyMGYwMTdfSUQ6NzIwODE4NDgyMjM2NjM3MTg0MV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>请求行：包含用于<strong>请求的方法</strong>，<strong>请求**<strong>URI</strong></strong> **和 <strong>HTTP版本</strong></p>
+<p>首部字段：包含请求的各种条件和属性的各类首部</p>
+<p>PS：一般包含四种首部 ： 通用首部、请求首部、响应首部、实体首部。</p>
+<h4 id="响应报文-1"><a href="#响应报文-1" class="headerlink" title="响应报文"></a>响应报文</h4><p>结构：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTAxZDdkMmQxNmEwM2RlOTE3ZDhjYjdkMjRjMzZiZWFfYWIzOGRjYzhmMmE3MGQ5ZTUxM2JmZmU5MjYzZDcwN2JfSUQ6NzIwODE4NjQ2NjMwNzA4MDE5M18xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<p>实例：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MWM4ZjA1ZThkNDgwNTg0ZTMwOTNhOWZjOWZlMTExYjFfMjM1MjMzMDM5MTIxOTQ3MjQwNWQwOTUxZGE2ZDcxMDJfSUQ6NzIwODE4NjYwOTA3MzQ1NTEwNl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>状态行：包含表明响应结果的 <strong>状态码</strong> ， <strong>原因短语</strong> 和 <strong>HTTP版本</strong>  。</p>
+<p>首部字段同上。</p>
+<h2 id="编码提供传输速率"><a href="#编码提供传输速率" class="headerlink" title="编码提供传输速率"></a>编码提供传输速率</h2><h4 id="①-区分-报文主体-与-实体主体"><a href="#①-区分-报文主体-与-实体主体" class="headerlink" title="① 区分 报文主体 与 实体主体"></a>① 区分 报文主体 与 实体主体</h4><p>报文 ：是HTTP通信的中的基本单位，由8位组字节流组成</p>
+<p>实体 ：作为请求或响应的有效载荷数据被传输，其内容由 实体首部 和 实体主体 组成</p>
+<p>HTTP报文的主体用于　传输请求或响应的实体主体。（一般在进行编码操作时产生差异）</p>
+<h4 id="②-压缩传输内容的内容编码"><a href="#②-压缩传输内容的内容编码" class="headerlink" title="② 压缩传输内容的内容编码"></a>② 压缩传输内容的内容编码</h4><p>类似于ZIP压缩文件，HTTP中的内容编码也对实体信息进行压缩，接受的客户端会进行解码。</p>
+<p>内容编码指指名在实体内容上的编码格式。</p>
+<p>常用的内容编码有</p>
+<p><strong>gzip(GNZ zip)、compress（UNIX系统的标准压缩）、deflate（zilb）、identity（不进行编码）、（*）</strong></p>
+<h4 id="③-分割传送的分块传输编码"><a href="#③-分割传送的分块传输编码" class="headerlink" title="③ 分割传送的分块传输编码"></a>③ 分割传送的分块传输编码</h4><p>分块传输编码 能 把实体主体分块 ，例如 在传输大容量数据时。通过把数据分割成多块，能让服务器逐步显示网页</p>
+<p>分块传输编码 分割出的数据块，每一块都用十六进制标记块的大小，而且最后一块会用“0（CR+LF）”来表示。</p>
+<h4 id="④-发送多种数据的多部分对象集合"><a href="#④-发送多种数据的多部分对象集合" class="headerlink" title="④ 发送多种数据的多部分对象集合"></a>④ 发送多种数据的多部分对象集合</h4><p>MIME机制　使允许邮件处理文本，图片等多个不同类型的数据。</p>
+<p>MIME 来描述标记数据类型,在MIME扩展中使用一种叫 多部分对象集合 的方法 来容纳多份不同类型的数据</p>
+<p>多部分对象集合的对象有:</p>
+<h5 id="multipart-from-data"><a href="#multipart-from-data" class="headerlink" title="multipart&#x2F;from-data"></a>multipart&#x2F;from-data</h5><p>该对象在Web 表单文件上传时使用.</p>
+<h5 id="multipart-byteranges"><a href="#multipart-byteranges" class="headerlink" title="multipart&#x2F;byteranges"></a>multipart&#x2F;byteranges</h5><p>该对象在 状态码 206响应报文包含了多个范围时使用。</p>
+<p>PS：</p>
+<p>在HTTP报文中使用多部分对象集合时，需要在首部字段里加上Content-type。</p>
+<p>使用 boundary 字符串来划分多部分对象集合指名的各类实体。</p>
+<p>例：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Zjc3ZjU1ZWZiODcwOTdlMDM5NWJjYzgxZTFhNWY5MTFfZjU1N2QyZDhjMjA4NjBlZWMzNTU2ODdhYjFlZGU1YzdfSUQ6NzIwODQ3MzU2MzM5ODIwOTU2NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h4 id="⑤-获取部分内容的范围请求"><a href="#⑤-获取部分内容的范围请求" class="headerlink" title="⑤ 获取部分内容的范围请求"></a>⑤ 获取部分内容的范围请求</h4><p>范围请求： 指定范围发送的请求 </p>
+<p>执行范围请求时，用到首部字段Range来指定资源的byte范围</p>
+<p>byte指定形式：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTc4NzNiZTU3MDUyMjM5OWFmOWE4ZjFmYzkxZmY0YjJfMThhNDMyYmY2Mjc4Y2FjOTNmMzg1N2NjOGUyMWY5OTlfSUQ6NzIwODQ3ODIzNDEzNTU0MzgzNl8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<p>PS：针对范围请求，响应会返回状态码为206 Partial Content 的响应报文，若无法响应，则返回状态码 200 OK 和完整的实体内容。</p>
+<h4 id="⑥内容协商返回最合适的内容"><a href="#⑥内容协商返回最合适的内容" class="headerlink" title="⑥内容协商返回最合适的内容"></a>⑥内容协商返回最合适的内容</h4><p>简单的来说，就是服务器根据客户端的属性（如语言），提供给客户端最合适的资源。</p>
+<p>内容协商技术有三种类型：</p>
+<ol>
+<li><p>服务器驱动协商</p>
+<p> 服务端对网页的自动处理</p>
+</li>
+<li><p>客户端驱动协商</p>
+<p> 用户进行手动操作</p>
+</li>
+<li><p>透明协商</p>
+<p> 上面两者的结合</p>
+</li>
+</ol>
+<h1 id="第四章-返回结果的HTTP状态码"><a href="#第四章-返回结果的HTTP状态码" class="headerlink" title="第四章 返回结果的HTTP状态码"></a>第四章 返回结果的HTTP状态码</h1><p>简略地说：</p>
+<p>2XX是成功状态码</p>
+<p>3XX是重定向码，服务器需要进行特殊处理来应对请求</p>
+<p>4XX表示客户端处发生错误</p>
+<p>5XX表示服务器端发生错误</p>
+<h2 id="汇总"><a href="#汇总" class="headerlink" title="汇总"></a>汇总</h2><p>（“借鉴”了一下菜鸟上的汇总(￣▽￣)“）</p>
+<h1 id="第五章-与HTTP协作的Web服务器"><a href="#第五章-与HTTP协作的Web服务器" class="headerlink" title="第五章 与HTTP协作的Web服务器"></a>第五章 与HTTP协作的Web服务器</h1><h2 id="用单台虚拟主机实现多个域名"><a href="#用单台虚拟主机实现多个域名" class="headerlink" title="用单台虚拟主机实现多个域名"></a>用单台虚拟主机实现多个域名</h2><p>注意：即同一个IP下可以对应多个域名，所以在发送HTTP请求时，必须在 Host 首部内完整指定主机名或域名的URI。</p>
+<h2 id="通信数据转发程序：代理、网关、隧道"><a href="#通信数据转发程序：代理、网关、隧道" class="headerlink" title="通信数据转发程序：代理、网关、隧道"></a>通信数据转发程序：代理、网关、隧道</h2><p>源服务器：拥有资源实体的源服务器。</p>
+<h3 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h3><p>**代理 **是有转发功能的应用程序，接受转发请求与响应。</p>
+<p><strong>基本行为</strong>：接受请求后转发给其他服务器，不改变URI。（PS：在转发时，需要附加Via首部字段以标记处经过的主机信息）</p>
+<p>代理一般按<strong>两种基准分类</strong>：是否使用缓存 和 是否修改报文</p>
+<p><strong>缓存代理</strong>：</p>
+<p>代理转发响应时，缓存代理会将响应的副本作为缓存保存，当代理再次接受到相同资源的请求时，就可以不从源服务器获取资源，将缓存作为响应返回。</p>
+<p><strong>透明代理：</strong></p>
+<p>不对报文做任何加工的代理类型叫透明代理，反之叫非透明代理。</p>
+<h3 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h3><p><strong>网关</strong> 是转发其他服务器通信数据的服务器，可以对请求进行处理。</p>
+<p>网关可以将HTTP请求转化为其他协议的通信，使通信线路上的服务器提供非HTTP服务。</p>
+<h3 id="隧道"><a href="#隧道" class="headerlink" title="隧道"></a>隧道</h3><p><strong>隧道</strong> 在相距远的服务器和客户端间进行中转，确保其间进行按安全的通信（可使用 SSL等加密技术）</p>
+<p>隧道不会解析HTTP请求，请求保持原样，在断开连接时结束。</p>
+<h2 id="保存资源的缓存"><a href="#保存资源的缓存" class="headerlink" title="保存资源的缓存"></a>保存资源的缓存</h2><h3 id="缓存服务器"><a href="#缓存服务器" class="headerlink" title="缓存服务器"></a><strong>缓存服务器</strong></h3><p>代理服务器的一种，在转发服务器返回的响应时，会保留一份响应的副本。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzliNjI4YmVjNmVlNjU1YjkzNzk3NGQyYzNiZmE0YmZfNDgzMjgzZDMwYTFlZTgxMzYyMjE3MjM4MTg4OTMzMDFfSUQ6NzIwODU3MzQ4ODU4MjM2MTA5MF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>作用： 利用缓存可避免多次从源服务器转发资源</p>
+<p>PS：基于客户端要求因素，缓存服务器会向服务器检查是否更新缓存。</p>
+<h3 id="客户端缓存"><a href="#客户端缓存" class="headerlink" title="客户端缓存"></a>客户端缓存</h3><p>客户端浏览器中也存在缓存，这种缓存称为 <strong>临时网络文件</strong>。（同样具有检查更新的特性）</p>
+<h1 id="第六章-HTTP首部"><a href="#第六章-HTTP首部" class="headerlink" title="第六章 HTTP首部"></a>第六章 HTTP首部</h1><p>（第六章你好多（；´д｀）ゞ）</p>
+<h2 id="HTTP报文首部"><a href="#HTTP报文首部" class="headerlink" title="HTTP报文首部"></a>HTTP报文首部</h2><h3 id="HTTP请求报文"><a href="#HTTP请求报文" class="headerlink" title="HTTP请求报文"></a>HTTP请求报文</h3><p>请求中，HTTP报文由 方法、URI、HTTP版本、HTTP首部字段 等部分组成</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2U1MThmYTJjYTkzMzExM2E0NWE3NjI4ZDg4ZTIzYjdfNDE4ZDg3MzU2OGIxMWRlNzY2MjJmMDhiYzIxNzM2M2ZfSUQ6NzIwODg4MDMzODExMzc4OTk1M18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h3 id="HTTP响应报文"><a href="#HTTP响应报文" class="headerlink" title="HTTP响应报文"></a>HTTP响应报文</h3><p>在响应中，HTTP报文由 HTTP版本、状态码、HTTP首部字段构成。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTE2MDFhNTRmNDg3NWIxZjhkODA3YmFkMmU2ZDFlZTRfN2E2ZTUyMWQ4NDVjNGNiMmZjMWI3ZmY1NWE5Njg5YzlfSUQ6NzIwODg4MTA3OTM5NzQwMDU3OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h2 id="HTTP首部字段"><a href="#HTTP首部字段" class="headerlink" title="HTTP首部字段"></a>HTTP首部字段</h2><p><strong>HTTP首部字段用来传递报文主体大小等信息。</strong></p>
+<p>HTTP首部字段由　首部字段名　和　字段值　构成，用“：”隔开。</p>
+<p>格式：首部字段名：字段值</p>
+<h3 id="四种HTTP首部字段类型"><a href="#四种HTTP首部字段类型" class="headerlink" title="四种HTTP首部字段类型"></a>四种HTTP首部字段类型</h3><h4 id="①通用首部字段"><a href="#①通用首部字段" class="headerlink" title="①通用首部字段"></a>①通用首部字段</h4><p>请求报文和响应报文都会使用的类型</p>
+<p>字段一览:</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MWRjZmVmZjhkY2RkYjg1ODg0YjliYzgxYWRhMGY2MTJfNWIwNjdmNTAxYzg5Yjk0Zjg2ZmNjNGU0OGIwNDQyY2NfSUQ6NzIwODg4NTUwMDc0OTMzMjQ4MV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Cache-Control字段"><a href="#Cache-Control字段" class="headerlink" title="Cache-Control字段"></a>Cache-Control字段</h5><p>首部字段Cache-Control能够控制缓存的行为.</p>
+<p>缓存请求指令一览:</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2IyNjlkYzZhYmJiYjM0MzJjMWM1MzJmZjM3Mjk1OTZfZDM4ZGQzNTc4N2ZkMjFjNDVlYzRmYTNiMjExZjc4ZjlfSUQ6NzIwODkwMjc4OTA4NTM0Nzg0NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>缓存响应指令一览:</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MGQxZTQ3NTZiNmIyZjNmNjI3MmJhOTkzZDdkYTljNDBfYmIxNmMzNjA4ZTA3MzA4ODY3ODIwNmZlNTMzYTc4NjFfSUQ6NzIwODkwMzEwNTgxODQ3NjU3Ml8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<p><strong>具体指令解释:</strong></p>
+<h6 id="Public-指令"><a href="#Public-指令" class="headerlink" title="Public 指令"></a><strong>Public 指令</strong></h6><p>使用该指令时,明确表明其他用户也可利用缓存</p>
+<h6 id="Private-指令"><a href="#Private-指令" class="headerlink" title="Private 指令"></a><strong>Private</strong> <strong>指令</strong></h6><p>执行该指令后,响应只以特定的用户作为对象.</p>
+<h6 id="No-cache-指令"><a href="#No-cache-指令" class="headerlink" title="No-cache 指令"></a><strong>No-cache</strong> <strong>指令</strong></h6><p>该指令目的是 防止从缓存中返回过期的资源.</p>
+<p>请求中包含,表示客户端不接收 缓存的资源.</p>
+<p>响应中包含,表示缓存服务器不再对资源进行缓存.</p>
+<p>若接收的首部字段中带参数值,如:</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTE0YzczNjUzZmM3YWFkOTE4ZWEwMTY4Yjk3NjcwODBfZGQ4ZDJlYTU5YzQyZTM5MWM5OTVhZjFkM2U3YjNlMzdfSUQ6NzIwODkwNTg2NDMxMjE3NjY0NF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<p>则,客户端不会对该资源进行缓存(有参不缓存.无参可缓存)</p>
+<h6 id="No-store-指令"><a href="#No-store-指令" class="headerlink" title="No-store 指令"></a>No-store <strong>指令</strong></h6><p>该指令规定缓存不能在本地存储请求或响应的任意部分.</p>
+<p>使用no-store指令的情况一般是请求或响应中包含机密信息</p>
+<p><strong>控制可执行缓存的对象的指令:</strong></p>
+<h6 id="s-maxage指令"><a href="#s-maxage指令" class="headerlink" title="s-maxage指令"></a><strong>s-maxage指令</strong></h6><p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjJiNTA4ZDdkNjJjODY4ODM3MmVjMjU0ZDA2ZjRkMDNfNjNiMmRhYjViZDZiZDVkNDMwMGI5MWY2YjQwYjkyZDVfSUQ6NzIwODkxNDA4NjMzNDI1MTAzNl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h6 id="Max-age指令"><a href="#Max-age指令" class="headerlink" title="Max-age指令"></a>Max-age<strong>指令</strong></h6><p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWVhZjMzY2QxOGRlMGU2NmRjNTE2NDEyM2MzYTUxZGNfMDIyMWY4NDFkZGIwYmU3NjU5YTUzZTEzMDNhYjk0YzlfSUQ6NzIwODkxNDQzMDY4NDAwNDM1NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>请求包含max-age指令时,如果指定时间大于判定时间,客户端接收缓存的资源,当指定值为0时,缓存服务器通常要向服务器确认缓存.</p>
+<p>响应包含max-age指令时,缓存服务器不进行比较,max-age的数值代表资源保存的最长时间.</p>
+<p>S-maxage 与 max-age 指令的功能相同,但是s-maxage 指令只适用供多位用户使用的公共缓存服务器.</p>
+<h6 id="Min-fresh指令"><a href="#Min-fresh指令" class="headerlink" title="Min-fresh指令"></a>Min-fresh<strong>指令</strong></h6><p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NWY0NmNhN2VmZDQwYjU2NGFiODY5MmVjYzcxMjI5YzdfNDg1NzA3OTMyYzlhMzdhNDU4MmFmZjE3NmZkODM5YTFfSUQ6NzIwODkyNDU3MTY0OTYwNTY2MF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>该指令要求缓存服务器返回至少未过指定时间的缓存资源.(上表示过了60秒的资源不会进行返回)</p>
+<h6 id="Max-stale指令"><a href="#Max-stale指令" class="headerlink" title="Max-stale指令"></a>Max-stale<strong>指令</strong></h6><p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTRjMDhlNGIzNmRhMDk3OGU2OTI3OWEyMTlhOWM1NTZfZDFmNTdjOGYzMjM2NWI5YzUxNDQ3NzQ0NWQ2OGMwNWZfSUQ6NzIwODkyMzM5NDM1NTQxMjk5NV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>用 max-stale 指示缓存资源,即使过期客户端也照常接收.</p>
+<p>(若未指定参数值,那么无论经过多久,都会接受响应.若指定数值,处于指定的时间内才会被客户端接受)</p>
+<h6 id="Only-if-cached-指令"><a href="#Only-if-cached-指令" class="headerlink" title="Only-if-cached 指令"></a>Only-if-cached <strong>指令</strong></h6><p>该指令表示客户端仅在缓存服务器本地缓存目标资源的情况下才进行返回.</p>
+<h6 id="must-revalidate指令"><a href="#must-revalidate指令" class="headerlink" title="must-revalidate指令"></a>must-revalidate<strong>指令</strong></h6><p>该指令用来验证下一个响应缓存是否有效</p>
+<h6 id="Proxy-revalidate指令"><a href="#Proxy-revalidate指令" class="headerlink" title="Proxy-revalidate指令"></a>Proxy-revalidate<strong>指令</strong></h6><p>该指令 要求所有缓存服务器在要返回缓存前检查其有效性</p>
+<h6 id="No-transform指令"><a href="#No-transform指令" class="headerlink" title="No-transform指令"></a>No-transform<strong>指令</strong></h6><p>该指令规定无论是请求还是响应中,缓存都不能改变实体主体的媒体类型.</p>
+<h6 id="Cache-Control-扩展"><a href="#Cache-Control-扩展" class="headerlink" title="Cache-Control 扩展"></a>Cache-Control 扩展</h6><p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MmUzNTI1ZjZlYjZjN2UzMjUyZDMyZTc0MWI5ZGY0ZTVfNzljZThkYzI3NDBlYTE4MjVjN2MxNDc1Y2MzZmU3NGFfSUQ6NzIwODkyNzk1NzkxNjU4MTkxNl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>通过该指令标记,可以扩展Cache-Control 首部字段内的指令.</p>
+<h5 id="Conenction字段"><a href="#Conenction字段" class="headerlink" title="Conenction字段"></a>Conenction字段</h5><p>作用:</p>
+<p><strong>控制不再转发给代理的首部字段(逐跳首部)</strong></p>
+<p>格式:</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTdhZTg5OTM0MDAzZTNmYTVjN2NhYzM3NGRhNDgzNmFfZDAwOTgwZDY3MGI5ZTNiMDdlMTkxNTRmYjM2NDNkNGZfSUQ6NzIwODkyOTUzNTQzNzI3NTEzN18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p><strong>管理持久连接</strong></p>
+<p>格式:</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YzQ3OThiZmIxNTk5Y2Q0MzRiMjI2NzQ1YTAyY2YyZDlfYWU0ZmE4ZDBkOGExZmM0N2JjNmQ2MzVhMjE3ZTNkMzVfSUQ6NzIwODkzMDQxMzEzMjMwMDI5MF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>维持持久连接</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzhlZjk1NDc0NzhhYzUyMDU1Y2M5ZWRlNjc4NzhlOWNfYWQ3NTU2YTBmYjA5MTAzMGFlMjRlNzc4MGU3MjNiMDFfSUQ6NzIwODkzMDM0NTc1OTE2MjM2OV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>断开链接</p>
+<h5 id="Data字段"><a href="#Data字段" class="headerlink" title="Data字段"></a>Data字段</h5><p>data字段表明船舰HTTP报文的日期与时间.</p>
+<p>RFC1123中的格式(HTTP&#x2F;1.1)</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGU4MTEwZDdhMDBkNWUwOGNlYzcyZjZhYWQ0NjcwYzVfYjhhMmFjNGMxNmM1MmRjNzRkZjRhOWQ4NjllZGVlZjBfSUQ6NzIwODkzMTg4MTIyNjc0NzkwNl8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<p>RFC850中的格式(HTTP&#x2F;1.1前)</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OWVlMjNlNmE2NjFiOTZhNTI1YjBmZjBlZTQxNmE5NDBfNTM3Y2Y5M2JhM2YyOTg0Y2Y3ZjE3OGMzYzJkZWRjZmRfSUQ6NzIwODkzMjIwMTM3MzY5NjAwMV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>还有一种格式:</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=M2IyMjI1ZDFkM2Y1Y2QwOTlkNWEzZDE1NTFmOWY0ODNfZDQ4ODU0OGFmZjhlYTYxYTcyMDZlNDAxMzNkZGY0Y2NfSUQ6NzIwODkzMjM0MjQ2MTcxMDM2NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Pragma字段"><a href="#Pragma字段" class="headerlink" title="Pragma字段"></a>Pragma字段</h5><p>该字段仅作为与HTTP&#x2F;1.0的向后兼容而定义.</p>
+<p>格式(例):</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NWI2NTgxZTk2MGU1OTU4NTg2ZDhmYWI0OTM0NTRhMzRfYjk0Njk2ZGY1OTRhODM4ZWQxZGYwMGM0N2M1MmU0MzhfSUQ6NzIwODkzMzc3MzU3OTE5MDI3Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Trailer字段"><a href="#Trailer字段" class="headerlink" title="Trailer字段"></a>Trailer字段</h5><p>trailer字段会事先说明在报文主体后记录了哪些首部字段.</p>
+<h5 id="Transfer-Encoding字段"><a href="#Transfer-Encoding字段" class="headerlink" title="Transfer-Encoding字段"></a>Transfer-Encoding字段</h5><p>该字段规定; 规定了传输报文主体时采用的编码方式.</p>
+<h5 id="Upgrade字段"><a href="#Upgrade字段" class="headerlink" title="Upgrade字段"></a>Upgrade字段</h5><p>该字段用来检测HTTP协议即其他协议是否可用更高的版本进行通信.</p>
+<p>(对于该请求服务器科尔用 101 Switching Protocols状态码作为响应返回)</p>
+<h5 id="Via字段"><a href="#Via字段" class="headerlink" title="Via字段"></a>Via字段</h5><p>使用首部字段Via是为了追踪客户端与服务器之间的请求和响应报文的传输路径,</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjI1ZjcxNDk5NjVlYTY4ZTQ3YWY5MjIyYTViMDllM2JfMGZiMjgxZDZhYjAyMjU3OWVhYmJmYzgzOWQwOTFlODdfSUQ6NzIwODkzNjUyODM4MTI4MDI1OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Warning字段"><a href="#Warning字段" class="headerlink" title="Warning字段"></a>Warning字段</h5><p>该字段通常会告诉用户一些与缓存相关的问题的警告.</p>
+<p>格式:</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTY5MWM0ODRjZTE4ZTY3YzNlM2NhODE4YmJkOWVhOTFfMWU2MWQ3YjRmYzYwYzRhOTJhNTRiZTFmYjkyNzA1YzNfSUQ6NzIwODkzNzE1MTc3MjI5NTE5Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>HTTP&#x2F;1.1 警告码</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YWE2ZmZiMzg0YWJkZTc5MzcxYTNmNjY2MzY2ZDljMjZfYzBiYjQ4NmE4NTQ3ZTU5MzRmYTFjN2I0YmE2Y2NjMzVfSUQ6NzIwODkzNzUwMjM4NjcwMDI4OV8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h4 id="②请求首部字段名"><a href="#②请求首部字段名" class="headerlink" title="②请求首部字段名"></a>②请求首部字段名</h4><p>从客户端向服务器端发送报文时使用的首部</p>
+<p>字段一览:</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZGQxYjU5ZjExNDBjYjhjN2EyOTkxNzJiOGQ4NWY5MTBfMmZiYTkxNjZiZmViMDQ4YzZkNDA4YTE0YzQxNGVkOTVfSUQ6NzIwODg4NTc1OTY2MTc4NTA5MF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Accept字段"><a href="#Accept字段" class="headerlink" title="Accept字段"></a>Accept字段</h5><p>Accpet首部字段可通知服务器用户代理能够处理的媒体类型即其相对优先级。</p>
+<p>形式：type&#x2F;subtype</p>
+<p>例</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjU5Yzk5YWIwY2I5ZTc4NDhjMzdhYjE1ZjBkYzIzNWJfNDA3OGU1M2NjOTk3YjZkZmNmYzBhMjhhMDcyZjA5Y2FfSUQ6NzIwOTA4NDc1MzkwMTg0NjU1Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>增加优先级，使用q&#x3D;来表示权重值；用分号进行分割；q范围为0~1；首先返回权重级高的媒体类型。</p>
+<h5 id="Accept-Charset字段"><a href="#Accept-Charset字段" class="headerlink" title="Accept-Charset字段"></a>Accept-Charset字段</h5><p>该字段用来通知服务器用户代理支持的字符集及其的相对优先顺序，且 可以一次指定多种字符集。</p>
+<p>例</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjQ4MGUxOGZjZTg2MTI5MDhhYzVhMjlkMGUwYTFjODZfNTI2ODM0Zjc2NDk4NDQwOWM1MzE2ODQzM2RkZTFmMjdfSUQ6NzIwOTA4NzU3NjA3MzczMjEyNF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Accept-Encoding字段"><a href="#Accept-Encoding字段" class="headerlink" title="Accept-Encoding字段"></a>Accept-Encoding字段</h5><p>该字段用来告知服务器用户代理支持的内容编码及其优先级，可一次指定多种内容编码。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODQ5MDBlYjRlZTA2ZWM2OTc2OGI0NDk1NTM0ZGI3ZDdfYjcyMzg0ZGVjNmFkYzY3Nzk0MmQwY2E0Mjc0MTA5MjBfSUQ6NzIwOTA4ODIwMDYyMTU4ODQ4Ml8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Accept-language字段"><a href="#Accept-language字段" class="headerlink" title="Accept-language字段"></a>Accept-language字段</h5><p>该字段用来告知服务器用户代理能够处理的自然语言及其优先级，可一次指定多种自然语言集。（无指定自然语言集，返回默认的）</p>
+<h5 id="Authorization字段"><a href="#Authorization字段" class="headerlink" title="Authorization字段"></a>Authorization字段</h5><p>该字段用来告知服务器用户代理的认证信息。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTI5MTZhMDcwOWZjMjBkNmJkNGVjZTIyNTRhNDQ4N2ZfMDc0N2E2MWY2NmRhNWQ2MDQ4ZWVlMzg5ZjMwOTZlZTBfSUQ6NzIwOTA4OTc5OTM3MzI1ODc1NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Expect字段（-）"><a href="#Expect字段（-）" class="headerlink" title="Expect字段（*）"></a>Expect字段（*）</h5><p>该字段告知服务器，期望出现某种特定行为，若服务器无法理解，则返回417状态码。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDE1ZDBlYjA3OWFhZjllYTZmOTE3Zjg4ODMyMGQyZWZfZWZlYjRjNDRkNDkxYjZlZDg5NGE5ZWE3MmQ3MGFkMTVfSUQ6NzIwOTA5MDQyMzc3ODc3MDk0Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="From字段"><a href="#From字段" class="headerlink" title="From字段"></a>From字段</h5><p>该字段用来告知服务器使用用户代理 的用户的电子邮件地址。（可能因代理不同，电子邮箱也会被记录在User-Agent首部字段中）</p>
+<h5 id="Host字段"><a href="#Host字段" class="headerlink" title="Host字段"></a>Host字段</h5><p>该字段告诉服务器，请求的资源所处的互联网主机名和端口号。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTBlZTIyMDhkYWVhNGE1YmJkM2M5ODAwYmIwNDMwNWFfMTc4YWQ2YjkyNzMzMDMwOTM5MjQwNTQwYTBmYjgwMDBfSUQ6NzIwOTA5MzY5MTk1NTMzMTA3M18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p><strong>该字段是在HTTP&#x2F;1.1内唯一一个必须被包含在请求内的首部字段。</strong></p>
+<p>Host字段与 单台服务器分配多个域名有重要联系。</p>
+<p>若服务器未设定主机名。则直接发送一个空值。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDBlYjExYzA3ZjMyMTkzODc0NzY0OWIwODBiYWVjOWZfOWE5NDAyNjEzZjA0NWZjNGZjNTdjY2RjY2ZiYzZmOWNfSUQ6NzIwOTA5NDA2NTYxMDY4NjQ2N18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="If-watch字段"><a href="#If-watch字段" class="headerlink" title="If-watch字段"></a>If-watch字段</h5><p>形如If-xxx这种样式的请求首部字段，称称为条件请求。服务器接收附带条件的请求后，只有判断指定条件为真时，才会执行请求。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NmU1MjI4NzQ3NzZjYzE5YzAxN2JhYWUzYzBiNDA4MDlfYzVlOGY2Y2Y2ZDYzNzdlNjkzZDM2OWRhMWE2MmQzNGNfSUQ6NzIwOTI1MTkwNzQ5ODQ5MTkzMl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="If-Modified-Since字段"><a href="#If-Modified-Since字段" class="headerlink" title="If-Modified-Since字段"></a>If-Modified-Since字段</h5><p>该字段告知服务器若If-Modified-Since 字段值早于资源更新的时间。则希望能处理该请求，若在其后，则返回状态码 304 Not Found。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzcyMGI1MGQyZTY4Y2FmN2VjNDBjMjM4NjI0MGZmZWNfYjdhYzgzY2JmOTZlMzRkYzU4NDRhZDhhYzQ2MzhlMDdfSUQ6NzIwOTI1NzI4OTMyMzIwMDUxNF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h5 id="If-None-Match字段"><a href="#If-None-Match字段" class="headerlink" title="If-None-Match字段"></a>If-None-Match字段</h5><p>该字段与If-Match作用相同，实现原理相反。</p>
+<h5 id="If-Range字段"><a href="#If-Range字段" class="headerlink" title="If-Range字段"></a>If-Range字段</h5><p>该字段告知服务器若指定的的If-Range字段值和请求资源的ETag值或时间相等，则作为范围请求处理，反之，返回全体资源。</p>
+<h5 id="If-Unmodified-Since字段"><a href="#If-Unmodified-Since字段" class="headerlink" title="If-Unmodified-Since字段"></a>If-Unmodified-Since字段</h5><p>该字段与If-Modified-Since作用相同，实现原理相反。</p>
+<h5 id="Max-Forwards字段"><a href="#Max-Forwards字段" class="headerlink" title="Max-Forwards字段"></a>Max-Forwards字段</h5><p>每经过一次转发，数值减一，为零时返回响应。</p>
+<p>一般通过 TRACE 和 OPTIONS 方法包含Max-Forward 字段</p>
+<h5 id="Proxy-Authorization字段"><a href="#Proxy-Authorization字段" class="headerlink" title="Proxy-Authorization字段"></a>Proxy-Authorization字段</h5><p>该字段包含的信息用于告知服务器认证所需信息。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTc4OWU0OWY5MmM0MTRiNmIwMzcyZjIzN2Q4ODdlMDdfZjdhNjM4OTYzNTM2MTA4YzFkNWU0N2NmMmYwOWU4MjRfSUQ6NzIwOTI2MDI2OTg5MjI3MjEyOV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Range字段"><a href="#Range字段" class="headerlink" title="Range字段"></a>Range字段</h5><p>获取部分资源的范围请求</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MGU2ZTdlZThhMjJkYzM3MTViMGE3MTU2NTBjMzFiMDlfMmJmODJhNzhlZTUyOTI0ZmNlY2Q2YWU2MDUzMWFkMDVfSUQ6NzIwOTI2MDIzNTc3MjIzMTcwOF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Referer字段"><a href="#Referer字段" class="headerlink" title="Referer字段"></a>Referer字段</h5><p>该字段会告知服务器请求的原始资源的URI</p>
+<p>（一般处于安全性考虑，不发送此字段）</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDJmMTg5OWRmMTE4ODZlNjk5MGFhZDcwY2NmMzI5ODNfNWYzYmUxZTI2MTExOGZhMDdhODc3MGE5ZTcwNDgzM2VfSUQ6NzIwOTI2MTEyMTc3MjAyNzkwNV8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YWM0NGNlZjhkOTNlOWE3YzEyOWViZmY2N2YxZmEyYTNfMTkwOWIyOGJmYjI2NDY5NzYxMTk4ZGZiNzNlZTVjYWVfSUQ6NzIwOTI2MTE4Njc4Nzk2Njk3OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p><del>嗯哼哼？</del></p>
+<h5 id="TE字段"><a href="#TE字段" class="headerlink" title="TE字段"></a>TE字段</h5><p>该字段会告知服务器客户端能够处理响应的传输编码方式及相对优先级，类似于Accept-Encoding。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Zjk2YjRmMDY5MTQyZjk5ZTRiNDAwNGZmNTY2OGU3NThfMzk1MzNkZWEyYTUzYzZlNDkwMzcyZDcyZWNkZGYzNzVfSUQ6NzIwOTI2NDgyOTYyOTAwNTgyOF8xNzgyNzA2MTA0OjE3ODI3OTI1MDRfVjM" alt="Image" loading="lazy"></p>
+<p>除此之外，该字段可以指定伴随tralier字段的分块传输编码方式。</p>
+<p>应用方式：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODMxMDdiNjk5YzQ3NDJiNDQyZmYxYjllYTMzMzY1NDNfN2M5NjJmZWQ3ZDNmYWU4MTU2YWRlYjE0NmUzMzZjYzJfSUQ6NzIwOTI2NTM2MjYyNDM0ODE2Ml8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h4 id="③响应首部字段"><a href="#③响应首部字段" class="headerlink" title="③响应首部字段"></a>③响应首部字段</h4><p>从服务器端向客户端返回报文时使用的首部</p>
+<p>字段一览:</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OThlYzc3NWZiMmU5YjA0Nzg2MDhmODhhYTZhNmMxYzRfNGI4ODI1YzcyMmZkNjFkMTUxMTQ1YTFiMDhjN2UyZDZfSUQ6NzIwODg4OTA1MTcxMjMzOTk5Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Accept-Ranges字段"><a href="#Accept-Ranges字段" class="headerlink" title="Accept-Ranges字段"></a>Accept-Ranges字段</h5><p>该字段用来告知客户端服务器是否能处理范围请求。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTZhMWUzYmNlYTZmYzc1MDE5Y2JmOTgzZDQxNjM4NDhfMmM1NDBmN2RiOWNkY2NkYTk4MGRmNmQ4M2ZlMmE3NTNfSUQ6NzIwOTI2OTAxNjUzMDE0MTE4Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Age字段"><a href="#Age字段" class="headerlink" title="Age字段"></a>Age字段</h5><p>该字段能告诉客户端，源服务器是在多久前创建的响应，字段值为秒。</p>
+<p>若创建该响应的是缓存服务器，Age是指缓存后的响应发起认证到认证完成的时间值，代理创建响应时必须带上字段Age</p>
+<h5 id="ETag字段"><a href="#ETag字段" class="headerlink" title="ETag字段"></a>ETag字段</h5><p>该字段可以告知客户端实体标识。是一种可将资源以字符串形式做唯一性标识的方式。</p>
+<p>当资源更新时，ETag值也需更新。</p>
+<p><strong>强ETag值</strong></p>
+<p>实体发生任何变化都会改变其值。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjBmMjUxMWE1MGRhYTYzN2QwNjI1NWFkZWZlMTMxMWRfZjQ5Y2YyNzZkOTVkMDFkMGRlMmJmYmRkY2Y5YmQxMDBfSUQ6NzIwOTI3MTI2NzU2MjY1MTY0OV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p><strong>弱ETag值</strong></p>
+<p>只用于提示资源是否相同，会在字段开始处加 W 来区分。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MWU4N2Y2YTc0MjA3OGNkMWQ1YTJiYTk1MDcxZDFhNjFfZjI0N2MwYjg1ZWUzZjIzZmYzODU2OGE4NTk2MzE3YWNfSUQ6NzIwOTI3MTMxMzIyNjA4ODQ3Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Location字段"><a href="#Location字段" class="headerlink" title="Location字段"></a>Location字段</h5><p>使用该字段可做重定向的工作，将响应接收方引导只与请求URI位置不同的资源。</p>
+<p>通常与 3xx ：Redirection 的响应配合。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YzZhYWNkOTExYzY5YzA4MzRjM2VlYmQ5ODhjYmQ3ODJfYjExOTRjODk2ZTgyN2Y4NThkYzQxMWNmOTJhNTU2ZWVfSUQ6NzIwOTI3MjA4MDEzMzU3MDU4OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Proxy-Authenticate字段"><a href="#Proxy-Authenticate字段" class="headerlink" title="Proxy-Authenticate字段"></a>Proxy-Authenticate字段</h5><p>该字段会把代理服务器要求的认证信息发送给客户端。</p>
+<h5 id="Retry-After字段"><a href="#Retry-After字段" class="headerlink" title="Retry-After字段"></a>Retry-After字段</h5><p>该字段告知客户端应在多久后再次发送请求，主要配合 状态码503 Sever Unavailable或 3xx Redirt响应使用</p>
+<p>字段值可以为 具体时间日期 或 创建响应后的秒数。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTVhYTk1YjRjOWVlMGRhNWUzODA4M2FmYTk3YzljMTZfYWI0YjQ5MzhhOWUyNjI2ZWQ1YWMxYjEzNjcyYzAzZTZfSUQ6NzIwOTI3NDc0NTk5MjkzNzQ3M18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Sever字段"><a href="#Sever字段" class="headerlink" title="Sever字段"></a>Sever字段</h5><p>该字段告知当前服务器上安装的HTTP服务器应用程序等各类信息</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZThmY2I0NmYwNWI3OGVmMjRjYzA0MTA2MDZjYjNiMzJfZmNmNDMxMjg0YzIxNDhhYTk1MzEyMGMzYTE0MzU1MjRfSUQ6NzIwOTI3NDY3MzM1MDExNTM1Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Vary字段"><a href="#Vary字段" class="headerlink" title="Vary字段"></a>Vary字段</h5><p>该字段可对缓存进行控制，源服务器会向代理服务器传达本地缓存使用方法的命令。也就是说，若Vary后首部字段相同，则返回缓存，若不同，则访问源服务器。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2Q5YTQ4ZTE2NWYyMWFlYmJkZjM0MWYyMGIzMDg0OGRfNTMwMjExMjRhNGZhMDU1YWUxYmJkZjljMjdjYWZjZWJfSUQ6NzIwOTI3NTMzMTkzOTc3ODU2MV8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h5 id="WWW-Authenticate字段"><a href="#WWW-Authenticate字段" class="headerlink" title="WWW-Authenticate字段"></a>WWW-Authenticate字段</h5><p>该字段用于HTTP访问认证</p>
+<p>例:</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjgzMDEzMDIzM2IyYmE0MTZhMDlmYzhlMDg3YzE1ODdfZjE2NDUxOTAyMmEyMGZlYjQzYTQxYTQ1YzNlZGY0MzNfSUQ6NzIxMjA5MDExODQyNzk2NzUxNl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>该字段包含 认证的方式（basic） 及 Reequest-URI安全域字符串（realm）</p>
+<h4 id="④实体首部字段"><a href="#④实体首部字段" class="headerlink" title="④实体首部字段"></a>④实体首部字段</h4><p>针对报文的实体部分使用的首部</p>
+<p>字段一览:</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWMwMmU2MTQzY2NhNzAwZmUyMzRiZTY5NzAyNzA3OGZfNjM4N2NjOGQzZTZjYzUwYTkzYjE5MTgxYmYxZDFhOGVfSUQ6NzIwODg4OTE5NDUwNzI4ODU3N18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Allow字段"><a href="#Allow字段" class="headerlink" title="Allow字段"></a>Allow字段</h5><p>该字段用于通知客户端能够支持Request-URI指定资源的所有HTTP方法，</p>
+<p>当服务器接受到不支持的HTTP方法时，返回 405 状态码 和 同时吧所有能支持的方法写入 Allow 内</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDYxODE4MzExY2M1YmRiYmI5ZDMyYmZhNjQ4NWIxYzZfM2E3YTFlNjk5NTk3YmNmZDYxNzg2ODA1YWU2ZjQwNGRfSUQ6NzIwOTI3Nzg5OTY2NzUyMTU2NF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Content-Encoding字段"><a href="#Content-Encoding字段" class="headerlink" title="Content-Encoding字段"></a>Content-Encoding字段</h5><p>该字段会告诉客户端服务器对实体的主体部分的内容编码方式。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NWY1MjM0ZmE2MDczYzg4MmU5ZWU2MjUyNTk4NmM4NDFfNjcyOTBlYzg5NWFkNGI1ZDBiYzhhNGIyMWI1NjIwMzJfSUQ6NzIwOTI3ODM4ODg5OTU2MTUwMF8xNzgyNzA2MTA0OjE3ODI3OTI1MDRfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Content-language字段"><a href="#Content-language字段" class="headerlink" title="Content-language字段"></a>Content-language字段</h5><p>该字段会告诉客户端对实体的主体部分的自然语言</p>
+<h5 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h5><p>该字段表明了实体主体部分的大小（单位：字节）</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Y2M0ZWMyM2JlZWQ3Mjk3NmI5ZmZlZTcwMmRkNTIwYTVfOWZlNWMxNzE0OTZkMTcxMDQ5MGI0YzVhZTAyYjIzYWZfSUQ6NzIwOTI3ODk0NTM4Mjk1NzA1OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Content-Location字段"><a href="#Content-Location字段" class="headerlink" title="Content-Location字段"></a>Content-Location字段</h5><p>该字段给出与报文主体部分相对应的URI。</p>
+<p>与Location不同，表示的是报文主体返回资源对应的URI</p>
+<h5 id="Content-MD5字段"><a href="#Content-MD5字段" class="headerlink" title="Content-MD5字段"></a>Content-MD5字段</h5><p>该字段的字段值是 一串由MD算法生成的值，用于检测报文主体在传输过程中是否保持完整，及确认传输到达。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODk0ZWY2OTY3MjgxNjgxN2VmNGUwN2YwODBjYzNhZDFfNzU3ZjE3ZjRhZWQyMWYwNjQ0NzNmZjc0ZDAzMjMxOWRfSUQ6NzIwOTI4MDQ5NDg5NzM4MTM3N18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>接受的客户端会重新执行一遍相同的MD5算法，来作比较检测。</p>
+<h5 id="Content-Range字段"><a href="#Content-Range字段" class="headerlink" title="Content-Range字段"></a>Content-Range字段</h5><p>该字段告知客户端响应中的实体部分的那个部分符合范围请求，及其整个实体大小。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Nzc3YWQwNGJiNzA5ZGFhMzY4NmNkNDM1YTM5NzQ2NjBfZDcwY2I3MDBjM2NjOGE1ZjZkMTFkODg1NWQyNzFiNzNfSUQ6NzIwOTI4MTIwMjI2MjQ5MTE2NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Content-Type字段"><a href="#Content-Type字段" class="headerlink" title="Content-Type字段"></a>Content-Type字段</h5><p>说明了实体主体内对象的媒体类型。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDM0YWEwOTU4M2FmMGQzOGM3YmVmMjgyNTc2NGI3MWVfZmFiMzcxYjEyYTIxYTliOTQwYmQ5MGU4ZjA3NjhmMjBfSUQ6NzIwOTI4MTUxMDQ4OTI0MzY1MV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Expires字段"><a href="#Expires字段" class="headerlink" title="Expires字段"></a>Expires字段</h5><p>该字段会将资源失效的日期告诉客户端。</p>
+<p>若不希望资源被缓存，则在字段值内写入与 Date 相同的值。</p>
+<p>当有max-age指令时，先处理max-age指令。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjkxOWNkNTUyNzY1MTJiMzUzNGE5ZDE0ZTc3NGI1NjdfNmM3MzA3NjUwNTYxNDM2MjJmNGNiMmY2ZGM1NTg1ZmNfSUQ6NzIwOTI4MjcwMDczNjU5Mzk0OF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h5 id="Last-Modified字段"><a href="#Last-Modified字段" class="headerlink" title="Last-Modified字段"></a>Last-Modified字段</h5><p>该字段指明资源最终修改的时间。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Nzk3YmRlMTk3ODBlYWMzNmQxM2NkMjRkMTBjYzEzMzlfNzVmZTBhOWEyNjczMmZlMjQ1OGQ5ZDk2NzVlNmU0OGJfSUQ6NzIwOTI4MjgwMTE5ODE3MDExM18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h2 id="非HTTP-1-1首部字段"><a href="#非HTTP-1-1首部字段" class="headerlink" title="非HTTP&#x2F;1.1首部字段"></a>非HTTP&#x2F;1.1首部字段</h2><p>不限于上述字段,还有 Cookie , Set-Cookie 等其他在RFC中定义的首部字段.</p>
+<h5 id="为Cookie服务的首部字段"><a href="#为Cookie服务的首部字段" class="headerlink" title="为Cookie服务的首部字段"></a>为Cookie服务的首部字段</h5><h6 id="Set-Cookie字段"><a href="#Set-Cookie字段" class="headerlink" title="Set-Cookie字段"></a>Set-Cookie字段</h6><p>当服务器开始管理客户端状态时，会事先告诉各种信息。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTkwZWI5ZjQxOTQzMjllNGJmMWU2MjM3NDUwZTczZjFfZWZhYjMwMGY2MmFlMmZmYzMwMWMzZDgzMWJkNWY4YzhfSUQ6NzIwOTI4NDA3MzQ1NjQ4NDM1NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>各属性：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZThmZjljOGQxYTdlY2U5MjQ4YjIyNTFiY2ZkMDQxNzNfMjdmYjBkMzkzOTNjOTU0ZjUwNzk1MDZkYTJlNTZkYjhfSUQ6NzIwOTI4NDE2ODM0ODM4NTI4M18xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h6 id="expires属性"><a href="#expires属性" class="headerlink" title="expires属性"></a>expires属性</h6><p>指定浏览器可发送Cokie的有效期。</p>
+<p>若被省略，增有效期默认在浏览器关闭之前。</p>
+<p>服务器端没有显示删除Cookie的方法，只能覆盖已过期的Cookie来达到目的。</p>
+<h6 id="Path属性"><a href="#Path属性" class="headerlink" title="Path属性"></a>Path属性</h6><p>可以限定Cookie发送范围的文件目录，但可以绕过</p>
+<h6 id="domain属性"><a href="#domain属性" class="headerlink" title="domain属性"></a>domain属性</h6><p>Cookie适用的域名，不指定为好（更安全）</p>
+<h6 id="Secure-属性"><a href="#Secure-属性" class="headerlink" title="Secure 属性"></a>Secure 属性</h6><p>限制只能在 HTTPS下才能发送Cookie</p>
+<h6 id="HttpOnly属性"><a href="#HttpOnly属性" class="headerlink" title="HttpOnly属性"></a>HttpOnly属性</h6><p>主要目的是 防XSS攻击。使得JS无法读取Cookie内容。</p>
+<h6 id="Cookie字段"><a href="#Cookie字段" class="headerlink" title="Cookie字段"></a>Cookie字段</h6><p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTlhNzdlOGQ5ZDI5NGVhMTYyODNkYzRlZWNjZDk4MTRfYTM2MTRhZmM4ODIzYjQxYTFjYmEyZDc2MzM4MDI5ZDBfSUQ6NzIwOTI4OTU4MTExODgzMjY0Ml8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>就是客户端为得到保持状态功能，而发送给服务器的Cookie。</p>
+<h5 id="X-Frame-Options字段"><a href="#X-Frame-Options字段" class="headerlink" title="X-Frame-Options字段"></a>X-Frame-Options字段</h5><p>属于响应首部，能控制网站内容在其他网站的Frame标签的显示</p>
+<p>目的是防止点击劫持攻击。</p>
+<p>字段值：</p>
+<ol>
+<li><p>DENY：拒绝 </p>
+</li>
+<li><p>SAMEORIGIN：仅允许同源域名下的页面匹配时许可。</p>
+</li>
+</ol>
+<h5 id="X-XSS-Protection字段"><a href="#X-XSS-Protection字段" class="headerlink" title="X-XSS-Protection字段"></a>X-XSS-Protection字段</h5><p>属于响应首部，用来防止XSS攻击。</p>
+<p>字段值：</p>
+<p>0 ： 将XSS过滤设置为无效状态。</p>
+<p>1 ：将XSS过滤设置成有效状态。</p>
+<h5 id="DNT字段"><a href="#DNT字段" class="headerlink" title="DNT字段"></a>DNT字段</h5><p>属于请求首部，用来拒绝个人信息被收集。</p>
+<p>字段值：</p>
+<p>0 ：同意被追踪</p>
+<p>1 ：拒绝被追踪</p>
+<h5 id="P3P字段（-）"><a href="#P3P字段（-）" class="headerlink" title="P3P字段（*）"></a>P3P字段（*）</h5><p>属于响应首部，利用P3P技术可以让网站上的个人隐私变成供程序理解的形式，来保护用户隐私</p>
+<h2 id="端对端首部-和-逐跳首部"><a href="#端对端首部-和-逐跳首部" class="headerlink" title="端对端首部 和 逐跳首部"></a>端对端首部 和 逐跳首部</h2><p><strong>端对端首部(缓存代理)“End to End”</strong></p>
+<p>在整个传输过程中会保持不变,必须保存在缓存中且必须转发</p>
+<p><strong>逐跳首部(非缓存代理)“Hop-by-hop”</strong></p>
+<p>只在单次转发中有效,会因通过缓存或代理而不再转发</p>
+<p>除下列八个字段,其他所有字段属于端到端首部</p>
+<p>• Connection<br>• Keep-Alive<br>• Proxy-Authenticate<br>• Proxy-Authorization<br>• Trailer<br>• TE<br>• Transfer-Encoding<br>• Upgrade</p>
+<h1 id="第八章-确认访问用户身份的认证"><a href="#第八章-确认访问用户身份的认证" class="headerlink" title="第八章 确认访问用户身份的认证"></a>第八章 确认访问用户身份的认证</h1><h2 id="HTTP使用的认证方式"><a href="#HTTP使用的认证方式" class="headerlink" title="HTTP使用的认证方式"></a>HTTP使用的认证方式</h2><p>HTTP&#x2F;1.1</p>
+<ul>
+<li><p>BASIC认证（基本认证）</p>
+</li>
+<li><p>DIGEST认证（摘要认证）</p>
+</li>
+<li><p>SSL客户端认证</p>
+</li>
+<li><p>FormBase认证（基于表单认证）</p>
+</li>
+</ul>
+<h3 id="BASIC认证"><a href="#BASIC认证" class="headerlink" title="BASIC认证"></a>BASIC认证</h3><p>步骤概图</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjQ3NmMxMjUyZDYwNDk0ZDJjN2U5NmU0MTE1MmNkMTVfOWJlZDNkM2YzNDI1NDU1ZDNhOTc1NTlhMDc3MDEzMDVfSUQ6NzIxMjA3NzA0MDM3NTAwNTE4Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<ol>
+<li><p>请求资源需要BASIC认证时，服务器会随状态码４０１，返回带ＷＷＷ-Authorization Required首部字段的响应。</p>
+</li>
+<li><p>接收响应后，客户端发送Authorization字段，该字段中写入经过base64 编码 的用户ID与密码</p>
+</li>
+</ol>
+<h3 id="DIGSET认证"><a href="#DIGSET认证" class="headerlink" title="DIGSET认证"></a>DIGSET认证</h3><p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Y2Y5N2Y3MjNkYTBhY2JjYjZkYjJkNmFmZGEwMTRjNzBfMzI2MDUyODIxZjgzOGFiMjNiZmRhYzQxMzViNzdiZjFfSUQ6NzIxMjE0MjY4NzI5Njc5ODcyMl8xNzgyNzA2MTA0OjE3ODI3OTI1MDRfVjM" alt="Image" loading="lazy"></p>
+<p>PS：</p>
+<p>nounce值是一种由Base64编码的十六进制的组成形式，实际内容以来服务器的具体实现。</p>
+<p>REspone值为经过MD5运算的密码</p>
+<h3 id="SSL客户端认证"><a href="#SSL客户端认证" class="headerlink" title="SSL客户端认证"></a>SSL客户端认证</h3><p>SSL客户端认证是借由HTTPS的客户端证书完成认证的方式。凭借客户端证书认证，服务器可确认访问客户端。</p>
+<p><strong>认证步骤</strong></p>
+<p>步骤一：接收到需要认证资源的请求，服务器会发送 Certificate Request 报文，要求客户端提供客户端证书。</p>
+<p>步骤二：用户选择将发送的客户端证书后，客户端会把客户端证书信息以 Client Certificate 报文方式发送给服务器。</p>
+<p>例</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGI2MmM4MzFkYjBmZjY0YzcxMmFmZDc2ZTM0NmM3NmFfMjZlOGE5ODk0N2FiOTZjOGY5ZTYwYWZjNzlmN2VjNDZfSUQ6NzIxMjE0ODU5MzQyNjI4NDU0NV8xNzgyNzA2MTA0OjE3ODI3OTI1MDRfVjM" alt="Image" loading="lazy"></p>
+<p>步骤三：</p>
+<p>服务器验证客户端证书验证通过后，可领取证书内客户端的公开密钥，然后开始HTTPS加密通信。</p>
+<p><strong>双因素认证：</strong></p>
+<p>一般，SSL客户端不会仅靠证书完成认证，一般会和表单认证组合形成一种双因素认证。</p>
+<h3 id="基于表单认证"><a href="#基于表单认证" class="headerlink" title="基于表单认证"></a>基于表单认证</h3><p>该认证方法不是在HHTP协议中定义的。</p>
+<p>客户端向服务器的上的Ｗｅｂ程序发送登录信息，按登录信息的验证结果认证。</p>
+<h2 id="Session管理及-Cookie管理"><a href="#Session管理及-Cookie管理" class="headerlink" title="Session管理及 Cookie管理"></a>Session管理及 Cookie管理</h2><p>一般使用Cookie来管理会话</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2RkMDBmNzNmMDAxYzE4Y2EyNTUxYjJiZTJiNjkyODJfYjQ2NDJkZjk0ZTY1ZDM1Nzg3ZGY0ZjBiYzAwNjYxMmFfSUQ6NzIxMjE1NTY5ODczNjY2MDQ4M18xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<p>PS:</p>
+<p>客户端一般使用POST方法把请求发送给服务器,这时会使用HTTPS通信来进行HTML表单画面的显示和用户输入数据的发送.</p>
+<p>服务器会发放用以识别用户的Session ID , 通过验证从客户端发送过来的登录信息进行身份认证 , 然后把用户的认证状态与session ID 绑定后记录在服务器端.</p>
+<p>客户端接收到发来的 Session ID后，会将其作为Cookie保存在本地，供下次访问使用．</p>
+<h1 id="第九章-基于HTTP功能追加协议"><a href="#第九章-基于HTTP功能追加协议" class="headerlink" title="第九章 基于HTTP功能追加协议"></a>第九章 基于HTTP功能追加协议</h1><p>HTTP的初始创造目的时当作传输HTML文档的协议.但不能满足如今更加多样化的需求(食大便了,带人),因此需要额外添加新功能.</p>
+<h2 id="Ajax的解决方法"><a href="#Ajax的解决方法" class="headerlink" title="Ajax的解决方法"></a>Ajax的解决方法</h2><p>Ajax(Asynchronous JavaScript and XML)异步JavaScript 与 XML技术，是一种有效利用　JavaScript　和DOM　的操作，以达到局部Ｗｅｂ页面替换加载异步通信手段．</p>
+<p>由于只更新局部页面，响应中传输的数据量会因此而减少．</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NmY3YmYxNDA1MjFkOWI1NjdjZjE0Yzg0NDkxM2Y3MzRfMzExMjEwNWY2OTFhZjg0MDQyZDRjNGZmZDc0NzhhMzlfSUQ6NzIxMjE2OTE5MzM0NDM4NTAyNl8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h2 id="Comet的解决方法"><a href="#Comet的解决方法" class="headerlink" title="Comet的解决方法"></a>Comet的解决方法</h2><p>每当服务器有内容更新,Comet不会让请求等待,直接返回响应,.是一种通过延迟应答,模拟实现服务器的端详客户端推送的功能.</p>
+<p>Comet会<strong>将响应置于挂起状态</strong>,当服务器有内容更新时,再返回该响应</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTcyMjI3YzM2YzZlYjBlMzc2NWRkODc4YjdhMWUxYTZfYmRhMzQ2MzNkNDcyNjA3N2UzMDk5M2VlMmM3ZjdhZWFfSUQ6NzIxMjE3MjU5MjA3NzE0NDA2Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>内容上虽然可以做到实时更新,但为了保留响应.一次连接的持续时间也会变长,为了维持连接会消耗更多的资源.</p>
+<h2 id="SPDY协议"><a href="#SPDY协议" class="headerlink" title="SPDY协议"></a>SPDY协议</h2><p>Google发布了SODT,其开发目标旨在解决HTTP的性能瓶颈.</p>
+<p><strong>SPDY的设计与功能</strong></p>
+<p>SPDY是在TCP&#x2F;IP的应用层与运输层之间通过新加会话层的形式运作.并且SPDY规定在通信中使用SSL</p>
+<p>SPDY以会话层的形式加入，控制对数据的流动，但还是采用HTTP建立连接，因此可兼容HTTP功能.</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGJmM2VjNjkzM2RiZjUwOWQ2MzMyNWJkM2EyOTNjYmZfZGVmY2JjY2MwY2YwYjg4MWIyZGY0YTdiMDZiOTI5OTFfSUQ6NzIxMjE3NDk3NTM1NTA3NjYwOV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>使用SPDY后,HTTP新增功能</p>
+<ul>
+<li>多路复用流</li>
+</ul>
+<p>通过单一的TCP连接可以无限制处理多个HTTP请求.</p>
+<ul>
+<li>赋予请求优先级</li>
+</ul>
+<p>可以给请求诸葛分配优先级顺序,主要是为了在发送多个请求时,解决因带宽低而导致响应变慢的问题</p>
+<ul>
+<li>压缩HTTP首部</li>
+</ul>
+<p>压缩HTTP请求与首部,通信发送的字节数变少.</p>
+<ul>
+<li>推送功能</li>
+</ul>
+<p>支持服务器主动向客户端推送数据的功能.</p>
+<ul>
+<li>服务器提示功能</li>
+</ul>
+<p>服务器可以主动提示客户端请求所需的资源,可以避免不必要的请求.</p>
+<h1 id="使用浏览器进行全双工通信的WebSockt"><a href="#使用浏览器进行全双工通信的WebSockt" class="headerlink" title="使用浏览器进行全双工通信的WebSockt"></a>使用浏览器进行全双工通信的WebSockt</h1><p>WebSocket ,Web浏览器之间的全双工通信标准.开发目的是为了解决Ajax 和 Comet 里XMLHttpRequest 附带的问题</p>
+<h2 id="Websocket的主要特点"><a href="#Websocket的主要特点" class="headerlink" title="Websocket的主要特点"></a>Websocket的主要特点</h2><p><strong>建立在HTTP基础上的协议</strong></p>
+<p>无论是服务器还是客户端,任意一方都可直接向对方发送报文</p>
+<p><strong>推送功能</strong></p>
+<p>支持服务器主动向客户端推送数据的功能.</p>
+<p><strong>减少通信量</strong></p>
+<p>Websockker连接建立后,会一直保持连接状态,但更优于HTTP连接</p>
+<h3 id="Websocket握手"><a href="#Websocket握手" class="headerlink" title="Websocket握手"></a>Websocket握手</h3><p>为了实现Websocket通信,需要用到HTTP的Upgrade首部字段,告知服务器通信协议发生改变,达到握手的目的</p>
+<ul>
+<li><strong>握手~请求</strong></li>
+</ul>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YzgwOTVhYTFiZmU2YjhiZDBlYjk2ZDZkODJiNzhjODRfNzJhOTY4YjIzNjg0ZmFkZTgzYmI5ZDU0OWZlZDJlOThfSUQ6NzIxMjE4NDA4NDkwOTQ0MTAyNV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>Sec-WebSocket-Key 字段 记录着握手过程中的键值</p>
+<p>Sec-WebSocket-Protocol 字段 记录使用的子协议</p>
+<p>子协议按WebSocket 协议标准在连接分开时使用,定义那些连接的名称</p>
+<ul>
+<li><strong>握手~响应</strong></li>
+</ul>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjhhNjk4ZGJkMWFjYWRhMDliOTlkZTcyOWI4NGNlOTlfYzUxODQ2ZjA1NWJhODEyNDJmNDczNGFmYWY0N2ZlZDhfSUQ6NzIxMjE4NTgxNDkzMzk5NTU0OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>Sec-WebSocket-Accept 的字段值是由 握手请求中的Sec-WebSocket-Key的字段值生成的.</p>
+<ul>
+<li>成功握手后,不再使用HTTP的数据帧,采用WebSocket独立的数据帧</li>
+</ul>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MGMxOTAxMDk1NDE3YTZiMTZkNzUwMmY1MmM4YTdmZjZfMGQxMDg2Zjk1OTY5YTc2N2JhN2RkYmEyYzIyOTIxZjNfSUQ6NzIxMjE4Njc0MjMwNzIyNTYwMl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>WebSocket API(*)</p>
+<p>JS可调用 **The WebSocket <strong><strong>API</strong></strong> **内提供的 WebSocket程序接口,实现WebSocket协议下全双工通信</p>
+<p>例</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTQzOTRiOWIxMjhhMmZkYjkzZGM1YWJjNWU4NzE5NmJfZTY1MTAwZDFhODNjNDYzZjA2MjFiNWM5MjgwYzczMmVfSUQ6NzIxMjE4NzU5NDI4Nzk3MjM4MF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h2 id="Web服务器管理文件的WebDAV"><a href="#Web服务器管理文件的WebDAV" class="headerlink" title="Web服务器管理文件的WebDAV"></a>Web服务器管理文件的WebDAV</h2><p>WebDAV是一个可对Web服务器上的内容直接进行文件复制,编辑等操作的分布式文件系统.作为扩展HTTP&#x2F;1.1的协议定义在RFC4918</p>
+<p>除了创建、删除文件等基本功能，它还具备文件创建者管理、文件编辑过程中禁止其他用户内容覆盖的加锁功能，以及对文件内容修改的版本控制功能.</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZmI3OTJiZTAzMjhhOGVjOTZjYmIwOWQ4NDViODZlN2JfMjE3ZjBhNGQxOGVkZmI4ZWZlOTc3OGY5MGNkMzQ2ODRfSUQ6NzIxMjE5MDE4MzQ3Nzk2ODg5N18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h3 id="扩展HTTP-1-1的WebDAV"><a href="#扩展HTTP-1-1的WebDAV" class="headerlink" title="扩展HTTP&#x2F;1.1的WebDAV"></a>扩展HTTP&#x2F;1.1的WebDAV</h3><p>针对服务器上的资源,新增了一些概念</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Y2YzMDQ2MTJjMDJjNWRhOGJjZDg0ZWJiZDc2ZGU3NDFfMTJlYmNkNzVkMzc4MjFlYjMwMmQzY2E2ODdiMzI5ZmRfSUQ6NzIxMjE5MDY4MjU3OTM2OTk4N18xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<ul>
+<li><p>集合(Collection):是一种统一管理多个资源的概念。以集合为 单位可进行各种操作。也可实现类似集合的集合这样的叠加。</p>
+</li>
+<li><p>资源(Resource):把文件或集合称为资源。</p>
+</li>
+<li><p>属性(Property):定义资源的属性。定义以“名称 &#x3D; 值”的格式执<br>行。</p>
+</li>
+<li><p>锁(Lock):把文件设置成无法编辑状态。多人同时编辑时，可 防止在同一时间进行内容写入。</p>
+</li>
+</ul>
+<h3 id="WebDAV内新增的方法及其状态码"><a href="#WebDAV内新增的方法及其状态码" class="headerlink" title="WebDAV内新增的方法及其状态码"></a>WebDAV内新增的方法及其状态码</h3><p><strong>PROPFIND</strong> :获取属性<br><strong>PROPPATCH</strong> :修改属性<br>**MKCOL **:创建集合<br>**COPY **:复制资源及属性<br><strong>MOVE</strong> :移动资源<br><strong>LOCK</strong> :资源加锁<br><strong>UNLOCK</strong> :资源解锁为配合扩展的方法，状态码也随之扩展。<br><strong>102 Processing</strong> :可正常处理请求，但目前是处理中状态<br><strong>207 Multi-Status</strong> :存在多种状态<br><strong>422 Unprocessible Entity</strong> :格式正确，内容有误<br><strong>423 Locked</strong> :资源已被加锁<br><strong>424 Failed Dependency</strong> :处理与某请求关联的请求失败，因此不再维持依赖关系<br><strong>507 Insufficient Storage</strong> :保存空间不足</p>
+<h3 id="WebDAV的请求与响应实例"><a href="#WebDAV的请求与响应实例" class="headerlink" title="ＷebDAV的请求与响应实例"></a>ＷebDAV的请求与响应实例</h3><p>使用PROFIND方法发起的请求</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2E4ZjZlM2NjMjBhN2NiZjUzZTZjNDg2MzM0OTA3NDRfOGVkOTYyNjJmMjM2ZGRkNmNkNGU0ZmI5MGUyNzY0ODdfSUQ6NzIxMjE5MjUzNjQ1MzA1NDQ5Ml8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>与之对应的响应</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTk5YThiYWI3MzVjNTdhYmJmNmJmZThiM2NmMDgyNzhfYzk2ZTJjNmI2YjA5N2E3ZTI1YTNmNDg5M2YxNjYwOGVfSUQ6NzIxMjE5MjY0MDYzNTMzODc1NF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MmViOWE5NzM2NzU3ZjFkMDIyYjVlZDE2ZThmMmUyMmZfNzU1MWM3MWNjYjg5OTM4NDE3NTlmMzg5ZjY4ZWYwZmVfSUQ6NzIxMjE5MjY4NjU1NDcyNjQwMV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h1 id="第十章-构建Web内容的技术"><a href="#第十章-构建Web内容的技术" class="headerlink" title="第十章 构建Web内容的技术"></a>第十章 构建Web内容的技术</h1><h2 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h2><p>HTML是为了发送web上的超文本而开发的标记语言。</p>
+<p>由HTML构成的文档经过浏览器的解析、渲染后，呈现出来的结果就是web页面</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjEwYzNlMmUxMjI5OTA2YzBiNTJmM2FmYTc1NGRkOWRfMGFmNTE3MmJjZTU4NzNiMmUxMjhkZWNjZWI4NGI2OGJfSUQ6NzIxMjI2MjEyMzIyMDU0OTYzM18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h3 id="设计应用CSS"><a href="#设计应用CSS" class="headerlink" title="设计应用CSS"></a>设计应用CSS</h3><p>CSS可以指定如何展现HTML内地各种元素，属于样式表标准之一</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZmNlMmE5YmJiNjVkMWRiMDUyMmQ0Yzg4NWIzZDQyNDNfMGUyMjY1Y2JlYTFhYjljMTFhYzJiZTQ5YzNjNzQ2MjNfSUQ6NzIxMjI2MjUyNzAyMTk1NzEyMl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>可在选择器(sekector).logo的指定范围内，使用{}括起来的声明块中写明的padding：20px等声明语句应用指定的样式。</p>
+<h3 id="动态HTML（＊）"><a href="#动态HTML（＊）" class="headerlink" title="动态HTML（＊）"></a>动态HTML（＊）</h3><p>动态HTML。是指时使用客户端脚本语言将静态HTML内容变成动态的技术的总称。</p>
+<p>该技术是通过调用客户端脚本语言JS，实现对HTML的Ｗｅｂ页面的动态改造，利用DOM可指定欲发生动态变化的HTML元素。</p>
+<h3 id="更易控制的HTML和DOM"><a href="#更易控制的HTML和DOM" class="headerlink" title="更易控制的HTML和DOM"></a>更易控制的HTML和DOM</h3><p>DOM是用以操作HTML文档和XML文档的API。</p>
+<p>通过调用JS等脚本语言对DOM的操作，可更加方便控制HTML。</p>
+<p>例：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDc1MWI3YjBiNjk3MjBiNTcwN2E5YzM3MDViNWE3MGFfZTlmMWI3MWRjMjY3MjFiOTVkYzlmYzkwMzI2MWYxZjJfSUQ6NzIxMjI2NTQyMTg4ODYxODUyNF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<p>通过JS可以改变第三个P元素的文字颜色</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTYwZDlhYWNjNDA2MWU0ZDk4OTBkN2FhMmM5MTU5MWJfYjc1OTc1MWE2MWUyMWViOTcyMjI4NDJlY2M0YzJmYTFfSUQ6NzIxMjI2NTc0ODUwNzQyNjg0NF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<h2 id="Web应用"><a href="#Web应用" class="headerlink" title="Web应用"></a>Web应用</h2><p>Web应用是指通过Web功能提供的应用程序。</p>
+<p>将类似于程序创建的内容称为<strong>动态内容</strong>。事先准备好的内容称为<strong>静态内容</strong></p>
+<p>Web应用作用于动态内容之上</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDM2YTRiZTIwNzI1OTM4Y2QwOTU2MGExZjA3YjY5ZGFfMTdlZmU0MTJiZWI3NGY0ZmYxMTJkN2UyNjAxMTIyOGNfSUQ6NzIxMjI2NzIzMDMzMDg2MzYxOF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h3 id="CGI"><a href="#CGI" class="headerlink" title="CGI"></a>CGI</h3><p>CGI（Common Gateway Interface）通用网关接口，是指web服务器在接收到客户端发送的请求后转发给程序的一组机制。</p>
+<p>CGI能作用程序，使其对请求内容做出相应的动作，如创建HTML等动态内容</p>
+<p>使用CGI的程序叫　CGI程序　。</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Mzc1NWNiMjJiMzFkNzk5MmM2NzFiMWFhNzA4Nzc3YjZfMmRjZmZjM2RhMTNmMGUxZTllMmI3NzJjNGM5N2ViZGFfSUQ6NzIxMjI2ODYzOTkzMDk5MDU5M18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>缺点:由于在每次接到请求后程序都要跟着启动一次,一旦访问量过大,Web服务器要承载很大的负载.</p>
+<h3 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h3><p>Servlet 是一种能在服务器上创建动态内容的程序,是用Java语言实现的一个接口,属于面向企业级Java的一部分.</p>
+<p>Servlet运行在与web服务器相同的进程中,受到的负载较小,Servlet运行环境叫Web容器或Servlet容器,可以缓解CGI的缺点.</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Y2Q4NzVjMDY3YTEzNjIxOTE0ZmU5MzgyMDRmMTgzZjJfMDg0Njk5YzhjNDBhMWYzYzY4YWRkNThmNDBjNTk0NTRfSUQ6NzIxMjI3MDY4MzI3Mzk2OTY2NV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h2 id="数据发布的格式及语言"><a href="#数据发布的格式及语言" class="headerlink" title="数据发布的格式及语言"></a>数据发布的格式及语言</h2><h3 id="XML"><a href="#XML" class="headerlink" title="XML"></a>XML</h3><p>XML (eXtensible Markup Language)可扩展标记语言,是一种可按应用目标进行扩展的通用标记语言.</p>
+<p>XML 和 HTML 都是从标准通用标记语言SGML简化而成,相较于HTML，对数据的处理方式做了特殊处理．</p>
+<p>例：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTJlNTA0NjliNzMwZmZjMDY0NzMwODJjYjg0NTc3ZGNfNGMyMzZjZTY1ZDZlZmNlZTk4MDI2N2EzYzFlZDQ0ODlfSUQ6NzIxMjI3MjAyNzY5NTE1MzE4MF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>HTML文档遇到不同的应用格式会不同,不适合记录数据结构,用XML改写</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MWE3NWVjMzA4MjkzOWJlZTNmNDljMmQ2MzQzMGJiNzZfOTA1OTEwNjRlZDQzMDJlNTYwZmM4ODBiMWE2MDM1YTBfSUQ6NzIxMjI3MjQ5NjIyODQzMzk0OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>XML的结构基本是用标签分割成的树形结构,通过语法分析器(parser)的解析功能可以解析出XML结构并得到数据元素.</p>
+<h3 id="RSS-Atom"><a href="#RSS-Atom" class="headerlink" title="RSS&#x2F;Atom"></a>RSS&#x2F;Atom</h3><p>RSS(简易信息聚合&#x2F;聚合内容)和Atom 都是发布新闻或博客日志等更新信息文档的格式的总称.都用到了XML.</p>
+<p>例</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjQ2ZTM1OTdlODhkNTQwYWI2NjYxNTQ0MTcxYTY4Y2FfY2RiMjM4YTExNmNlYmMxMTQxODYyYzJmNjY1MDllOWZfSUQ6NzIxMjI3MzgyMDUxNjg3NjI4OV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h3 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h3><p>JSON(JavaScript Object Notation)是一种以JS的对象表示法为基础的轻量级数据标记语言.</p>
+<p>能处理的数据类型** false&#x2F;null&#x2F;true&#x2F;对象&#x2F;数组&#x2F;数字&#x2F;字符串** 七种.</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODRiMWYxYzNkMDhmNTdiMjllOGE1YTI4MDYxMWRhNGZfYjhkNjc5ZmE5OGQ5MjllYzNmMjk5ZjJhMjM0OTlhNWJfSUQ6NzIxMjI3NDczMTA1NDA4ODE5NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>让数据更轻更纯粹......</p>
+<h1 id="第十一章-Web的攻击技术"><a href="#第十一章-Web的攻击技术" class="headerlink" title="第十一章 Web的攻击技术"></a>第十一章 Web的攻击技术</h1><h2 id="针对web的攻击技术"><a href="#针对web的攻击技术" class="headerlink" title="针对web的攻击技术"></a>针对web的攻击技术</h2><p>HTTP协议本身不具备必要的安全功能，应用HTTP协议的<strong>服务器</strong>和<strong>客户端</strong>，以及运行在<strong>服务器上的Web</strong></p>
+<p><strong>应用等</strong>资源是攻击目标。</p>
+<h3 id="在客户端可篡改请求"><a href="#在客户端可篡改请求" class="headerlink" title="在客户端可篡改请求"></a>在客户端可篡改请求</h3><p>在HTTP请求报文内加载攻击代码，就能发起对Web应用的攻击。通过 URL查询字段或表单，HTTP首部、Cookie等途径可传入攻击代码。</p>
+<h3 id="针对web应用的攻击模式"><a href="#针对web应用的攻击模式" class="headerlink" title="针对web应用的攻击模式"></a>针对web应用的攻击模式</h3><ul>
+<li><p>主动攻击</p>
+<ul>
+<li>以服务器为目标的主动攻击</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWQxYjE2YjcyYmI2Y2E2MmQ1OWI1MWMyN2NhYTQ1YWNfMmJmYzBhMjNkYTkyYmYyMmU5MmM2Y2M4OWFjZGY2NTNfSUQ6NzIxMjUyMjQ1MTc2OTk5OTM2MV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>主动攻击 是指攻击者通过直接访问Web应用，把攻击代码传入的攻击模式，攻击者需要访问到服务器上的资源。</p>
+<ul>
+<li><p>被动攻击</p>
+<ul>
+<li>以服务器为目标的被动攻击</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MmZjZTZiYmU1ODI4YjNlZmZhMDI3MDdhYjJmZDVjNzdfOTc5NDVkZjM3ZWNiM2NhYmJlMDVkNjBkYjU5MjNmOTFfSUQ6NzIxMjUyMjU1NTE2MDAxODk0NV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>被动攻击 是指利用圈套策略执行攻击代码的攻击模式。攻击者不直接对目标Web应用访问发起攻击。</p>
+<p>具有代表性的攻击 <strong>跨站脚本攻击</strong> 和 <strong>跨站点请求伪造</strong></p>
+<p><strong>利用用户身份攻击企业内部网络</strong></p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZmJkNTc3NTAwYzM4Y2FlMWEwMzJhYTE3ZGZhNjVlZDlfNmZhOTY1MTNiNjg3YWEwMjZjZTkyNDVmMjJiMDE3MmRfSUQ6NzIxMjUyMjY5MzkyNzg0NTkxNl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h2 id="因输出值转义不完全引发的安全漏洞"><a href="#因输出值转义不完全引发的安全漏洞" class="headerlink" title="因输出值转义不完全引发的安全漏洞"></a>因输出值转义不完全引发的安全漏洞</h2><p>实施Web应用的安全对策可大致分为以下两部分</p>
+<ul>
+<li><p>客户端的验证</p>
+</li>
+<li><p>服务器端的验证</p>
+<ul>
+<li><p>输入值验证</p>
+</li>
+<li><p>输出值转义</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzZmMWE5NzRlZTAwOGZiMTI4YjgwZDQyMWM0MDdkNGRfZTEwY2YwMjI1OGFiMDcyNWIyOTljOWYwYmY5MTM1MjhfSUQ6NzIxMjUyMzU5NzE5NjUwOTIxMl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>输入值验证通常是指检查是否是符合系统工业逻辑的数值或检查的字符编码等预防对策。</p>
+<p>当输出值转义不完全时，会因触攻击者传入的攻击代码，而给输出对象带来损害</p>
+<h3 id="跨站脚本攻击-XSS"><a href="#跨站脚本攻击-XSS" class="headerlink" title="跨站脚本攻击(XSS)"></a>跨站脚本攻击(XSS)</h3><p>跨站脚本攻击（XSS），是指通过存在安全漏洞的Web网站注册用户的浏览器内运行非法的HTML标签或JavaScript进行的一种攻击 。 动态创建的HTML部分有可能隐藏着安全漏洞。</p>
+<p>XSS一般会有以下手段</p>
+<ul>
+<li><p>利用虚假输入表单骗取用户个人信息。</p>
+</li>
+<li><p>利用脚本窃取用户的 Cookie 值，被害者在不知情的情况下， 帮助攻击者发送恶意请求。</p>
+</li>
+<li><p>显示伪造的文章或图片</p>
+</li>
+</ul>
+<p>案例:(在动态生成HTML处发生)</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MWNjZmMzOTM0YjRhZWM1OGJhNGNkMDU5NGY5NTMxYzdfZWQ4ZjEzZmI4YjMxNjVmNzZjOWE5ZTJhNmE0YmRkODlfSUQ6NzIxMjUzNDU4NTQyNTg3MDg1MV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>像这样一个页面,在姓名一栏输入了 &lt;s&gt; 标签,浏览器会将其解析成HTML标签.利用此原理, 使用script标签可以发动攻击</p>
+<p>如</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDI4MjA2N2I1YzAwNGU2MmNkM2U1MGZhYjlmZTk3NjdfM2MwZGM4MTM3N2JkZGZiNjY5YjNkMGI1MTVmMWIyOWZfSUQ6NzIxMjUzNjQ2ODczNTU3NDAxOF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>通过地址栏中URI的查询字段指定ID，即相当于在表单内自动填写字符串的功能，于是我们可以利用这点来创建嵌入恶意代码的URL</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjU4MWJkMDVlNTVkNGJkNjc3YTcxZTJlYTAwMTEzMTNfYWFiMzEwMTFhZjBiZTNjZjk0NTFhMzQwYzMxOGJjYjVfSUQ6NzIxMjUzNjU2NTMyMTk1NzM3OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>浏览器打开该URI后,直观上没有发生变化,但脚本已经开始运行了,用户输入的ID与密码会直接发送到攻击者的网站.</p>
+<p>利用类似方式,还可以窃取到用户的Cookie值.</p>
+<h3 id="SQL注入攻击"><a href="#SQL注入攻击" class="headerlink" title="SQL注入攻击"></a>SQL注入攻击</h3><p>SQL注入是针对Web应用使用的数据库，通过运行非法的SQL而产生的攻击.</p>
+<p>一般会有以下手段</p>
+<ul>
+<li><p>非法查看或篡改数据库内的数据 </p>
+</li>
+<li><p>规避认证 </p>
+</li>
+<li><p>执行和数据库服务器业务关联的程序等</p>
+</li>
+</ul>
+<p>攻击实例</p>
+<p>这样一个购物网站</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDIwNmFjMGI3YmY1NGQxYWRmYTg4NmZhNDc3MDdhNDhfZTNjMWU0NmU1NTMwYmE2MTIzMTg5N2Y5YmNkZjI0ZDVfSUQ6NzIxMjUzOTAwOTkyNTU3ODc1Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>正常操作</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDI4ZTljYTQyYTJkOGI1NjU1M2VjMjhkYWU1Y2QyOTVfNDk4NjI5YmU5YzdjNjU5ZWY1MDg0MWZkZjVhMGE3MjdfSUQ6NzIxMjUzOTE4ODU4NzEwMjIzNl8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<p>可见flag&#x3D;1为可显示条件,flag&#x3D;0为隐藏内容.但是我们可以在地址栏进行改写,加上 -- ,and flag&#x3D;1 会被忽略掉.</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MmVkMDkyZGJkNDJhZTlmNjVmMTQ1YzNiNDM3ZGU4NmFfMjY4MjA1ZTRhMTc2MTY5YzgwODlmMGVkMzA1MDMxZDlfSUQ6NzIxMjU0MDI2OTc3NzYzMzI4Ml8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>可令原本被隐藏的书籍显示出来.</p>
+<h3 id="OS命令注入攻击"><a href="#OS命令注入攻击" class="headerlink" title="OS命令注入攻击"></a>OS命令注入攻击</h3><p>OS命令注入攻击</p>
+<p>OS命令注入攻击(OS Command Injection) 是指通过Web应用,执行非法的操作系统命令达到攻击的目的.(通过Shell函数)</p>
+<p>在Web应用调用Shell时存在疏漏时,可执行插入的OS命令.</p>
+<p>攻击实例:</p>
+<p>该网页是发送邮件功能</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjYwZDcwYjA2Y2IxMzAwN2RjYTdhNjYyMDM1YzI2NTZfMjIyMjJhZWVkMWE5MWZkZTU0ZGQ5NjZiMmNkNDFjMDVfSUQ6NzIxMjU0MjExOTI0ODc1NjczOF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<p>在该表单的源代码中,有</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTY0MWYwOGYyYTIxZjE3NzcwMWUxOGU2OTIxNzM4MzNfZWVjNmRhMTFmMjFiYjEwZDk2NmI3ZmY0ZWYzNjhmZGZfSUQ6NzIxMjU0MjUxNDQxNzU5ODQ2NV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>插入</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZGFhMzVmYzNmN2IyYTE3NzQ5Y2MwNjk1MTJlYjUwMTVfZjUwNDk5NzBkZjc2ZWNkN2ZhNzRjYmY0Yzk2MzcxYTBfSUQ6NzIxMjU0MjY5OTg4NTUyNzA0MV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>在OS命令中,会被解析为分隔多个执行命令的标记.</p>
+<p>于是,在分隔后,sendmail命令会执行插入的命令,从而窃取账户信息.</p>
+<h3 id="HTTP首部注入攻击"><a href="#HTTP首部注入攻击" class="headerlink" title="HTTP首部注入攻击"></a>HTTP首部注入攻击</h3><p>HTTP首部注入攻击(HTTP Header Injection),是指攻击者通过在响应首部字段内插入换行,添加任意响应首部或主体的一种攻击.(被动攻击)</p>
+<p>向首部主体内添加内容的攻击称为HTTP响应截断攻击(HTTP Response Splitting Attack)</p>
+<p>一般手段:</p>
+<ul>
+<li><p>设置任何 Cookie 信息</p>
+</li>
+<li><p>重定向至任意 URL</p>
+</li>
+<li><p>显示任意的主体(HTTP 响应截断攻击)</p>
+</li>
+</ul>
+<p>攻击实例</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2YxMjE0ZDVkNzA4ZWVkZjY4NTY5OWI2ODlmM2M2MzVfNTVjZDYxZWVhZDk4NzczNmQyMWQ4ZDAwNTljNjUxMTNfSUQ6NzIxMjU0NTUyNzA1MTkxMTE3MV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>将 该字段最后的类别ID改为</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODg1MTA3YTlhZjgyMzdkZDI0YjBjN2M0ZjA2N2Q2YjNfMGRmMzQ0MjY3Y2FiNjMzZTQxNWY2ODU2NTJkZGJhNjhfSUQ6NzIxMjU0NTcyMDQyNjA4NjQwNF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<p>此处输入的**%0D%0A,<strong>原本属于首部字段的查询值部分,然而经过</strong>解析后变成了换行符**,后面的<strong>Set-Cookie成为了新的首部字段.</strong></p>
+<p>类似这样,攻击者keke在响应中插入任意首部字段.</p>
+<h3 id="HTTP响应截断攻击"><a href="#HTTP响应截断攻击" class="headerlink" title="HTTP响应截断攻击"></a>HTTP响应截断攻击</h3><p>HTTP响应截断攻击与HTTP首部字段攻击顺序相同,但是要插入两个**%0D%0A,即两个换行符,**可做出首部与主体分隔所需的空行.显示伪造的主体,</p>
+<h3 id="邮件首部注入攻击"><a href="#邮件首部注入攻击" class="headerlink" title="邮件首部注入攻击"></a>邮件首部注入攻击</h3><p>邮件首部注入攻击(Mail Header Injection)是指Web应用中的邮件发送功能,攻击者通过向邮件首部 To 或 Subject 内任意添加非法内容发起的攻击.</p>
+<p>攻击实例:</p>
+<p>还是一个邮件网页(咨询表单)</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OWQwYmEyODRmZmJiMzNhMjFmZGRmNWIxY2RkMzNjYTRfNjcwZGJiNjdkMjFiYmI2Y2FlNDU3MDk2MDA2YzllYWJfSUQ6NzIxMjU0ODc3MDQxNTIzMTAwNF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>在邮箱地址一栏中填入</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTY0ZjY4MjM2ZjhiM2VlNmE0YTQ5OWI3YmExMzk4ZWJfYzk3OWVhZGM5OTQ3OGNkNzg5N2I2ZjFkNDgyOTY2ZjFfSUQ6NzIxMjU0ODkzMjk0NDU3NjUxM18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>一旦咨询表单所在的Web应用接收该换行符,<strong>可能实现 对Bcc邮件地址的追加发送</strong>.</p>
+<p>或是加两个换行符,实现对邮件文本内容的的篡改</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MWZiYzlhMWE1YzdkNzU0MDcyMjdmZTBiMjQyZjdjZjRfODYwYTJjYzAyY2NhYjY0NDkwOGU5OTE1ZWM4ZTRjZTlfSUQ6NzIxMjU0OTczMjQ5MzgzNjMxNl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>用同样的方法,可能改写 To 和 Subject 等任意邮件首部,或添加附件等.</p>
+<h3 id="目录遍历攻击"><a href="#目录遍历攻击" class="headerlink" title="目录遍历攻击"></a>目录遍历攻击</h3><p>目录遍历攻击(Directory Traversal) 攻击是指对本无意公开的文件目录,通过非法截断其目录路径后,达成访问目的的一种攻击,也称 路径遍历攻击(Path Traversal).</p>
+<p>原理:在有外部指定文件名的处理存在疏漏的情况下,用户<strong>可使用 ..&#x2F;的相对路径定位到绝对路径下</strong></p>
+<p>攻击案例:</p>
+<p>原本的请求文件URI为</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=M2Q1N2Y2MDc4ZWVkMTgwMmViZDIxNWZhZjViZGJiZTZfZGM2ODFjNzIyMDkwMDlhNjMwNTViM2EzZjAxZmM5NjBfSUQ6NzIxMjU1MjMyMzgxNjk5Njg2Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>若设置为</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWI3MjE3OGNmNDVmYmZlM2EzNTIxNTk0ODEyZWUxZTRfMTM2ZTY3NWE3M2U2ZGFlMTRhMjJlZjU4YzhlMzQwZWFfSUQ6NzIxMjU1MjQ4MDIxOTM4MTc2Ml8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>如果read.php没有设限,那么原本不公开的为文件会被展现出来</p>
+<h3 id="远程文件包含漏洞"><a href="#远程文件包含漏洞" class="headerlink" title="远程文件包含漏洞"></a>远程文件包含漏洞</h3><p>远程文件包含漏洞(remote File Inclusion)是指当部分脚本内容需要从其他文件读入时,攻击者利用指定外部服务器的URL充当依赖文件，让脚本读取之后，即可运行任意脚本的一种攻击</p>
+<p>该漏洞主要存在于PHP中．对于PHP的include　或　require　来说，这是一种可通过设定，指定外部服务器端URL为文件名的功能，在PHP５.２.０后废用</p>
+<p>攻击案例：</p>
+<p>正常操作</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODQ3MWJlNmY4ODI5MmNlOGYwMTgxOTc0YzYwMWI2ZjFfM2Y3Y2RhZDhmYWMzODE0Mzk1YjRmYTZhMjhkNmUzYjJfSUQ6NzIxMjU1NTk5NDg2ODg5MTY0OV8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>该脚本的部分源码为</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YThiOGMxZTE1NWNhZDQzZTc0NDBjNTIwODAzNDQ5ZGZfNTJjYzMyZmJmZmUwMGY4NmI3MTYzMWFjNDJhNmYzNjRfSUQ6NzIxMjU1NjE4MjQ4MDIyNDI1N18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>若输入如下URL</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NWJhY2MxZWRiZDRlNDU4MzMxMmMyZTJmODlkYWJmMjRfYWEyMjQ4Y2UxYjNlODY3ZWUzZTFjNTM5YTg3YWM5ZmFfSUQ6NzIxMjU1NjM2Mjg0MzI5MTY3Nl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>若该Web的 include 可以引入外部服务器的URL,那么实现在cmd.php准备</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjcwNmJmNjc0MzQxY2U4OWVjYjdkNDAxODhhZDFiZTNfMGE1NzM3ZDFmMWVmNjE0MGE0NjI4NDYxNjBlOWU3NWJfSUQ6NzIxMjU1NzA2NzIxNDI3NDU4OF8xNzgyNzA2MTAyOjE3ODI3OTI1MDJfVjM" alt="Image" loading="lazy"></p>
+<p>就可在服务器上OS命令了</p>
+<h2 id="因设置或设计上的缺陷引发的安全漏洞"><a href="#因设置或设计上的缺陷引发的安全漏洞" class="headerlink" title="因设置或设计上的缺陷引发的安全漏洞"></a>因设置或设计上的缺陷引发的安全漏洞</h2><h3 id="强制浏览"><a href="#强制浏览" class="headerlink" title="强制浏览"></a>强制浏览</h3><p>强制浏览安全漏洞是指 从安置在Web服务器的公开目录下的文件中，浏览那些原本非自愿公开的文件</p>
+<p>对于原本不愿公开的文件，为了保证安全会隐藏其URL。但通过某些方法易使URL产生泄露</p>
+<ul>
+<li>文件目录一览</li>
+</ul>
+<p>未做防范措施，一般会在log文件夹下</p>
+<ul>
+<li><p>容易被推测的文件名及目录名</p>
+</li>
+<li><p>备份文件</p>
+</li>
+<li><p>经认证才可访问的文件，直接通过URL访问能绕过一些认证</p>
+</li>
+</ul>
+<p>案例：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NGUxOTVmMjYxNDA3NGY5ZWMzNzMwZWQ3NTc4YWUxZDhfZTNmNDQ5MmRmMGY2ZDU5NDY1ZmI0ZTk5ZGY1NGQ3ZjBfSUQ6NzIxMjY0NDg0NDEyMzA2MjI3M18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>类似这样的博客，需要权限访问，但是通过对图片URL的分析，可能可以直接通过URL访问博客</p>
+<h3 id="不正确的错误消息处理"><a href="#不正确的错误消息处理" class="headerlink" title="不正确的错误消息处理"></a>不正确的错误消息处理</h3><p>不正确的错误消息处理（Error Handing Vulnerability）的安全漏洞是指 web应用的错误信息内包含对攻击者有用的信息。</p>
+<p>简单来讲：就是对 Web应用 和 数据库等应用  抛出的错误信息没有进行抑制设定，从而导致可能对攻击者有利的信息泄露</p>
+<h3 id="开放重定向"><a href="#开放重定向" class="headerlink" title="开放重定向"></a>开放重定向</h3><p>开放重定向（Open Redirect）是一种对指定的任意URL作重定向跳转的功能。</p>
+<p>加入指定的重定向URL到某个具有恶意的Web网站，那么用户会被诱导至那个Web网站</p>
+<p>案例：</p>
+<p>将</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=N2YyZTk3NDAwZDE3Zjg2ZDEwMGQzYWY1MjI5MWZkNzZfOWM3MTUyMTY5OTQ5NTdiNmZiODZkZmYyMjZkMGE4NTFfSUQ6NzIxMjY0ODA4MTg2OTc4MzA2OF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>改写为</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YWI5Nzc1NjQ4NzY1MzJhY2NhNzBmMzRmOWUxZjRiMjJfZGU3MDAyZTJmOTAzN2FlZjNjYjA0NjdmN2M0NWE1ZGJfSUQ6NzIxMjY0ODE4MTA0NTk1MjUxNF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>可信度高的网站若开启重定向功能，则可能被选中作为钓鱼攻击的跳板</p>
+<h2 id="因会话管理疏忽引发的安全漏洞"><a href="#因会话管理疏忽引发的安全漏洞" class="headerlink" title="因会话管理疏忽引发的安全漏洞"></a>因会话管理疏忽引发的安全漏洞</h2><h3 id="会话劫持"><a href="#会话劫持" class="headerlink" title="会话劫持"></a>会话劫持</h3><p>会话劫持（Session Hijack）是攻击者通过某种手段拿到了用户的会话ID，并非法使用此会话ID伪装成用户，达到攻击的目的。</p>
+<p>具备认证功能的Web应用将 会话ID的会话管理机制 作为管理认证状态的主流方式。会话ID记录了Cookie等信息，服务器端会将会话ID与认证状态 一对一匹配管理</p>
+<p>盗走会话ID的几种方式：</p>
+<ul>
+<li><p>通过非正规的生成方法推测会话 ID</p>
+</li>
+<li><p>通过窃听或 XSS 攻击盗取会话 ID </p>
+</li>
+<li><p>通过会话固定攻击(Session Fixation)强行获取会话 ID</p>
+</li>
+</ul>
+<p>案例：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTc1ZWIxZTg1ZmYzZTExMjVmYzVjMmQyMDU0ODUwMWVfODU4N2MxMTliY2Y5ZGFmOThiYjBiMjk1YTE0MmNkNGJfSUQ6NzIxMjY1MDk4ODY0OTI1MDgyMF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<h3 id="会话固定攻击"><a href="#会话固定攻击" class="headerlink" title="会话固定攻击"></a>会话固定攻击</h3><p>对于以窃取目标会话 ID 为主动攻击手段的会话劫持而言，会话固定攻击(Session Fixation)攻击会强制用户使用攻击者指定的会话 ID（被动攻击。）</p>
+<p>案例：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGY2YTc3MzMwMzc4YTAzZTg4OTcwZDgyNjgxNGEzM2NfNjAwMTI1MDY2YjI1OGVkOGU1M2M4Y2M0NjA5YjQzMTJfSUQ6NzIxMjY1MjAwOTA2MDQ4MzA3NF8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>攻击者用服务器给出的 会话ID 设计陷阱引诱用户认证，之后 攻击者可以伪装成用户登录网站</p>
+<h3 id="跨站请求伪造"><a href="#跨站请求伪造" class="headerlink" title="跨站请求伪造"></a>跨站请求伪造</h3><p>跨站请求伪造（Cross-site Request Forgery  CSRF）攻击， 是指 攻击者通过设计好的陷阱，强制对已完成认证的用户进行非预期的个人信息或设定信息等某些状态更新（被动攻击）</p>
+<p>案例：</p>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YjU4MDJiMTU2NzRhNWU4ZDg0MDZiZDRlNWZiMGMxNGNfOTVjNDVjNTgzYjk4N2RhZDk2M2UyYTk1NWYzZmJiYjdfSUQ6NzIxMjY1NDMwMTIzNDEzNTA0M18xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p><strong>当用户为已认证状态时</strong>，攻击者会在留言板上发布含恶意代码的评论，一旦用户访问该留言板时，恶意代码会被解析，以用户的身份进行操作</p>
+<h2 id="其他安全漏洞"><a href="#其他安全漏洞" class="headerlink" title="其他安全漏洞"></a>其他安全漏洞</h2><h3 id="密码破解"><a href="#密码破解" class="headerlink" title="密码破解"></a>密码破解</h3><p>密码破解攻击（Password Cracking） 即算出密码，突破认证。</p>
+<p>密码破解一般为两种手段</p>
+<ul>
+<li><p>通过网络的密码试错</p>
+<ul>
+<li><p>穷举法（略）</p>
+</li>
+<li><p>字典攻击</p>
+<p>  字典攻击是指利用事先收集好的候选密码（经过各种组合方法后存入字典）枚举字典中的密码，尝试通过认证的一种攻击手段</p>
+</li>
+</ul>
+</li>
+<li><p>对已加密密码的破解</p>
+<ul>
+<li><p>通过 穷举法&amp;字典攻击进行类推</p>
+</li>
+<li><p>彩虹表</p>
+<p>  彩虹表（Rainbow Table）是由明文密码即与之对应的散列值构成的一张数据库表。可以用来缩短 穷举法&amp;字典攻击 的时间</p>
+</li>
+<li><p>拿到密钥</p>
+</li>
+<li><p>加密算法的漏洞</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="点击劫持"><a href="#点击劫持" class="headerlink" title="点击劫持"></a>点击劫持</h3><p><strong>点击劫持（Clickjacking）</strong>是利用透明的按钮或链接做成陷阱，覆盖在Web页面之上。诱使不知情的用户点击的攻击手段。<strong>又称为界面伪装。</strong></p>
+<h3 id="DoS攻击"><a href="#DoS攻击" class="headerlink" title="DoS攻击"></a>DoS攻击</h3><p><strong>DoS攻击（Denial of Service attack）</strong>是一种让运行中的服务呈停止状态的攻击。（攻击对象不仅限于Web网站）</p>
+<p>主要为两种手段</p>
+<ul>
+<li><p>集中利用访问请求造成资源过载，资源用尽的同时，实际上服务就呈停止状态</p>
+</li>
+<li><p>通过攻击安全漏洞使服务停止</p>
+</li>
+</ul>
+<p><img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NmI3ZTU4ZTdlZmE1YmRjNTIzNWM4MzA5ZWI3M2QyZTRfMTU5YjM3MjVlNDhkM2QzYzRmN2QwZjc2YTdmYWUzOTBfSUQ6NzIxMjgwNDIzNzk3NjM3MTIwMl8xNzgyNzA2MTAzOjE3ODI3OTI1MDNfVjM" alt="Image" loading="lazy"></p>
+<p>多台计算机发起的Dos攻击称为*<em>DDoS攻击（ <strong><strong>Distributed Denial of Service attack</strong></strong>）</em>*<strong>，</strong>DDos攻击常利用被感染病毒的计算机做跳板</p>
+<h3 id="后门程序"><a href="#后门程序" class="headerlink" title="后门程序"></a>后门程序</h3><p>后门程序（Backdoor）是指开发设置的隐藏入口，可不按正常步骤使用受限功能。</p>
+<p>通常后门程序有三类</p>
+<ul>
+<li><p>开发阶段作为 Debug 调用的后门程序 </p>
+</li>
+<li><p>开发者为了自身利益植入的后门程序 </p>
+</li>
+<li><p>攻击者通过某种方法设置的后门程序</p>
+</li>
+</ul>
+<p>Mission Over！！！！</p>
+</div></section><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="Donate" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><span class="icon iconify" data-icon="ri:hand-coin-line"></span></span><div id="reward-comment">I'm so cute. Please give me money.</div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>Post author: </strong>wub</li><li class="post-copyright-link"><strong>Post link: </strong><a href="https://wub233.github.io/2026/06/29/HTTP%E5%9B%BE%E8%A7%A3%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" title="">https://wub233.github.io/2026/06/29/HTTP%E5%9B%BE%E8%A7%A3%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</a></li><li class="post-copyright-license"><strong>Copyright Notice: </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><span class="icon iconify" data-icon="ri:creative-commons-line"></span><span class="icon iconify" data-icon="ri:creative-commons-by-line"></span><span class="icon iconify" data-icon="ri:creative-commons-nc-line"></span><span class="icon iconify" data-icon="ri:creative-commons-sa-line"></span></a> unless otherwise stated.</li></ul></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2026/06/29/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%20%E7%AC%94%E8%AE%B0/" rel="prev" title=""><span class="icon iconify" data-icon="ri:arrow-left-s-line"></span><span class="post-nav-text"></span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2024/04/27/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%AD%A6%E4%B9%A0/" rel="next" title="区块链学习"><span class="post-nav-text">区块链学习</span><span class="icon iconify" data-icon="ri:arrow-right-s-line"></span></a></div></div></div><div class="hty-card" id="comment"></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2019 – 2026 </span><span class="with-love" id="animate"><span class="icon iconify" data-icon="ri:cloud-line"></span></span><span class="author"> wub</span></div><div class="powered"><span>Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v7.1.1</span><span class="footer-separator">|</span><span>Theme - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.10.11</span></div></footer></div><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><span class="icon iconify" data-icon="ri:arrow-up-s-line"></span><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a></body></html>
